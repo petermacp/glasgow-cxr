@@ -1,0 +1,2945 @@
+[
+    {
+        "meta_data": {
+            "title": "Screenshot 2023-12-01 at 13.38.52.png.pdf",
+            "doc_id": "07e94f771d0c484daa190da8ff70b974",
+            "type": "financial_statement__DFSGu__CFuBF",
+            "uploaded_from": "api",
+            "user_doc_id": null,
+            "doc_meta_data": "",
+            "folder_name": "",
+            "folder_id": "",
+            "created_at_iso": "2023-12-01T13:56:24+00:00",
+            "modified_at_iso": "2023-12-01T13:57:34+00:00",
+            "status": "reviewing",
+            "review_url": "https://app.docsumo.com/review-document/07e94f771d0c484daa190da8ff70b974"
+        },
+        "data": {
+            "Tables": [
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Shettleston and Tollcross ***",
+                        "position": [
+                            199,
+                            631,
+                            458,
+                            700
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "44,693",
+                        "position": [
+                            532,
+                            675,
+                            643,
+                            703
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "234",
+                        "position": [
+                            750,
+                            676,
+                            810,
+                            701
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            622,
+                            1008,
+                            698
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "44,927",
+                        "position": [
+                            1048,
+                            679,
+                            1160,
+                            705
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "1,167",
+                        "position": [
+                            1235,
+                            678,
+                            1323,
+                            709
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "38",
+                        "position": [
+                            1407,
+                            680,
+                            1450,
+                            706
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Parkhead ***",
+                        "position": [
+                            197,
+                            711,
+                            457,
+                            739
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "17,650",
+                        "position": [
+                            536,
+                            713,
+                            642,
+                            739
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "361",
+                        "position": [
+                            750,
+                            715,
+                            808,
+                            742
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            707,
+                            1008,
+                            739
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "18,011",
+                        "position": [
+                            1052,
+                            718,
+                            1158,
+                            745
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "819",
+                        "position": [
+                            1264,
+                            718,
+                            1324,
+                            745
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "22",
+                        "position": [
+                            1407,
+                            720,
+                            1448,
+                            743
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Dalmarnock",
+                        "position": [
+                            198,
+                            750,
+                            403,
+                            778
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "33,658",
+                        "position": [
+                            534,
+                            751,
+                            645,
+                            780
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "6",
+                        "position": [
+                            791,
+                            755,
+                            812,
+                            780
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            739,
+                            1008,
+                            777
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "33,664",
+                        "position": [
+                            1050,
+                            757,
+                            1161,
+                            783
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "487",
+                        "position": [
+                            1265,
+                            757,
+                            1325,
+                            783
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "69",
+                        "position": [
+                            1409,
+                            759,
+                            1448,
+                            782
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Calton",
+                        "position": [
+                            196,
+                            789,
+                            302,
+                            814
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "19,634",
+                        "position": [
+                            535,
+                            792,
+                            643,
+                            822
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "916",
+                        "position": [
+                            751,
+                            794,
+                            808,
+                            819
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            777,
+                            1008,
+                            818
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "20,550",
+                        "position": [
+                            1050,
+                            796,
+                            1158,
+                            826
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "404",
+                        "position": [
+                            1264,
+                            797,
+                            1322,
+                            821
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "51",
+                        "position": [
+                            1408,
+                            797,
+                            1445,
+                            823
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Mile-end",
+                        "position": [
+                            198,
+                            828,
+                            339,
+                            855
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "32,152",
+                        "position": [
+                            534,
+                            830,
+                            642,
+                            859
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "259",
+                        "position": [
+                            750,
+                            833,
+                            811,
+                            858
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            818,
+                            1008,
+                            858
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "32,411",
+                        "position": [
+                            1050,
+                            835,
+                            1158,
+                            865
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "443",
+                        "position": [
+                            1265,
+                            835,
+                            1323,
+                            862
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "73",
+                        "position": [
+                            1409,
+                            837,
+                            1448,
+                            861
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Dennistoun",
+                        "position": [
+                            199,
+                            869,
+                            391,
+                            896
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "23,373",
+                        "position": [
+                            534,
+                            873,
+                            645,
+                            899
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "9",
+                        "position": [
+                            790,
+                            873,
+                            811,
+                            897
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            858,
+                            1008,
+                            897
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "23,382",
+                        "position": [
+                            1049,
+                            875,
+                            1160,
+                            903
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "689",
+                        "position": [
+                            1265,
+                            874,
+                            1324,
+                            901
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "34",
+                        "position": [
+                            1410,
+                            876,
+                            1449,
+                            900
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Provan",
+                        "position": [
+                            197,
+                            909,
+                            316,
+                            934
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "58,384",
+                        "position": [
+                            534,
+                            910,
+                            647,
+                            939
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "1,923",
+                        "position": [
+                            721,
+                            912,
+                            811,
+                            937
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            897,
+                            1008,
+                            936
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "60,307",
+                        "position": [
+                            1051,
+                            914,
+                            1157,
+                            942
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "4,846",
+                        "position": [
+                            1232,
+                            913,
+                            1321,
+                            941
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "12",
+                        "position": [
+                            1411,
+                            915,
+                            1449,
+                            936
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Cowlairs ***",
+                        "position": [
+                            198,
+                            948,
+                            459,
+                            976
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "22,272",
+                        "position": [
+                            535,
+                            949,
+                            645,
+                            978
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "1,067",
+                        "position": [
+                            721,
+                            949,
+                            809,
+                            975
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            936,
+                            1008,
+                            972
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "23,339",
+                        "position": [
+                            1049,
+                            952,
+                            1159,
+                            981
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "645",
+                        "position": [
+                            1265,
+                            953,
+                            1322,
+                            977
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "36",
+                        "position": [
+                            1410,
+                            952,
+                            1447,
+                            977
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Springburn ..",
+                        "position": [
+                            196,
+                            987,
+                            456,
+                            1021
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "35,870",
+                        "position": [
+                            533,
+                            988,
+                            644,
+                            1019
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "1,995",
+                        "position": [
+                            722,
+                            990,
+                            809,
+                            1016
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            972,
+                            1008,
+                            1015
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "37,865",
+                        "position": [
+                            1049,
+                            991,
+                            1158,
+                            1020
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "2,118",
+                        "position": [
+                            1234,
+                            991,
+                            1325,
+                            1020
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "18",
+                        "position": [
+                            1410,
+                            991,
+                            1449,
+                            1017
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Townhead ***",
+                        "position": [
+                            198,
+                            1022,
+                            458,
+                            1055
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "26,130",
+                        "position": [
+                            533,
+                            1026,
+                            643,
+                            1056
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "1,840",
+                        "position": [
+                            722,
+                            1030,
+                            809,
+                            1056
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            1015,
+                            1008,
+                            1052
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "27,970",
+                        "position": [
+                            1050,
+                            1031,
+                            1159,
+                            1060
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "301",
+                        "position": [
+                            1265,
+                            1029,
+                            1323,
+                            1055
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "93",
+                        "position": [
+                            1408,
+                            1029,
+                            1447,
+                            1058
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Exchange ***",
+                        "position": [
+                            200,
+                            1066,
+                            457,
+                            1099
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "11,427",
+                        "position": [
+                            536,
+                            1067,
+                            646,
+                            1094
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "3,450",
+                        "position": [
+                            721,
+                            1068,
+                            809,
+                            1099
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "31",
+                        "position": [
+                            897,
+                            1069,
+                            937,
+                            1095
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "14,908",
+                        "position": [
+                            1053,
+                            1071,
+                            1161,
+                            1097
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "507",
+                        "position": [
+                            1264,
+                            1070,
+                            1324,
+                            1095
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "29",
+                        "position": [
+                            1409,
+                            1071,
+                            1446,
+                            1095
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Anderston ***",
+                        "position": [
+                            198,
+                            1088,
+                            457,
+                            1132
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "22,052",
+                        "position": [
+                            534,
+                            1106,
+                            644,
+                            1135
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "1,461",
+                        "position": [
+                            723,
+                            1109,
+                            809,
+                            1135
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "252",
+                        "position": [
+                            877,
+                            1111,
+                            938,
+                            1134
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "23,765",
+                        "position": [
+                            1049,
+                            1109,
+                            1160,
+                            1137
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "530",
+                        "position": [
+                            1264,
+                            1107,
+                            1326,
+                            1136
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "45",
+                        "position": [
+                            1408,
+                            1108,
+                            1447,
+                            1133
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Park... *** ***",
+                        "position": [
+                            196,
+                            1128,
+                            458,
+                            1173
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "17,061",
+                        "position": [
+                            537,
+                            1147,
+                            642,
+                            1175
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "994",
+                        "position": [
+                            752,
+                            1148,
+                            812,
+                            1173
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            1130,
+                            1008,
+                            1170
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "18,055",
+                        "position": [
+                            1051,
+                            1147,
+                            1159,
+                            1174
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "317",
+                        "position": [
+                            1265,
+                            1147,
+                            1327,
+                            1174
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "57",
+                        "position": [
+                            1410,
+                            1148,
+                            1448,
+                            1174
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Cowcaddens",
+                        "position": [
+                            198,
+                            1182,
+                            404,
+                            1212
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "20,207",
+                        "position": [
+                            535,
+                            1187,
+                            645,
+                            1215
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "282",
+                        "position": [
+                            752,
+                            1188,
+                            813,
+                            1211
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            1170,
+                            1008,
+                            1213
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "20,489",
+                        "position": [
+                            1049,
+                            1187,
+                            1161,
+                            1216
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "488",
+                        "position": [
+                            1264,
+                            1185,
+                            1326,
+                            1213
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "42",
+                        "position": [
+                            1409,
+                            1187,
+                            1449,
+                            1210
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Woodside ..",
+                        "position": [
+                            198,
+                            1222,
+                            458,
+                            1252
+                        ],
+                        "confidence": 1.0,
+                        "review_required": false
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "19,781",
+                        "position": [
+                            536,
+                            1224,
+                            643,
+                            1251
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "473",
+                        "position": [
+                            752,
+                            1227,
+                            811,
+                            1253
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            1213,
+                            1008,
+                            1250
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "20,254",
+                        "position": [
+                            1050,
+                            1227,
+                            1161,
+                            1256
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "170",
+                        "position": [
+                            1267,
+                            1225,
+                            1326,
+                            1252
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "119",
+                        "position": [
+                            1392,
+                            1225,
+                            1448,
+                            1251
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Ruchill ***",
+                        "position": [
+                            198,
+                            1262,
+                            457,
+                            1291
+                        ],
+                        "confidence": 1.0,
+                        "review_required": false
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "47,514",
+                        "position": [
+                            534,
+                            1264,
+                            643,
+                            1292
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "464",
+                        "position": [
+                            751,
+                            1265,
+                            811,
+                            1291
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            1250,
+                            1008,
+                            1289
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "47,978",
+                        "position": [
+                            1050,
+                            1265,
+                            1161,
+                            1296
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "1,962",
+                        "position": [
+                            1238,
+                            1265,
+                            1323,
+                            1292
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "24",
+                        "position": [
+                            1410,
+                            1266,
+                            1450,
+                            1288
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "North Kelvin",
+                        "position": [
+                            197,
+                            1301,
+                            432,
+                            1327
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "22,314",
+                        "position": [
+                            534,
+                            1303,
+                            643,
+                            1331
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "98",
+                        "position": [
+                            771,
+                            1304,
+                            814,
+                            1332
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            1289,
+                            1008,
+                            1328
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "22,412",
+                        "position": [
+                            1051,
+                            1304,
+                            1160,
+                            1332
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "278",
+                        "position": [
+                            1266,
+                            1305,
+                            1327,
+                            1329
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "81",
+                        "position": [
+                            1410,
+                            1302,
+                            1448,
+                            1327
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Maryhill",
+                        "position": [
+                            197,
+                            1340,
+                            343,
+                            1376
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "25,474",
+                        "position": [
+                            533,
+                            1345,
+                            645,
+                            1372
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "153",
+                        "position": [
+                            752,
+                            1344,
+                            812,
+                            1369
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            1328,
+                            1008,
+                            1361
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "25,629",
+                        "position": [
+                            1052,
+                            1343,
+                            1160,
+                            1372
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "2,210",
+                        "position": [
+                            1234,
+                            1343,
+                            1326,
+                            1372
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "12",
+                        "position": [
+                            1410,
+                            1343,
+                            1452,
+                            1367
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Kelvinside",
+                        "position": [
+                            201,
+                            1380,
+                            376,
+                            1408
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "17,930",
+                        "position": [
+                            536,
+                            1383,
+                            645,
+                            1410
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "1,741",
+                        "position": [
+                            722,
+                            1384,
+                            810,
+                            1410
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            1361,
+                            1008,
+                            1403
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "19,671",
+                        "position": [
+                            1054,
+                            1383,
+                            1157,
+                            1412
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "1,160",
+                        "position": [
+                            1237,
+                            1381,
+                            1322,
+                            1412
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "17",
+                        "position": [
+                            1410,
+                            1381,
+                            1450,
+                            1405
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Partick (East)",
+                        "position": [
+                            198,
+                            1415,
+                            447,
+                            1455
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "18,243",
+                        "position": [
+                            536,
+                            1423,
+                            645,
+                            1452
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "1,015",
+                        "position": [
+                            723,
+                            1422,
+                            811,
+                            1451
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            1403,
+                            1008,
+                            1445
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "19,329",
+                        "position": [
+                            1053,
+                            1422,
+                            1161,
+                            1450
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "351",
+                        "position": [
+                            1267,
+                            1419,
+                            1326,
+                            1445
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "55",
+                        "position": [
+                            1409,
+                            1418,
+                            1448,
+                            1445
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Partick (West)",
+                        "position": [
+                            198,
+                            1454,
+                            456,
+                            1492
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "22,648",
+                        "position": [
+                            536,
+                            1463,
+                            646,
+                            1489
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "38",
+                        "position": [
+                            772,
+                            1462,
+                            813,
+                            1488
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            1445,
+                            1008,
+                            1492
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "22,686",
+                        "position": [
+                            1052,
+                            1461,
+                            1160,
+                            1490
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "464",
+                        "position": [
+                            1266,
+                            1460,
+                            1326,
+                            1485
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "49",
+                        "position": [
+                            1410,
+                            1459,
+                            1450,
+                            1483
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Whiteinch *w*",
+                        "position": [
+                            200,
+                            1498,
+                            457,
+                            1527
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "20,866",
+                        "position": [
+                            536,
+                            1501,
+                            644,
+                            1529
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "86",
+                        "position": [
+                            772,
+                            1500,
+                            811,
+                            1528
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            1492,
+                            1008,
+                            1532
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "20,952",
+                        "position": [
+                            1053,
+                            1500,
+                            1161,
+                            1527
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "894",
+                        "position": [
+                            1265,
+                            1496,
+                            1325,
+                            1524
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "23",
+                        "position": [
+                            1409,
+                            1498,
+                            1448,
+                            1524
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Yoker ***",
+                        "position": [
+                            199,
+                            1538,
+                            457,
+                            1567
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "26,847",
+                        "position": [
+                            534,
+                            1541,
+                            645,
+                            1568
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "240",
+                        "position": [
+                            752,
+                            1542,
+                            810,
+                            1565
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            1532,
+                            1008,
+                            1563
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "27,139",
+                        "position": [
+                            1051,
+                            1538,
+                            1161,
+                            1568
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "1,213",
+                        "position": [
+                            1236,
+                            1535,
+                            1324,
+                            1567
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "22",
+                        "position": [
+                            1410,
+                            1538,
+                            1449,
+                            1559
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Knightswood ***",
+                        "position": [
+                            199,
+                            1559,
+                            457,
+                            1613
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "43,514",
+                        "position": [
+                            535,
+                            1579,
+                            647,
+                            1609
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "93",
+                        "position": [
+                            772,
+                            1578,
+                            811,
+                            1605
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            1563,
+                            1008,
+                            1603
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "43,607",
+                        "position": [
+                            1051,
+                            1578,
+                            1158,
+                            1606
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "1,614",
+                        "position": [
+                            1237,
+                            1574,
+                            1322,
+                            1602
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "27",
+                        "position": [
+                            1409,
+                            1577,
+                            1450,
+                            1599
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Hutchesontown",
+                        "position": [
+                            199,
+                            1615,
+                            464,
+                            1646
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "22,546",
+                        "position": [
+                            535,
+                            1620,
+                            645,
+                            1648
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "8",
+                        "position": [
+                            791,
+                            1620,
+                            817,
+                            1645
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            1603,
+                            1008,
+                            1650
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "22,554",
+                        "position": [
+                            1051,
+                            1618,
+                            1160,
+                            1644
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "387",
+                        "position": [
+                            1265,
+                            1614,
+                            1325,
+                            1642
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "58",
+                        "position": [
+                            1410,
+                            1613,
+                            1449,
+                            1639
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Gorbals ***",
+                        "position": [
+                            199,
+                            1656,
+                            459,
+                            1684
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "25,200",
+                        "position": [
+                            535,
+                            1660,
+                            645,
+                            1687
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "13",
+                        "position": [
+                            774,
+                            1658,
+                            813,
+                            1683
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            1650,
+                            1008,
+                            1691
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "25,213",
+                        "position": [
+                            1051,
+                            1656,
+                            1161,
+                            1684
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "252",
+                        "position": [
+                            1266,
+                            1653,
+                            1325,
+                            1679
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "100",
+                        "position": [
+                            1392,
+                            1655,
+                            1448,
+                            1677
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Kingston ***",
+                        "position": [
+                            199,
+                            1694,
+                            457,
+                            1734
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "20,728",
+                        "position": [
+                            535,
+                            1698,
+                            645,
+                            1726
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "",
+                        "position": [
+                            686,
+                            1691,
+                            832,
+                            1733
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "80",
+                        "position": [
+                            898,
+                            1698,
+                            940,
+                            1722
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "20,808",
+                        "position": [
+                            1050,
+                            1695,
+                            1162,
+                            1725
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "355",
+                        "position": [
+                            1265,
+                            1692,
+                            1325,
+                            1718
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "59",
+                        "position": [
+                            1410,
+                            1692,
+                            1446,
+                            1716
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Kinning Park",
+                        "position": [
+                            200,
+                            1731,
+                            439,
+                            1769
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "23,355",
+                        "position": [
+                            534,
+                            1737,
+                            646,
+                            1767
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "128",
+                        "position": [
+                            755,
+                            1737,
+                            812,
+                            1760
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "472",
+                        "position": [
+                            878,
+                            1736,
+                            940,
+                            1761
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "23,955",
+                        "position": [
+                            1052,
+                            1734,
+                            1160,
+                            1762
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "402",
+                        "position": [
+                            1266,
+                            1731,
+                            1325,
+                            1755
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "60",
+                        "position": [
+                            1409,
+                            1730,
+                            1448,
+                            1755
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Govan ***",
+                        "position": [
+                            198,
+                            1774,
+                            459,
+                            1802
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "28,893",
+                        "position": [
+                            535,
+                            1776,
+                            646,
+                            1802
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "143",
+                        "position": [
+                            753,
+                            1776,
+                            812,
+                            1801
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "61",
+                        "position": [
+                            898,
+                            1775,
+                            937,
+                            1801
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "29,097",
+                        "position": [
+                            1051,
+                            1773,
+                            1161,
+                            1800
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "489",
+                        "position": [
+                            1266,
+                            1769,
+                            1323,
+                            1793
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "60",
+                        "position": [
+                            1409,
+                            1769,
+                            1448,
+                            1794
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Fairfield",
+                        "position": [
+                            201,
+                            1812,
+                            343,
+                            1841
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "20,433",
+                        "position": [
+                            536,
+                            1816,
+                            644,
+                            1844
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "1,239",
+                        "position": [
+                            724,
+                            1815,
+                            812,
+                            1845
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "465",
+                        "position": [
+                            879,
+                            1814,
+                            937,
+                            1839
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "22,137",
+                        "position": [
+                            1051,
+                            1809,
+                            1162,
+                            1841
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "1,351",
+                        "position": [
+                            1236,
+                            1809,
+                            1321,
+                            1839
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "16",
+                        "position": [
+                            1411,
+                            1806,
+                            1446,
+                            1834
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Craigton",
+                        "position": [
+                            198,
+                            1851,
+                            343,
+                            1889
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "37,318",
+                        "position": [
+                            537,
+                            1854,
+                            649,
+                            1882
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "251",
+                        "position": [
+                            754,
+                            1854,
+                            808,
+                            1879
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            1848,
+                            1008,
+                            1888
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "37,569",
+                        "position": [
+                            1052,
+                            1850,
+                            1162,
+                            1880
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "1,566",
+                        "position": [
+                            1236,
+                            1845,
+                            1323,
+                            1876
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "24",
+                        "position": [
+                            1409,
+                            1848,
+                            1448,
+                            1871
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Pollokshields",
+                        "position": [
+                            201,
+                            1890,
+                            422,
+                            1920
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "39,907",
+                        "position": [
+                            537,
+                            1893,
+                            647,
+                            1924
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "2,400",
+                        "position": [
+                            723,
+                            1894,
+                            811,
+                            1923
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            1888,
+                            1008,
+                            1925
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "42,307",
+                        "position": [
+                            1051,
+                            1890,
+                            1161,
+                            1919
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "3,239",
+                        "position": [
+                            1236,
+                            1885,
+                            1326,
+                            1915
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "13",
+                        "position": [
+                            1411,
+                            1886,
+                            1449,
+                            1910
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Camphill",
+                        "position": [
+                            200,
+                            1927,
+                            351,
+                            1969
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "19,663",
+                        "position": [
+                            539,
+                            1933,
+                            648,
+                            1960
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "304",
+                        "position": [
+                            754,
+                            1934,
+                            814,
+                            1957
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            1925,
+                            1008,
+                            1971
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "19,967",
+                        "position": [
+                            1055,
+                            1928,
+                            1161,
+                            1958
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "481",
+                        "position": [
+                            1265,
+                            1924,
+                            1322,
+                            1951
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "42",
+                        "position": [
+                            1410,
+                            1924,
+                            1448,
+                            1946
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Pollokshaws",
+                        "position": [
+                            201,
+                            1967,
+                            408,
+                            2000
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "51,727",
+                        "position": [
+                            539,
+                            1973,
+                            647,
+                            2001
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "78",
+                        "position": [
+                            774,
+                            1972,
+                            816,
+                            1998
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            1971,
+                            1008,
+                            2003
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "51,805",
+                        "position": [
+                            1052,
+                            1966,
+                            1161,
+                            1997
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "3,223",
+                        "position": [
+                            1234,
+                            1963,
+                            1326,
+                            1992
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "16",
+                        "position": [
+                            1412,
+                            1962,
+                            1449,
+                            1987
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Govanhill ***",
+                        "position": [
+                            200,
+                            2008,
+                            460,
+                            2037
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "23,572",
+                        "position": [
+                            537,
+                            2012,
+                            648,
+                            2040
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "270",
+                        "position": [
+                            754,
+                            2012,
+                            814,
+                            2035
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            2003,
+                            1008,
+                            2044
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "23,842",
+                        "position": [
+                            1052,
+                            2007,
+                            1162,
+                            2035
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "365",
+                        "position": [
+                            1267,
+                            2001,
+                            1324,
+                            2028
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "65",
+                        "position": [
+                            1410,
+                            2000,
+                            1449,
+                            2026
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Langside ***",
+                        "position": [
+                            199,
+                            2048,
+                            461,
+                            2084
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "24,731",
+                        "position": [
+                            538,
+                            2051,
+                            646,
+                            2079
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "864",
+                        "position": [
+                            753,
+                            2049,
+                            814,
+                            2074
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            2044,
+                            1008,
+                            2081
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "25,595",
+                        "position": [
+                            1052,
+                            2044,
+                            1161,
+                            2075
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "801",
+                        "position": [
+                            1267,
+                            2041,
+                            1323,
+                            2066
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "32",
+                        "position": [
+                            1410,
+                            2041,
+                            1451,
+                            2064
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "MUNICIPAL WARDS 1. Shettleston and__1": {
+                        "value": "Cathcart ***",
+                        "position": [
+                            201,
+                            2087,
+                            461,
+                            2116
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Without Institutions and Shipping__2": {
+                        "value": "50,284",
+                        "position": [
+                            538,
+                            2090,
+                            646,
+                            2116
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Institu tionst__3": {
+                        "value": "267",
+                        "position": [
+                            755,
+                            2089,
+                            814,
+                            2114
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Shipping__4": {
+                        "value": "",
+                        "position": [
+                            832,
+                            2081,
+                            1008,
+                            2148
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Total__5": {
+                        "value": "50,551",
+                        "position": [
+                            1054,
+                            2083,
+                            1158,
+                            2112
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Acreage__6": {
+                        "value": "2,737",
+                        "position": [
+                            1236,
+                            2079,
+                            1326,
+                            2110
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "Persons per acre (including Inst'utions and Shipping)__7": {
+                        "value": "18",
+                        "position": [
+                            1412,
+                            2079,
+                            1451,
+                            2103
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                }
+            ]
+        }
+    }
+]

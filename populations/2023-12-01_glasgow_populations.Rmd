@@ -1,0 +1,24 @@
+---
+title: "Glasgow populations"
+output: html_notebook
+---
+
+Load the required libraries
+
+```{r}
+library(tidyverse)
+ library(jsonlite)
+```
+Load the images
+
+```{r}
+
+pop <- fromJSON("1963.json", flatten=TRUE)
+
+pop %>%
+  select(data.Tables) %>%
+  unnest() %>%
+  select(1,5,9,13,17)
+
+```
+

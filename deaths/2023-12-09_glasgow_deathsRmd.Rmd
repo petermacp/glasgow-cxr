@@ -1,0 +1,19 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+
+```{r}
+library(tidyverse)
+library(here)
+library(pdftools)
+```
+
+```{r}
+
+
+
+```
+

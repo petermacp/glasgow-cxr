@@ -1,0 +1,2945 @@
+[
+    {
+        "meta_data": {
+            "title": "Screenshot 2023-12-01 at 14.18.21.png",
+            "doc_id": "ad943e0d948b49dd9ded6b77314d3c7a",
+            "type": "financial_statement__DFSGu__CFuBF",
+            "uploaded_from": "api",
+            "user_doc_id": null,
+            "doc_meta_data": "",
+            "folder_name": "",
+            "folder_id": "",
+            "created_at_iso": "2023-12-01T14:19:46+00:00",
+            "modified_at_iso": "2023-12-01T14:20:44+00:00",
+            "status": "reviewing",
+            "review_url": "https://app.docsumo.com/review-document/ad943e0d948b49dd9ded6b77314d3c7a"
+        },
+        "data": {
+            "Tables": [
+                {
+                    "__1": {
+                        "value": "Shettleston and Tollcross",
+                        "position": [
+                            14,
+                            10,
+                            255,
+                            70
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "45,416",
+                        "position": [
+                            326,
+                            44,
+                            427,
+                            72
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "221",
+                        "position": [
+                            526,
+                            45,
+                            581,
+                            69
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "",
+                        "position": [
+                            596,
+                            1,
+                            748,
+                            83
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "45,637",
+                        "position": [
+                            804,
+                            46,
+                            906,
+                            73
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "1,167",
+                        "position": [
+                            976,
+                            48,
+                            1056,
+                            73
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "39",
+                        "position": [
+                            1137,
+                            49,
+                            1172,
+                            69
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Parkhead ***",
+                        "position": [
+                            15,
+                            85,
+                            254,
+                            108
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "18,006",
+                        "position": [
+                            329,
+                            83,
+                            426,
+                            107
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "401",
+                        "position": [
+                            526,
+                            83,
+                            578,
+                            105
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "",
+                        "position": [
+                            596,
+                            83,
+                            748,
+                            117
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "18,407",
+                        "position": [
+                            805,
+                            84,
+                            902,
+                            109
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "819",
+                        "position": [
+                            1002,
+                            84,
+                            1058,
+                            106
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "22",
+                        "position": [
+                            1137,
+                            85,
+                            1175,
+                            104
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Dalmarnock",
+                        "position": [
+                            15,
+                            120,
+                            206,
+                            143
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "34,540",
+                        "position": [
+                            327,
+                            117,
+                            427,
+                            145
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "15",
+                        "position": [
+                            545,
+                            118,
+                            579,
+                            140
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "",
+                        "position": [
+                            596,
+                            117,
+                            748,
+                            154
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "34,555",
+                        "position": [
+                            803,
+                            119,
+                            903,
+                            147
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "487",
+                        "position": [
+                            1001,
+                            120,
+                            1058,
+                            143
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "71",
+                        "position": [
+                            1135,
+                            121,
+                            1172,
+                            144
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Calton",
+                        "position": [
+                            15,
+                            156,
+                            113,
+                            179
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "20,299",
+                        "position": [
+                            328,
+                            155,
+                            427,
+                            179
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "1,062",
+                        "position": [
+                            500,
+                            155,
+                            579,
+                            181
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "",
+                        "position": [
+                            596,
+                            155,
+                            748,
+                            189
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "21,361",
+                        "position": [
+                            803,
+                            157,
+                            903,
+                            182
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "404",
+                        "position": [
+                            1002,
+                            158,
+                            1055,
+                            179
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "53",
+                        "position": [
+                            1137,
+                            159,
+                            1173,
+                            181
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Mile-end",
+                        "position": [
+                            13,
+                            192,
+                            145,
+                            215
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "33,541",
+                        "position": [
+                            326,
+                            189,
+                            424,
+                            219
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "275",
+                        "position": [
+                            525,
+                            192,
+                            578,
+                            215
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "",
+                        "position": [
+                            596,
+                            189,
+                            748,
+                            226
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "33,816",
+                        "position": [
+                            803,
+                            192,
+                            903,
+                            220
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "443",
+                        "position": [
+                            1001,
+                            193,
+                            1057,
+                            217
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "76",
+                        "position": [
+                            1135,
+                            192,
+                            1172,
+                            218
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Dennistoun",
+                        "position": [
+                            15,
+                            230,
+                            193,
+                            252
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "23,599",
+                        "position": [
+                            326,
+                            226,
+                            427,
+                            256
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "26",
+                        "position": [
+                            543,
+                            228,
+                            579,
+                            251
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "",
+                        "position": [
+                            596,
+                            226,
+                            748,
+                            264
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "23,625",
+                        "position": [
+                            802,
+                            229,
+                            902,
+                            256
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "689",
+                        "position": [
+                            1001,
+                            229,
+                            1055,
+                            254
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "34",
+                        "position": [
+                            1135,
+                            231,
+                            1171,
+                            252
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Provan",
+                        "position": [
+                            14,
+                            267,
+                            128,
+                            290
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "51,663",
+                        "position": [
+                            327,
+                            265,
+                            427,
+                            291
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "2,008",
+                        "position": [
+                            495,
+                            264,
+                            579,
+                            291
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "",
+                        "position": [
+                            596,
+                            264,
+                            748,
+                            286
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "53,671",
+                        "position": [
+                            802,
+                            264,
+                            901,
+                            295
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "4,846",
+                        "position": [
+                            971,
+                            265,
+                            1052,
+                            293
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "11",
+                        "position": [
+                            1135,
+                            267,
+                            1171,
+                            290
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Cowlairs ...",
+                        "position": [
+                            12,
+                            287,
+                            253,
+                            325
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "22,530",
+                        "position": [
+                            327,
+                            299,
+                            425,
+                            328
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "1,325",
+                        "position": [
+                            497,
+                            300,
+                            578,
+                            326
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "",
+                        "position": [
+                            596,
+                            286,
+                            748,
+                            322
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "23,855",
+                        "position": [
+                            802,
+                            303,
+                            901,
+                            328
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "645",
+                        "position": [
+                            1001,
+                            303,
+                            1054,
+                            325
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "37",
+                        "position": [
+                            1134,
+                            305,
+                            1170,
+                            327
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Springburn ...",
+                        "position": [
+                            12,
+                            323,
+                            254,
+                            370
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "36,664",
+                        "position": [
+                            327,
+                            337,
+                            425,
+                            364
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "1,932",
+                        "position": [
+                            497,
+                            339,
+                            581,
+                            363
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "",
+                        "position": [
+                            596,
+                            322,
+                            748,
+                            357
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "38,596",
+                        "position": [
+                            802,
+                            338,
+                            900,
+                            366
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "2,118",
+                        "position": [
+                            971,
+                            339,
+                            1054,
+                            363
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "18",
+                        "position": [
+                            1135,
+                            340,
+                            1172,
+                            362
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Townhead ...",
+                        "position": [
+                            14,
+                            358,
+                            253,
+                            398
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "26,709",
+                        "position": [
+                            325,
+                            374,
+                            425,
+                            400
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "1,865",
+                        "position": [
+                            498,
+                            375,
+                            578,
+                            400
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "",
+                        "position": [
+                            596,
+                            357,
+                            748,
+                            409
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "28,574",
+                        "position": [
+                            801,
+                            376,
+                            902,
+                            402
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "301",
+                        "position": [
+                            999,
+                            376,
+                            1052,
+                            398
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "95",
+                        "position": [
+                            1132,
+                            376,
+                            1169,
+                            397
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Exchange",
+                        "position": [
+                            14,
+                            412,
+                            166,
+                            440
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "12,295",
+                        "position": [
+                            327,
+                            410,
+                            425,
+                            438
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "3,143",
+                        "position": [
+                            496,
+                            410,
+                            578,
+                            438
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "31",
+                        "position": [
+                            658,
+                            411,
+                            695,
+                            435
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "15,469",
+                        "position": [
+                            803,
+                            410,
+                            901,
+                            439
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "507",
+                        "position": [
+                            1001,
+                            413,
+                            1054,
+                            437
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "31",
+                        "position": [
+                            1133,
+                            413,
+                            1168,
+                            436
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Anderston ...",
+                        "position": [
+                            12,
+                            447,
+                            254,
+                            473
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "23,664",
+                        "position": [
+                            326,
+                            448,
+                            425,
+                            474
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "1,012",
+                        "position": [
+                            496,
+                            448,
+                            578,
+                            473
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "252",
+                        "position": [
+                            640,
+                            450,
+                            697,
+                            471
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "24,928",
+                        "position": [
+                            801,
+                            450,
+                            903,
+                            475
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "530",
+                        "position": [
+                            1000,
+                            449,
+                            1054,
+                            472
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "47",
+                        "position": [
+                            1134,
+                            450,
+                            1170,
+                            472
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Park ...",
+                        "position": [
+                            12,
+                            483,
+                            145,
+                            509
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "17,801",
+                        "position": [
+                            327,
+                            484,
+                            422,
+                            509
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "522",
+                        "position": [
+                            523,
+                            485,
+                            579,
+                            507
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "",
+                        "position": [
+                            596,
+                            483,
+                            748,
+                            517
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "18,323",
+                        "position": [
+                            802,
+                            485,
+                            901,
+                            512
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "317",
+                        "position": [
+                            999,
+                            485,
+                            1055,
+                            508
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "58",
+                        "position": [
+                            1132,
+                            487,
+                            1172,
+                            508
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Cowcaddens",
+                        "position": [
+                            11,
+                            517,
+                            202,
+                            545
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "20,714",
+                        "position": [
+                            326,
+                            519,
+                            424,
+                            546
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "316",
+                        "position": [
+                            524,
+                            521,
+                            578,
+                            545
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "",
+                        "position": [
+                            596,
+                            517,
+                            748,
+                            556
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "21,030",
+                        "position": [
+                            800,
+                            523,
+                            900,
+                            547
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "488",
+                        "position": [
+                            998,
+                            522,
+                            1056,
+                            545
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "43",
+                        "position": [
+                            1132,
+                            522,
+                            1171,
+                            545
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Woodside",
+                        "position": [
+                            12,
+                            557,
+                            162,
+                            580
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "20,548",
+                        "position": [
+                            325,
+                            557,
+                            423,
+                            583
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "520",
+                        "position": [
+                            523,
+                            559,
+                            578,
+                            580
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "",
+                        "position": [
+                            596,
+                            556,
+                            748,
+                            592
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "21,068",
+                        "position": [
+                            800,
+                            557,
+                            901,
+                            584
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "170",
+                        "position": [
+                            1000,
+                            558,
+                            1053,
+                            580
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "124",
+                        "position": [
+                            1117,
+                            559,
+                            1169,
+                            581
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Ruchill",
+                        "position": [
+                            12,
+                            594,
+                            126,
+                            615
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "48,159",
+                        "position": [
+                            324,
+                            592,
+                            424,
+                            620
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "505",
+                        "position": [
+                            523,
+                            594,
+                            577,
+                            616
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "",
+                        "position": [
+                            596,
+                            592,
+                            748,
+                            628
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "48,664",
+                        "position": [
+                            800,
+                            596,
+                            899,
+                            621
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "1,962",
+                        "position": [
+                            971,
+                            594,
+                            1053,
+                            621
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "25",
+                        "position": [
+                            1132,
+                            597,
+                            1167,
+                            617
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "North Kelvin",
+                        "position": [
+                            12,
+                            629,
+                            229,
+                            653
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "22,670",
+                        "position": [
+                            325,
+                            630,
+                            425,
+                            657
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "83",
+                        "position": [
+                            539,
+                            628,
+                            578,
+                            655
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "",
+                        "position": [
+                            596,
+                            628,
+                            748,
+                            666
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "22,753",
+                        "position": [
+                            798,
+                            631,
+                            899,
+                            657
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "278",
+                        "position": [
+                            998,
+                            632,
+                            1055,
+                            655
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "82",
+                        "position": [
+                            1131,
+                            632,
+                            1171,
+                            653
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Maryhill ***",
+                        "position": [
+                            11,
+                            666,
+                            251,
+                            694
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "25,829",
+                        "position": [
+                            324,
+                            668,
+                            426,
+                            693
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "286",
+                        "position": [
+                            523,
+                            667,
+                            576,
+                            690
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "2",
+                        "position": [
+                            674,
+                            668,
+                            695,
+                            690
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "26,117",
+                        "position": [
+                            799,
+                            668,
+                            899,
+                            693
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "2,210",
+                        "position": [
+                            970,
+                            668,
+                            1052,
+                            695
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "12",
+                        "position": [
+                            1133,
+                            669,
+                            1170,
+                            689
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Kelvinside ***",
+                        "position": [
+                            13,
+                            703,
+                            250,
+                            726
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "18,389",
+                        "position": [
+                            325,
+                            703,
+                            425,
+                            729
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "1,452",
+                        "position": [
+                            496,
+                            703,
+                            578,
+                            729
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "",
+                        "position": [
+                            596,
+                            703,
+                            748,
+                            733
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "19,841",
+                        "position": [
+                            801,
+                            705,
+                            899,
+                            730
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "1,160",
+                        "position": [
+                            971,
+                            703,
+                            1051,
+                            732
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "17",
+                        "position": [
+                            1132,
+                            704,
+                            1170,
+                            729
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Partick (East)",
+                        "position": [
+                            11,
+                            734,
+                            244,
+                            769
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "18,767",
+                        "position": [
+                            325,
+                            740,
+                            424,
+                            766
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "952",
+                        "position": [
+                            522,
+                            740,
+                            578,
+                            763
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "71",
+                        "position": [
+                            654,
+                            740,
+                            692,
+                            763
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "19,790",
+                        "position": [
+                            801,
+                            740,
+                            899,
+                            767
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "351",
+                        "position": [
+                            997,
+                            740,
+                            1050,
+                            765
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "56",
+                        "position": [
+                            1131,
+                            742,
+                            1167,
+                            764
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Partick (West)",
+                        "position": [
+                            12,
+                            766,
+                            250,
+                            806
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "23,498",
+                        "position": [
+                            323,
+                            776,
+                            424,
+                            801
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "13",
+                        "position": [
+                            540,
+                            776,
+                            578,
+                            799
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "",
+                        "position": [
+                            596,
+                            766,
+                            748,
+                            810
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "23,511",
+                        "position": [
+                            798,
+                            776,
+                            895,
+                            803
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "464",
+                        "position": [
+                            998,
+                            777,
+                            1052,
+                            800
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "51",
+                        "position": [
+                            1131,
+                            778,
+                            1165,
+                            802
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Whiteinch",
+                        "position": [
+                            11,
+                            810,
+                            171,
+                            836
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "21,090",
+                        "position": [
+                            324,
+                            813,
+                            422,
+                            837
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "161",
+                        "position": [
+                            523,
+                            812,
+                            575,
+                            835
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "",
+                        "position": [
+                            596,
+                            810,
+                            748,
+                            846
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "21,251",
+                        "position": [
+                            798,
+                            811,
+                            895,
+                            837
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "894",
+                        "position": [
+                            997,
+                            813,
+                            1052,
+                            837
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "24",
+                        "position": [
+                            1130,
+                            815,
+                            1166,
+                            836
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Yoker",
+                        "position": [
+                            10,
+                            847,
+                            107,
+                            870
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "27,192",
+                        "position": [
+                            323,
+                            847,
+                            423,
+                            873
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "195",
+                        "position": [
+                            523,
+                            849,
+                            575,
+                            872
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "52",
+                        "position": [
+                            656,
+                            851,
+                            693,
+                            872
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "27,439",
+                        "position": [
+                            797,
+                            851,
+                            898,
+                            875
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "1,213",
+                        "position": [
+                            971,
+                            850,
+                            1052,
+                            878
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "23",
+                        "position": [
+                            1130,
+                            852,
+                            1168,
+                            873
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Knightswood",
+                        "position": [
+                            11,
+                            885,
+                            216,
+                            913
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "42,637",
+                        "position": [
+                            322,
+                            886,
+                            423,
+                            910
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "113",
+                        "position": [
+                            523,
+                            885,
+                            577,
+                            908
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "",
+                        "position": [
+                            596,
+                            884,
+                            748,
+                            919
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "42,750",
+                        "position": [
+                            798,
+                            885,
+                            898,
+                            914
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "1,614",
+                        "position": [
+                            970,
+                            885,
+                            1051,
+                            915
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "26",
+                        "position": [
+                            1130,
+                            887,
+                            1167,
+                            909
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Hutchesontown",
+                        "position": [
+                            12,
+                            920,
+                            257,
+                            946
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "24,301",
+                        "position": [
+                            324,
+                            921,
+                            420,
+                            950
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "12",
+                        "position": [
+                            541,
+                            923,
+                            578,
+                            945
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "",
+                        "position": [
+                            596,
+                            920,
+                            748,
+                            956
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "24,313",
+                        "position": [
+                            797,
+                            922,
+                            898,
+                            949
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "387",
+                        "position": [
+                            996,
+                            924,
+                            1052,
+                            947
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "63",
+                        "position": [
+                            1131,
+                            924,
+                            1166,
+                            946
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Gorbals",
+                        "position": [
+                            10,
+                            956,
+                            129,
+                            980
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "26,632",
+                        "position": [
+                            322,
+                            959,
+                            423,
+                            983
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "5",
+                        "position": [
+                            556,
+                            959,
+                            576,
+                            982
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "",
+                        "position": [
+                            596,
+                            956,
+                            748,
+                            993
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "26,637",
+                        "position": [
+                            797,
+                            959,
+                            898,
+                            983
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "252",
+                        "position": [
+                            996,
+                            961,
+                            1051,
+                            982
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "106",
+                        "position": [
+                            1113,
+                            960,
+                            1165,
+                            982
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Kingston",
+                        "position": [
+                            12,
+                            993,
+                            153,
+                            1022
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "21,313",
+                        "position": [
+                            322,
+                            995,
+                            424,
+                            1021
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "",
+                        "position": [
+                            462,
+                            993,
+                            596,
+                            1024
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "80",
+                        "position": [
+                            655,
+                            996,
+                            692,
+                            1019
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "21,393",
+                        "position": [
+                            797,
+                            996,
+                            898,
+                            1022
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "355",
+                        "position": [
+                            996,
+                            996,
+                            1050,
+                            1020
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "60",
+                        "position": [
+                            1130,
+                            997,
+                            1166,
+                            1019
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Kinning Park",
+                        "position": [
+                            12,
+                            1024,
+                            233,
+                            1061
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "23,720",
+                        "position": [
+                            322,
+                            1030,
+                            422,
+                            1058
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "98",
+                        "position": [
+                            539,
+                            1031,
+                            577,
+                            1055
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "472",
+                        "position": [
+                            637,
+                            1033,
+                            693,
+                            1055
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "24,290",
+                        "position": [
+                            797,
+                            1034,
+                            897,
+                            1058
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "402",
+                        "position": [
+                            996,
+                            1033,
+                            1051,
+                            1054
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "60",
+                        "position": [
+                            1130,
+                            1033,
+                            1167,
+                            1055
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Govan",
+                        "position": [
+                            9,
+                            1064,
+                            109,
+                            1090
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "29,792",
+                        "position": [
+                            323,
+                            1067,
+                            422,
+                            1094
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "180",
+                        "position": [
+                            522,
+                            1069,
+                            576,
+                            1090
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "61",
+                        "position": [
+                            655,
+                            1069,
+                            689,
+                            1092
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "30,033",
+                        "position": [
+                            797,
+                            1069,
+                            898,
+                            1096
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "489",
+                        "position": [
+                            995,
+                            1068,
+                            1049,
+                            1093
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "61",
+                        "position": [
+                            1129,
+                            1069,
+                            1162,
+                            1093
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Fairfield",
+                        "position": [
+                            11,
+                            1100,
+                            140,
+                            1125
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "20,439",
+                        "position": [
+                            322,
+                            1105,
+                            421,
+                            1132
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "1,276",
+                        "position": [
+                            495,
+                            1104,
+                            574,
+                            1133
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "465",
+                        "position": [
+                            636,
+                            1105,
+                            689,
+                            1129
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "22,180",
+                        "position": [
+                            797,
+                            1105,
+                            897,
+                            1133
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "1,351",
+                        "position": [
+                            968,
+                            1105,
+                            1047,
+                            1129
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "16",
+                        "position": [
+                            1132,
+                            1107,
+                            1164,
+                            1130
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Craigton ***",
+                        "position": [
+                            10,
+                            1137,
+                            249,
+                            1168
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "37,686",
+                        "position": [
+                            323,
+                            1140,
+                            420,
+                            1167
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "281",
+                        "position": [
+                            521,
+                            1142,
+                            573,
+                            1164
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "-",
+                        "position": [
+                            656,
+                            1155,
+                            682,
+                            1161
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "37,967",
+                        "position": [
+                            797,
+                            1141,
+                            895,
+                            1169
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "1,566",
+                        "position": [
+                            968,
+                            1141,
+                            1046,
+                            1171
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "24",
+                        "position": [
+                            1128,
+                            1143,
+                            1164,
+                            1163
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Pollokshields",
+                        "position": [
+                            10,
+                            1173,
+                            215,
+                            1200
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "40,121",
+                        "position": [
+                            321,
+                            1177,
+                            421,
+                            1204
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "2,444",
+                        "position": [
+                            492,
+                            1179,
+                            575,
+                            1205
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "",
+                        "position": [
+                            596,
+                            1173,
+                            748,
+                            1208
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "42,565",
+                        "position": [
+                            797,
+                            1179,
+                            896,
+                            1204
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "3,239",
+                        "position": [
+                            966,
+                            1178,
+                            1048,
+                            1206
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "13",
+                        "position": [
+                            1129,
+                            1179,
+                            1165,
+                            1202
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Camphill",
+                        "position": [
+                            9,
+                            1209,
+                            150,
+                            1244
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "20,151",
+                        "position": [
+                            322,
+                            1213,
+                            420,
+                            1241
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "128",
+                        "position": [
+                            521,
+                            1215,
+                            577,
+                            1236
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "",
+                        "position": [
+                            596,
+                            1208,
+                            748,
+                            1244
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "20,279",
+                        "position": [
+                            797,
+                            1215,
+                            895,
+                            1242
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "481",
+                        "position": [
+                            995,
+                            1214,
+                            1046,
+                            1239
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "42",
+                        "position": [
+                            1128,
+                            1215,
+                            1165,
+                            1236
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Pollokshaws ...",
+                        "position": [
+                            10,
+                            1244,
+                            253,
+                            1274
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "52,149",
+                        "position": [
+                            322,
+                            1250,
+                            420,
+                            1276
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "87",
+                        "position": [
+                            538,
+                            1251,
+                            576,
+                            1273
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "",
+                        "position": [
+                            596,
+                            1244,
+                            748,
+                            1281
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "52,236",
+                        "position": [
+                            797,
+                            1252,
+                            897,
+                            1277
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "3,223",
+                        "position": [
+                            966,
+                            1252,
+                            1048,
+                            1277
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "16",
+                        "position": [
+                            1130,
+                            1252,
+                            1164,
+                            1274
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Govanhill",
+                        "position": [
+                            8,
+                            1282,
+                            163,
+                            1306
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "23,899",
+                        "position": [
+                            322,
+                            1287,
+                            421,
+                            1312
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "250",
+                        "position": [
+                            520,
+                            1288,
+                            573,
+                            1308
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "",
+                        "position": [
+                            596,
+                            1281,
+                            748,
+                            1319
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "24,149",
+                        "position": [
+                            795,
+                            1288,
+                            895,
+                            1312
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "365",
+                        "position": [
+                            994,
+                            1287,
+                            1049,
+                            1310
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "66",
+                        "position": [
+                            1127,
+                            1287,
+                            1164,
+                            1310
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Langside",
+                        "position": [
+                            9,
+                            1320,
+                            147,
+                            1349
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "25,126",
+                        "position": [
+                            321,
+                            1323,
+                            420,
+                            1347
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "801",
+                        "position": [
+                            520,
+                            1324,
+                            571,
+                            1346
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "",
+                        "position": [
+                            596,
+                            1319,
+                            748,
+                            1356
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "25,927",
+                        "position": [
+                            797,
+                            1325,
+                            896,
+                            1351
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "801",
+                        "position": [
+                            994,
+                            1325,
+                            1046,
+                            1348
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "32",
+                        "position": [
+                            1128,
+                            1325,
+                            1165,
+                            1346
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                },
+                {
+                    "__1": {
+                        "value": "Cathcart",
+                        "position": [
+                            7,
+                            1356,
+                            143,
+                            1378
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__2": {
+                        "value": "48,526",
+                        "position": [
+                            319,
+                            1359,
+                            420,
+                            1386
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__3": {
+                        "value": "274",
+                        "position": [
+                            520,
+                            1362,
+                            573,
+                            1383
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__4": {
+                        "value": "",
+                        "position": [
+                            596,
+                            1356,
+                            748,
+                            1396
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__5": {
+                        "value": "48,800",
+                        "position": [
+                            796,
+                            1361,
+                            895,
+                            1386
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__6": {
+                        "value": "2,737",
+                        "position": [
+                            966,
+                            1360,
+                            1047,
+                            1385
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    },
+                    "__7": {
+                        "value": "18",
+                        "position": [
+                            1127,
+                            1360,
+                            1165,
+                            1383
+                        ],
+                        "confidence": 0,
+                        "review_required": true
+                    }
+                }
+            ]
+        }
+    }
+]
