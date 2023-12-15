@@ -1,0 +1,70 @@
+---
+title: "Glasgow Muncipal Ward boundaries"
+output: html_notebook
+---
+
+
+```{r}
+library(tidyverse)
+library(here)
+library(sf)
+library(readxl)
+library(ggrepel)
+```
+
+
+
+```{r}
+
+raw <- st_read("wards.geojson")
+
+```
+
+```{r}
+
+raw %>%
+  ggplot() +
+  geom_sf()
+
+
+```
+
+Load the look-up table with names of wards
+
+```{r}
+
+#look-up table for divisions and wards
+ward_lookup <- read_xlsx(path = "/Users/petermacpherson/Dropbox/Projects/Historical TB ACF 2023-11-28/Work/analysis/glasgow-cxr/2023-11-28_glasgow-acf.xlsx", sheet = "divisions_wards")
+
+ward_lookup <- ward_lookup %>%
+  rename(id = ward_number)
+
+
+```
+
+Join them together
+
+```{r}
+
+glasgow_wards_1951 <- left_join(raw, ward_lookup) %>%
+  rename(ward_number = id)
+
+glasgow_wards_1951 %>%
+  ggplot() +
+  geom_sf(fill="pink") +
+  geom_sf_label(aes(label = ward), size=2, fill=NA, label.size = NA, colour="white")
+  
+
+
+```
+
+Now write to .geojson file for analysis
+
+```{r}
+
+st_write(glasgow_wards_1951, "glasgow_wards_1951.geojson")
+
+
+```
+
+

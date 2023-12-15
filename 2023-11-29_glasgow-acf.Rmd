@@ -24,6 +24,7 @@ library(ggrepel)
 library(scico)
 library(ggdensity)
 library(ggpubr)
+library(ggsn)
 
 ```
 
@@ -254,13 +255,70 @@ Import datasets for analysis
 
 #### 2.1 Shapefiles
 
-
+Make a map of Glasgow wards
 
 ```{r}
 
-glasgow_wards_1951 <- st_read("glasgow_wards_1959.geojson")
+glasgow_wards_1951 <- st_read(here("mapping/glasgow_wards_1951.geojson"))
 
 ```
+
+```{r}
+
+#read in Scotland boundary
+scotland <- st_read(here("mapping/Scotland_boundary/Scotland boundary.shp"))
+
+
+
+#make a bounding box for Glasgow
+bbox <- st_bbox(glasgow_wards_1951) |> st_as_sfc()
+
+#plot scotlan with a bounding box around the City of Glasgow
+scotland_with_bbox <- ggplot() +
+  geom_sf(data = scotland, fill="antiquewhite") +
+  geom_sf(data = bbox, colour = "#C60C30", fill="antiquewhite") +
+  theme_void() +
+  theme(panel.border = element_rect(colour = "grey78", fill=NA, linewidth = 0.5),
+        panel.background = element_rect(fill = "#EAF7FA", size = 0.3))
+
+
+#plot the wards
+#note we tidy up some names to fit on map
+glasgow_ward_map <- glasgow_wards_1951 %>%
+  mutate(ward = case_when(ward=="Shettleston and Tollcross" ~ "Shettleston and\nTollcross",
+                          ward=="Partick (West)" ~ "Partick\n(West)",
+                          ward=="Partick (East)" ~ "Partick\n(East)",
+                          ward=="North Kelvin" ~ "North\nKelvin",
+                          ward=="Kinning Park" ~ "Kinning\nPark",
+                          TRUE ~ ward)) %>%
+  
+  ggplot() +
+  geom_sf(aes(fill=division)) +
+  geom_sf_label(aes(label = ward), size=3, fill=NA, label.size = NA, colour="black", family = "Segoe UI") +
+  #scale_colour_identity() +
+  scale_fill_brewer(palette = "Set3", name="City of Glasgow Division") +
+  theme_grey(base_family = "Segoe UI") +
+  labs(x="",
+       y="",
+       fill="Division") +
+  theme(legend.position = "top",
+        
+        panel.border = element_rect(colour = "grey78", fill=NA, linewidth = 0.5),
+        panel.background = element_rect(fill = "antiquewhite", size = 0.3),
+        panel.grid.major = element_line(color = "grey78")) +
+  guides(fill=guide_legend(title.position = "top", title.hjust = 0.5, title.theme = element_text(face="bold"))) +
+  scalebar(glasgow_wards_1951, dist = 2, dist_unit = "km",
+             transform = TRUE, model = "WGS84", location="bottomleft")
+
+#add the map of scotland as an inset
+glasgow_ward_map + inset_element(scotland_with_bbox, 0.75, 0, 1, 0.4)
+
+ggsave(here("figures/glasgow_ward_map.png"), height=10, width = 12)
+
+
+```
+
+
 
 ### 3. Denominators
 
