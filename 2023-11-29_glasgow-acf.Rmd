@@ -529,7 +529,7 @@ division_pops %>%
 
 ward_pops %>%
   ggplot() +
-  geom_area(aes(y=total_population, x=year2, colour=division, fill=division), alpha=0.5) +
+  geom_area(aes(y=total_population, x=year2, colour=division, fill=division), alpha=0.8) +
   geom_point(aes(y=total_population, x=year2, colour=division)) +
   geom_vline(aes(xintercept=acf_start), linetype=3) +
   geom_vline(aes(xintercept=acf_end), linetype=3) +
@@ -773,7 +773,7 @@ cases_by_ward_sex_year %>%
 
 ```
 
-Aggregate together to case cases by division
+Aggregate together to get cases by division
 
 ```{r}
 
@@ -1216,12 +1216,12 @@ Slightly more informative prior ("weakly informative" really)
 ```{r}
 
 ggplot(data = tibble(x = seq(from = 500, to = 5000, by = 10)),
-       aes(x = x, y = dgamma(x, shape = 0.1, rate = 0.00001))) +
+       aes(x = x, y = dgamma(x, shape = 2, rate = 0.001))) +
   geom_area(color = "transparent", 
             fill = "#DE0D92") +
   scale_x_continuous(NULL) +
   coord_cartesian(xlim = c(500, 5000)) +
-  ggtitle(expression(brms~~gamma(0.1*", "*0.00001)~shape~prior))
+  ggtitle(expression(brms~~gamma(2*", "*0.001)~shape~prior))
 
 
 ```
@@ -1231,7 +1231,7 @@ Fit a model with only priors
 ```{r}
 
 winform_prior <- c(prior(normal(0, 1), class = Intercept),
-                  prior(gamma(0.1, 0.00001), class = shape),
+                  prior(gamma(2, 0.001), class = shape),
                   prior(normal(0, 0.25), class = b))
 
 
@@ -1272,6 +1272,9 @@ plot(m_pulmonary_overall)
 pp_check(m_pulmonary_overall, type='ecdf_overlay')
 
 ```
+
+
+
 
 #### 7.2 Summarise change in CNRs
 
@@ -1545,17 +1548,17 @@ basic_prior2 <- c(prior(normal(0, 1), class = Intercept),
                  prior(cauchy(0,5), class="sd"))
 
 
-ggplot(data = tibble(x = seq(from = 0, to = 250, by = 10)),
-       aes(x = x, y = dgamma(x, shape = 0.5, rate = 0.01))) +
+ggplot(data = tibble(x = seq(from = 0, to = 500, by = 10)),
+       aes(x = x, y = dgamma(x, shape = 1, rate = 0.01))) +
   geom_area(color = "transparent", 
             fill = "#DE0D92") +
   scale_x_continuous(NULL) +
   scale_y_continuous(NULL, breaks = NULL) +
-  coord_cartesian(xlim = c(0, 250)) +
-  ggtitle(expression(brms~~gamma(0.5*", "*0.00001)~shape~prior))
+  coord_cartesian(xlim = c(0, 500)) +
+  ggtitle(expression(brms~~gamma(1*", "*0.01)~shape~prior))
 
 winform_prior2 <- c(prior(normal(0, 1), class = Intercept),
-                  prior(gamma(0.5, 0.01), class = shape),
+                  prior(gamma(1, 0.01), class = shape),
                   prior(normal(0, 1), class = b),
                   prior(cauchy(0,5), class="sd"),
                   prior(lkj(2), class="cor"))
@@ -1699,54 +1702,54 @@ Is there any correlation between immediate increase and a) post-intervention (19
 
 ```{r}
 
-ward_cors <- ward_impact_out %>%
-  select(ward, immediate_effect = acf_inc100k_rr,
-               immediate_effect_lower = acf_inc100k_rr.lower,
-               immediate_effect_upper = acf_inc100k_rr.upper) %>%
-  right_join(
-    ward_pulm_impact2 %>% 
-      select(ward, post_effect = acf_inc100k_rr,
-               post_effect_lower = acf_inc100k_rr.lower,
-               post_effect_upper = acf_inc100k_rr.upper)
-  ) %>%
-  right_join(
-    ward_pulm_impact3 %>%
-      filter(acf_period=="c. post-acf") %>%
-      select(ward, slope_effect = pct_change_epred_annual,
-             slope_effect_lower = pct_change_lower_annual,
-             slope_effect_upper = pct_change_upper_annual)
-  )
-
-ward_cors %>%
-  ggplot(aes(x=immediate_effect, xmin=immediate_effect_lower, xmax=immediate_effect_upper,
-             y=post_effect, ymin=post_effect_lower, ymax=post_effect_upper,
-             group = ward)) +
-  geom_errorbar() +
-  geom_errorbarh() +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  theme_ggdist() +
-  labs(title="Correlation between immediate ACF impact and post-ACF case notification rate",
-       y="Relative case notification rate (1958 vs. 1956)\nPost intervention impact",
-       x="Relative case notification rate (1957 vs. 1956)\nImmediate impact",
-       caption="Points are municipal wards") +
-  theme(legend.position = "none",
-        panel.border = element_rect(colour = "grey78", fill=NA))
-
-ward_cors %>%
-  ggplot(aes(x=immediate_effect, xmin=immediate_effect_lower, xmax=immediate_effect_upper,
-             y=slope_effect, ymin=slope_effect_lower, ymax=slope_effect_upper,
-             group = ward)) +
-  geom_errorbar() +
-  geom_errorbarh() +
-  geom_smooth(method = "lm") +
-  theme_ggdist() +
-  labs(title="Correlation between immediate ACF impact and post-ACF mean rate of change",
-       y="Post ACF mean annual rate of change in case notification rates",
-       x="Relative case notification rate (1957 vs. 1956)\nImmediate impact",
-       caption="Points are municipal wards") +
-  theme(legend.position = "none",
-        panel.border = element_rect(colour = "grey78", fill=NA))
+# ward_cors <- ward_impact_out %>%
+#   select(ward, immediate_effect = acf_inc100k_rr,
+#                immediate_effect_lower = acf_inc100k_rr.lower,
+#                immediate_effect_upper = acf_inc100k_rr.upper) %>%
+#   right_join(
+#     ward_pulm_impact2 %>% 
+#       select(ward, post_effect = acf_inc100k_rr,
+#                post_effect_lower = acf_inc100k_rr.lower,
+#                post_effect_upper = acf_inc100k_rr.upper)
+#   ) %>%
+#   right_join(
+#     ward_pulm_impact3 %>%
+#       filter(acf_period=="c. post-acf") %>%
+#       select(ward, slope_effect = pct_change_epred_annual,
+#              slope_effect_lower = pct_change_lower_annual,
+#              slope_effect_upper = pct_change_upper_annual)
+#   )
+# 
+# ward_cors %>%
+#   ggplot(aes(x=immediate_effect, xmin=immediate_effect_lower, xmax=immediate_effect_upper,
+#              y=post_effect, ymin=post_effect_lower, ymax=post_effect_upper,
+#              group = ward)) +
+#   geom_errorbar() +
+#   geom_errorbarh() +
+#   geom_point() +
+#   geom_smooth(method = "lm") +
+#   theme_ggdist() +
+#   labs(title="Correlation between immediate ACF impact and post-ACF case notification rate",
+#        y="Relative case notification rate (1958 vs. 1956)\nPost intervention impact",
+#        x="Relative case notification rate (1957 vs. 1956)\nImmediate impact",
+#        caption="Points are municipal wards") +
+#   theme(legend.position = "none",
+#         panel.border = element_rect(colour = "grey78", fill=NA))
+# 
+# ward_cors %>%
+#   ggplot(aes(x=immediate_effect, xmin=immediate_effect_lower, xmax=immediate_effect_upper,
+#              y=slope_effect, ymin=slope_effect_lower, ymax=slope_effect_upper,
+#              group = ward)) +
+#   geom_errorbar() +
+#   geom_errorbarh() +
+#   geom_smooth(method = "lm") +
+#   theme_ggdist() +
+#   labs(title="Correlation between immediate ACF impact and post-ACF mean rate of change",
+#        y="Post ACF mean annual rate of change in case notification rates",
+#        x="Relative case notification rate (1957 vs. 1956)\nImmediate impact",
+#        caption="Points are municipal wards") +
+#   theme(legend.position = "none",
+#         panel.border = element_rect(colour = "grey78", fill=NA))
 
 
 
@@ -1757,42 +1760,42 @@ Try a different way with the full distribution of posteriors
 
 ```{r}
 
-ward_immediate_draws <- mdata2 %>%
-  select(year, year2, y_num, acf_period, population_without_inst_ship, cases, ward) %>%
-  filter(year %in% c(1956,1957)) %>%
-  add_epred_draws(m_pulmonary_ward) %>%
-  mutate(inc_100k = .epred/population_without_inst_ship*100000) %>%
-  group_by(ward, .draw) %>%
-  summarise(pct_change_immediate = (last(inc_100k) - first(inc_100k))/first(inc_100k)) %>%
-  arrange(ward) %>%
-  ungroup()
-
-ward_post_draws <- mdata2 %>%
-  select(year, year2, y_num, acf_period, population_without_inst_ship, cases, ward) %>%
-  filter(year %in% c(1956,1958)) %>%
-  add_epred_draws(m_pulmonary_ward) %>%
-  mutate(inc_100k = .epred/population_without_inst_ship*100000) %>%
-  group_by(ward, .draw) %>%
-  summarise(pct_change_post = (last(inc_100k) - first(inc_100k))/first(inc_100k)) %>%
-  arrange(ward) %>%
-  ungroup()
-
-
-ward_slope_draws <- mdata2 %>%
-  select(year, year2, y_num, acf_period, population_without_inst_ship, cases, ward) %>%
-  filter(year %in% c(1950, 1956, 1958, 1963)) %>%
-  add_epred_draws(m_pulmonary_ward) %>%
-  mutate(inc_100k = .epred/population_without_inst_ship*100000) %>%
-  ungroup() %>%
-  mutate(n_years = case_when(acf_period=="a. pre-acf" ~ 7,
-                             acf_period=="c. post-acf" ~ 6)) %>%
-  group_by(ward, acf_period, .draw) %>%
-  summarise(pct_change_slope = ((last(inc_100k) - first(inc_100k))/first(inc_100k))/n_years) %>%
-  distinct() %>%
-  pivot_wider(names_from = c(acf_period),
-              values_from = pct_change_slope) %>%
-  mutate(ratio_annual_slope = `c. post-acf` / `a. pre-acf`)
-  
+# ward_immediate_draws <- mdata2 %>%
+#   select(year, year2, y_num, acf_period, population_without_inst_ship, cases, ward) %>%
+#   filter(year %in% c(1956,1957)) %>%
+#   add_epred_draws(m_pulmonary_ward) %>%
+#   mutate(inc_100k = .epred/population_without_inst_ship*100000) %>%
+#   group_by(ward, .draw) %>%
+#   summarise(pct_change_immediate = (last(inc_100k) - first(inc_100k))/first(inc_100k)) %>%
+#   arrange(ward) %>%
+#   ungroup()
+# 
+# ward_post_draws <- mdata2 %>%
+#   select(year, year2, y_num, acf_period, population_without_inst_ship, cases, ward) %>%
+#   filter(year %in% c(1956,1958)) %>%
+#   add_epred_draws(m_pulmonary_ward) %>%
+#   mutate(inc_100k = .epred/population_without_inst_ship*100000) %>%
+#   group_by(ward, .draw) %>%
+#   summarise(pct_change_post = (last(inc_100k) - first(inc_100k))/first(inc_100k)) %>%
+#   arrange(ward) %>%
+#   ungroup()
+# 
+# 
+# ward_slope_draws <- mdata2 %>%
+#   select(year, year2, y_num, acf_period, population_without_inst_ship, cases, ward) %>%
+#   filter(year %in% c(1950, 1956, 1958, 1963)) %>%
+#   add_epred_draws(m_pulmonary_ward) %>%
+#   mutate(inc_100k = .epred/population_without_inst_ship*100000) %>%
+#   ungroup() %>%
+#   mutate(n_years = case_when(acf_period=="a. pre-acf" ~ 7,
+#                              acf_period=="c. post-acf" ~ 6)) %>%
+#   group_by(ward, acf_period, .draw) %>%
+#   summarise(pct_change_slope = ((last(inc_100k) - first(inc_100k))/first(inc_100k))/n_years) %>%
+#   distinct() %>%
+#   pivot_wider(names_from = c(acf_period),
+#               values_from = pct_change_slope) %>%
+#   mutate(ratio_annual_slope = `c. post-acf` / `a. pre-acf`)
+#   
 
 
 
@@ -1804,23 +1807,23 @@ Correlation between immediate effect and post effect of ACF
 
 ```{r}
 
-
-left_join(ward_immediate_draws, ward_post_draws) %>%
-  ggplot(aes(x=pct_change_immediate, y=pct_change_post, group=ward)) +
-  geom_hdr_points(size=0.1) +
-  geom_smooth(method = "lm", se=FALSE, colour="black", linewidth=0.5) +
-  stat_regline_equation(label.x = 0, label.y = 0.25, size=4) +
-  scale_colour_scico_d(palette = "lipari", name = "Posterior probability") +
-  scale_x_continuous(labels = percent) +
-  scale_y_continuous(labels = percent) +
-  labs(title="Correlation between immediate ACF impact and post-ACF case notification rate",
-       y="Post intervention impact: ercentage change in CNR (1958 vs. 1956)",
-       x="Immediate impact: percentage change in CNR (1957 vs. 1956)",
-       caption="Points are draws from posteior distribution") +
-  theme_ggdist() +
-  theme(legend.position = "bottom",
-        panel.border = element_rect(colour = "grey78", fill=NA)) +
-  facet_wrap(ward~.)
+# 
+# left_join(ward_immediate_draws, ward_post_draws) %>%
+#   ggplot(aes(x=pct_change_immediate, y=pct_change_post, group=ward)) +
+#   geom_hdr_points(size=0.1) +
+#   geom_smooth(method = "lm", se=FALSE, colour="black", linewidth=0.5) +
+#   stat_regline_equation(label.x = 0, label.y = 0.25, size=4) +
+#   scale_colour_scico_d(palette = "lipari", name = "Posterior probability") +
+#   scale_x_continuous(labels = percent) +
+#   scale_y_continuous(labels = percent) +
+#   labs(title="Correlation between immediate ACF impact and post-ACF case notification rate",
+#        y="Post intervention impact: ercentage change in CNR (1958 vs. 1956)",
+#        x="Immediate impact: percentage change in CNR (1957 vs. 1956)",
+#        caption="Points are draws from posteior distribution") +
+#   theme_ggdist() +
+#   theme(legend.position = "bottom",
+#         panel.border = element_rect(colour = "grey78", fill=NA)) +
+#   facet_wrap(ward~.)
 
 
 ```
@@ -1829,22 +1832,22 @@ Correlation between immediate effect and change in slope
 
 ```{r}
 
-left_join(ward_immediate_draws, ward_slope_draws) %>%
-  ggplot(aes(x=pct_change_immediate, y=ratio_annual_slope, group=ward)) +
-  geom_hdr_points(size=0.1) +
-  geom_smooth(method = "lm", se=FALSE, colour="black", linewidth=0.5) +
-  #stat_regline_equation(label.x = 0, label.y = 0.02, size=4) +
-  scale_colour_scico_d(palette = "lipari", name = "Posterior probability") +
-  scale_x_continuous(labels = percent) +
-  scale_y_continuous(limits = c(0, 10)) +
-  labs(title="Correlation between immediate ACF impact and post-ACF case notification rate",
-       y="Post intervention impact: Percentage change in CNR (1958 vs. 1956)",
-       x="Immediate impact: percentage change in CNR (1957 vs. 1956)",
-       caption="Points are draws from posteior distribution") +
-  theme_ggdist() +
-  theme(legend.position = "bottom",
-        panel.border = element_rect(colour = "grey78", fill=NA)) +
-  facet_wrap(ward~.)
+# left_join(ward_immediate_draws, ward_slope_draws) %>%
+#   ggplot(aes(x=pct_change_immediate, y=ratio_annual_slope, group=ward)) +
+#   geom_hdr_points(size=0.1) +
+#   geom_smooth(method = "lm", se=FALSE, colour="black", linewidth=0.5) +
+#   #stat_regline_equation(label.x = 0, label.y = 0.02, size=4) +
+#   scale_colour_scico_d(palette = "lipari", name = "Posterior probability") +
+#   scale_x_continuous(labels = percent) +
+#   scale_y_continuous(limits = c(0, 10)) +
+#   labs(title="Correlation between immediate ACF impact and post-ACF case notification rate",
+#        y="Post intervention impact: Percentage change in CNR (1958 vs. 1956)",
+#        x="Immediate impact: percentage change in CNR (1957 vs. 1956)",
+#        caption="Points are draws from posteior distribution") +
+#   theme_ggdist() +
+#   theme(legend.position = "bottom",
+#         panel.border = element_rect(colour = "grey78", fill=NA)) +
+#   facet_wrap(ward~.)
 
 
 ```
@@ -1854,61 +1857,61 @@ Join these together with the overall estimates to make a single figure for showi
 
 ```{r}
 
-f2_data <- 
-  left_join(overall_immediate_draws, overall_post_draws) %>%
-  left_join(overall_slope_draws) %>%
-  mutate(level = "overall",
-         ward = "Glasgow") %>%
-  bind_rows(
-    left_join(ward_immediate_draws, ward_post_draws) %>%
-  left_join(ward_slope_draws) %>%
-  mutate(level = "ward")
-  )
-
-f2a <- f2_data %>% 
-  ggplot(aes(x=pct_change_immediate, y=pct_change_post, group=ward)) +
-  geom_hdr_points(size=0.1) +
-  geom_smooth(method = "lm", se=FALSE, colour="black", linewidth=0.5) +
-  stat_regline_equation(label.x = 0, label.y = 0.12, size=4) +
-  scale_colour_scico_d(palette = "lipari", name = "Posterior probability density") +
-  scale_x_continuous(labels = percent) +
-  scale_y_continuous(labels = percent) +
-  labs(y="Post-intervention impact: Percentage change in CNR (1958 vs. 1956)",
-       x="Immediate impact: percentage change in CNR (1957 vs. 1956)") +
-  theme_ggdist() +
-  theme(legend.position = "bottom",
-        panel.border = element_rect(colour = "grey78", fill=NA)) +
-  facet_wrap(fct_relevel(ward,
-                         "Glasgow",
-                         after=0)~., ncol = 5) + 
-  guides(colour = guide_legend(override.aes = list(size=4)))
-
-f2a
-
-f2b <- f2_data %>% 
-  ggplot(aes(x=pct_change_immediate, y=ratio_annual_slope, group=ward)) +
-  geom_hdr_points(size=0.1) +
-  geom_smooth(method = "lm", se=FALSE, colour="black", linewidth=0.5) +
-  stat_regline_equation(label.x = 1.2, label.y = 12, size=4) +
-  scale_x_continuous(labels = percent,
-                     breaks = pretty_breaks(n = 4)) +
-  scale_y_continuous(breaks = pretty_breaks(n = 4),
-                limits = c(0,15)) +
-  scale_fill_viridis_d(option="E") +
-  labs(y="Post-intervention impact: Relative change in annual CNR slope (1958-1963 vs. 1950-1956)",
-       x="Immediate impact: percentage change in CNR (1957 vs. 1956)",
-       colour="Posterior probability density") +
-  theme_ggdist() +
-  theme(legend.position = "bottom",
-        panel.border = element_rect(colour = "grey78", fill=NA)) +
-  facet_wrap(fct_relevel(ward,
-                         "Glasgow",
-                         after=0)~., ncol = 5) + 
-  guides(colour = guide_legend(override.aes = list(size=4)))
-
-f2b
-
-(f2a / f2b) + plot_annotation(tag_levels = 'A')
+# f2_data <- 
+#   left_join(overall_immediate_draws, overall_post_draws) %>%
+#   left_join(overall_slope_draws) %>%
+#   mutate(level = "overall",
+#          ward = "Glasgow") %>%
+#   bind_rows(
+#     left_join(ward_immediate_draws, ward_post_draws) %>%
+#   left_join(ward_slope_draws) %>%
+#   mutate(level = "ward")
+#   )
+# 
+# f2a <- f2_data %>% 
+#   ggplot(aes(x=pct_change_immediate, y=pct_change_post, group=ward)) +
+#   geom_hdr_points(size=0.1) +
+#   geom_smooth(method = "lm", se=FALSE, colour="black", linewidth=0.5) +
+#   stat_regline_equation(label.x = 0, label.y = 0.12, size=4) +
+#   scale_colour_scico_d(palette = "lipari", name = "Posterior probability density") +
+#   scale_x_continuous(labels = percent) +
+#   scale_y_continuous(labels = percent) +
+#   labs(y="Post-intervention impact: Percentage change in CNR (1958 vs. 1956)",
+#        x="Immediate impact: percentage change in CNR (1957 vs. 1956)") +
+#   theme_ggdist() +
+#   theme(legend.position = "bottom",
+#         panel.border = element_rect(colour = "grey78", fill=NA)) +
+#   facet_wrap(fct_relevel(ward,
+#                          "Glasgow",
+#                          after=0)~., ncol = 5) + 
+#   guides(colour = guide_legend(override.aes = list(size=4)))
+# 
+# f2a
+# 
+# f2b <- f2_data %>% 
+#   ggplot(aes(x=pct_change_immediate, y=ratio_annual_slope, group=ward)) +
+#   geom_hdr_points(size=0.1) +
+#   geom_smooth(method = "lm", se=FALSE, colour="black", linewidth=0.5) +
+#   stat_regline_equation(label.x = 1.2, label.y = 12, size=4) +
+#   scale_x_continuous(labels = percent,
+#                      breaks = pretty_breaks(n = 4)) +
+#   scale_y_continuous(breaks = pretty_breaks(n = 4),
+#                 limits = c(0,15)) +
+#   scale_fill_viridis_d(option="E") +
+#   labs(y="Post-intervention impact: Relative change in annual CNR slope (1958-1963 vs. 1950-1956)",
+#        x="Immediate impact: percentage change in CNR (1957 vs. 1956)",
+#        colour="Posterior probability density") +
+#   theme_ggdist() +
+#   theme(legend.position = "bottom",
+#         panel.border = element_rect(colour = "grey78", fill=NA)) +
+#   facet_wrap(fct_relevel(ward,
+#                          "Glasgow",
+#                          after=0)~., ncol = 5) + 
+#   guides(colour = guide_legend(override.aes = list(size=4)))
+# 
+# f2b
+# 
+# (f2a / f2b) + plot_annotation(tag_levels = 'A')
 
 ggsave(here("figures/f2.png"), height=18, width=10)
 
@@ -1930,12 +1933,31 @@ Total pulmonary TB cases averted between 1958 and 1963
 
 ```{r}
 
-ward_counterf$counter_post %>%
-  summarise(across(c(cases_averted, cases_averted.lower, cases_averted.upper), sum), .by=ward)
+ward_averted <- ward_counterf$counter_post %>%
+  summarise(across(c(cases_averted, cases_averted.lower, cases_averted.upper), sum), .by=ward) %>%
+  mutate_if(is.double, ~ scales::number(x = ., accuracy = 0.1, big.mark = ",")) %>%
+  mutate(cases_averted_txt = glue::glue("{cases_averted}\n({cases_averted.lower}-{cases_averted.upper})")) %>%
+  select(ward, cases_averted_txt)
+
+ward_averted %>% datatable()
+
+```
+
+Add the numbers averted for each ward to the figure
+
+```{r}
+
+plot_counterfactual(model_data = mdata2, model=m_pulmonary_ward, outcome = inc_100k, population_denominator = population_without_inst_ship, grouping_var = ward, ward) +
+  geom_text(data=ward_averted, aes(x=1961, y=500, label=cases_averted_txt), size=3)
+  
+ggsave(here("figures/s4.png"), width=14, height=12)
 
 
 
 ```
+
+
+
 
 ### 10. Age-sex model
 
@@ -2232,6 +2254,7 @@ f3c <- age_sex_impact3 %>%
                          age=="56_65" ~ "56 to 65y",
                          age=="65+" ~ "65 & up y")) %>%
   ggplot() +
+    geom_hline(aes(yintercept=0), linetype=2) +
     geom_pointrange(aes(y=pct_change_epred_annual, ymin=pct_change_lower_annual, ymax=pct_change_upper_annual, group=acf_period, 
                       x=age,
                       colour = acf_period), size=0.1) +
@@ -2249,22 +2272,12 @@ f3c
 
 ```
 
-Join together for Figure 2.
-
-```{r}
-
-(f3a / f3b / f3c) + plot_annotation(tag_levels = "A")
-
-ggsave(here("figures/f3.png"), height=12)
-
-
-```
 
 #### 10.3 Compared to counterfactual
 
 ```{r}
 
-  counterfact_age_sex <-
+counterfact_age_sex <-
       add_epred_draws(object = m_age_sex,
                       newdata = mdata3 %>%
                                     select(year, year2, y_num, age, sex) %>%
@@ -2272,7 +2285,7 @@ ggsave(here("figures/f3.png"), height=12)
       filter(year>1957) %>%
       select(year, age, sex, .draw, .epred_counterf = .epred)
   
-  #Calcuate incidence per draw, then summarise.
+#Calcuate incidence per draw, then summarise.
   post_change_age_sex <-
       add_epred_draws(object = m_age_sex,
                       newdata = mdata3 %>%
@@ -2328,31 +2341,64 @@ counter_post_overall_age_sex <-
 
 ```{r}
 
-counter_post_age_sex %>%
+age_sex_txt <- counter_post_overall_age_sex %>%
   mutate(across(c(cases_averted:cases_averted.upper), number_format(accuracy = 0.1, big.mark = ","))) %>%
   mutate(across(c(pct_change:pct_change.upper), percent, accuracy=0.1)) %>%
   transmute(year = as.character(year),
             sex = sex,
             age = age,
-            cases_averted = glue::glue("{cases_averted} ({cases_averted.lower} to {cases_averted.upper})"),
-            pct_change = glue::glue("{pct_change} ({pct_change.lower} to {pct_change.upper})"))
+            cases_averted = glue::glue("{cases_averted}\n({cases_averted.lower} to {cases_averted.upper})"),
+            pct_change = glue::glue("{pct_change}\n({pct_change.lower} to {pct_change.upper})"))
 
 
-counter_post_overall_age_sex %>%
-  mutate(across(c(cases_averted:cases_averted.upper), number_format(accuracy = 0.1, big.mark = ","))) %>%
-  mutate(across(c(pct_change:pct_change.upper), percent, accuracy=0.1)) %>%
-  transmute(year = as.character(year),
-            sex = sex,
-            age = age,
-            cases_averted = glue::glue("{cases_averted} ({cases_averted.lower} to {cases_averted.upper})"),
-            pct_change = glue::glue("{pct_change} ({pct_change.lower} to {pct_change.upper})"))
-
-
+age_sex_txt %>% datatable()
 
 
 ```
 
+```{r}
 
+f3d <- counter_post_overall_age_sex %>% 
+  mutate(sex = case_when(sex=="M" ~ "Male",
+                         sex=="F" ~ "Female")) %>%
+  mutate(age = case_when(age=="00_05" ~ "0 to 5y",
+                         age=="06_15" ~ "06 to 15y",
+                         age=="16_25" ~ "16 to 25y",
+                         age=="26_35" ~ "26 to 35y",
+                         age=="36_45" ~ "36 to 45y",
+                         age=="46_55" ~ "46 to 55y",
+                         age=="56_65" ~ "56 to 65y",
+                         age=="65+" ~ "65 & up y")) %>%
+  ggplot() +
+  geom_pointrange(aes(x = age, y=cases_averted, ymin=cases_averted.lower, ymax=cases_averted.upper, colour=sex)) + 
+  facet_grid(.~sex) +
+  coord_flip() +
+  scale_colour_manual(values = c("purple", "darkorange"), name="") +
+  scale_y_continuous(labels = comma) +
+  labs(x="",
+       y="Number (95% UI) of TB cases averted (1958-1963)",
+       colour="") +
+  theme_ggdist() +
+  theme(panel.border = element_rect(colour = "grey78", fill=NA),
+        legend.position = "none")
+
+f3d
+```
+
+
+
+
+Join together for Figure 2.
+
+
+```{r}
+
+(f3a + f3b) / (f3c + f3d) + plot_annotation(tag_levels = "A")
+
+ggsave(here("figures/f3.png"), width = 12)
+
+
+```
 
 
 ### 11. Division-level model
@@ -2361,7 +2407,7 @@ counter_post_overall_age_sex %>%
 
 ```{r}
 
-mdata3 <- division_inc %>%
+mdata4 <- division_inc %>%
   filter(tb_type=="Pulmonary") %>%
   mutate(acf_period = case_when(year %in% c(1950:1956) ~ "a. pre-acf",
                                 year %in% c(1957) ~ "b. acf",
@@ -2370,7 +2416,9 @@ mdata3 <- division_inc %>%
   mutate(y_num = row_number()) %>%
   ungroup()
 
+```
 
+```{r}
 ggplot(data = tibble(x = seq(from = 0, to = 1500, by = 10)),
        aes(x = x, y = dgamma(x, shape = 2, rate = 0.001))) +
   geom_area(color = "transparent", 
@@ -2380,19 +2428,19 @@ ggplot(data = tibble(x = seq(from = 0, to = 1500, by = 10)),
   coord_cartesian(xlim = c(0, 1500)) +
   ggtitle(expression(brms~~gamma(0.5*", "*0.0001)~shape~prior))
 
-winform_prior3 <- c(prior(normal(0, 1), class = Intercept),
-                  #prior(gamma(2, 0.0001), class = shape),
+winform_prior3 <- c(prior(normal(0, 0.1), class = Intercept),
+                  prior(gamma(2, 0.0001), class = shape),
                   prior(normal(0, 0.0001), class = b, coef = "acf_periodb.acf"),
                   prior(normal(0, 0.0001), class = b, coef = "acf_periodc.postMacf"),
                   prior(normal(0, 0.0001), class = b, coef = "y_num"),
                   prior(normal(0, 0.0001), class = b, coef = "y_num:acf_periodb.acf"),
                   prior(normal(0, 0.0001), class = b, coef = "y_num:acf_periodc.postMacf"),
-                  prior(exponential(1), class="sd"))
+                  prior(cauchy(0,5), class="sd"))
 
 
 m_pulmonary_division_prior <- brm(
   cases ~ y_num + acf_period + acf_period:y_num + (1 + y_num + acf_period + acf_period:y_num | division ) + offset(log(population_without_inst_ship)),
-                  data = mdata3,
+                  data = mdata4,
                   family = negbinomial(),
                   seed = 1234,
                   chains = 4, cores = 4, 
@@ -2400,10 +2448,11 @@ m_pulmonary_division_prior <- brm(
                   save_pars = save_pars(all = TRUE),
                   sample_prior = "only",
                   backend = "cmdstanr",
-                  warmup = 1000)
+                  warmup = 1000,
+  control = list(adapt_delta = 0.9))
 
 conditional_effects(m_pulmonary_division_prior)
-plot_counterfactual(model=m_pulmonary_division_prior, model_data=mdata3, population_denominator = population_without_inst_ship, outcome = cases, grouping_var = division, division) + scale_y_log10()
+plot_counterfactual(model=m_pulmonary_division_prior, model_data=mdata4, population_denominator = population_without_inst_ship, outcome = inc_100k, grouping_var = division, division)
 
 
 ```
@@ -2413,24 +2462,37 @@ plot_counterfactual(model=m_pulmonary_division_prior, model_data=mdata3, populat
 ```{r}
 
 m_pulmonary_division <- brm(
-  cases ~ y_num + acf_period + acf_period:y_num + (1 | division) + offset(log(population_without_inst_ship)),
-                  data = mdata3,
-                  family = poisson(),
+  cases ~ y_num + acf_period + acf_period:y_num + (1 + y_num + acf_period + acf_period:y_num | division) + offset(log(population_without_inst_ship)),
+                  data = mdata4,
+                  family = negbinomial(),
                   seed = 1234,
                   chains = 4, cores = 4, 
                   prior = winform_prior3,
                   save_pars = save_pars(all = TRUE),
                   backend = "cmdstanr",
-                  warmup = 1000)
+                  warmup = 1000,
+  control = list(adapt_delta = 0.9))
 
 summary(m_pulmonary_division)
 plot(m_pulmonary_division)
 pp_check(m_pulmonary_division, type='ecdf_overlay')
 
-plot_counterfactual(model=m_pulmonary_division, model_data=mdata3, population_denominator = population_without_inst_ship, outcome = cases, grouping_var = division, division)
+plot_counterfactual(model=m_pulmonary_division, model_data=mdata4, population_denominator = population_without_inst_ship, outcome = inc_100k, grouping_var = division, division)
 
 
 ```
+
+#### 10.2 Summary of impact
+
+
+```{r}
+
+summarise_change(model_data=mdata4, model = m_pulmonary_division, population_denominator = population_without_inst_ship, grouping_var = division) %>%
+  map(datatable)
+
+
+```
+
 
 
 ### 12. Counterfactual table
@@ -2459,4 +2521,53 @@ bind_rows(
 
 
 
+##############
+#experimental below here
+#############
 
+
+What about a multilevel model with Wards nested within divisions?
+
+```{r}
+
+mdata4 <- ward_inc %>%
+  filter(tb_type=="Pulmonary") %>%
+  mutate(acf_period = case_when(year %in% c(1950:1956) ~ "a. pre-acf",
+                                year %in% c(1957) ~ "b. acf",
+                                year %in% c(1958:1963) ~ "c. post-acf")) %>%
+  group_by(ward) %>%
+  mutate(y_num = row_number()) %>%
+  ungroup()
+
+
+
+```
+
+```{r}
+
+winform_prior4 <- c(prior(normal(0, 1), class = Intercept),
+                  #prior(gamma(1, 0.01), class = shape),
+                  prior(normal(0, 1), class = b),
+                  prior(cauchy(0,5), class="sd"),
+                  prior(lkj(2), class="cor"))
+```
+
+
+```{r}
+
+m_pulmonary_nested <- brm(
+  cases ~ y_num + acf_period + acf_period:y_num + (1 + y_num + acf_period + acf_period:y_num | division/ward),
+                  data = mdata4,
+                  family = negbinomial(),
+                  seed = 1234,
+                  chains = 4, cores = 4, 
+                  prior = winform_prior4,
+                  save_pars = save_pars(all = TRUE),
+                  backend = "cmdstanr",
+                  warmup = 1000)
+
+summary(m_pulmonary_nested)
+conditional_effects(m_pulmonary_nested)
+
+
+```
