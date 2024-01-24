@@ -68,7 +68,8 @@ summary(mdl) #bigger relative diff for smaller relative peak (controlling for be
 
 ## ===== simple calculation of notifications averted with delta method
 WT <- W[,.(tb=sum(tb,na.rm=TRUE),Pop=sum(total_population)),by=.(period,year)]
-WT[period!='during',t:=1:(nrow(WT)-1)] #time with 'during' omitted
+## WT[period!='during',t:=1:(nrow(WT)-1)] #time with 'during' omitted
+WT[,t:=1:nrow(WT)] #time as integer
 
 ggplot(WT,aes(year,tb))+geom_point()+theme_linedraw()
 ggplot(WT,aes(t,tb))+geom_point()+theme_linedraw()
@@ -134,7 +135,7 @@ dD.fun <- function(theta){
 ## )
 
 theta.woc <- list(
-  intT = 7, #integer time before the post-intervention period
+  intT = 8, #integer time before the post-intervention period (see graph above)
   itz=WT[!is.na(t),t],
   Pop=WT[!is.na(t),Pop],
   k=coef(mod.woc)['(Intercept)'],
@@ -149,7 +150,7 @@ theta.woc <- list(
 tz <- seq(from=min(WT$year),to=max(WT$year),by=0.1) #time
 tz <- seq(from=min(WT$t,na.rm=TRUE),to=max(WT$t,na.rm=TRUE),by=0.1) #time
 It <- ifelse(tz>=1958,1,0)  #indicator
-It <- ifelse(tz>=7.5,1,0)  #indicator
+It <- ifelse(tz>=8,1,0)  #indicator
 nap <- with(data=theta.woc,{exp(k + s*tz)}) #counterfactual
 nap2 <- with(data=theta.woc,{exp(It*(a+b*tz))}) #ACF effect
 napc <- (nap*nap2)[tz%%1==0]                    #with ACF at integer times
@@ -158,19 +159,21 @@ TZ <- WT[,year]
 TZ <- WT[,t]
 
 ## plot NOTE OK
+png(file=here('exploratory/figures/delta.diagram.png'))
 plot(WT[,.(t,tb)],ylim=c(0,3000))
 lines(tz[tz%%1==0],napc*pop,col=2)
 points(tz[tz%%1==0],nap[tz%%1==0]*pop,col=4)
 points(WT[,t],
        exp(predict(mod.woc,newdata = WT)),
-       col=2)
-
+       col=2,pch='x')
+dev.off()
 
 ## Checks: NOTE OK
 ## sum(pop*((nap2-1)*nap)[tz%%1==0]) #discrete version
+blue <- nap[tz%%1==0]*pop
+red <- napc*pop
 sum(
-  nap[tz%%1==0]*pop - #blue
-  napc*pop            #red
+  (blue-red)[TZ>8]
 )
 D.fun(theta.woc)              #our formula
 
@@ -179,7 +182,7 @@ D.fun(theta.woc)              #our formula
 ## Dcnr.fun(theta.woc)              #our formula
 
 
- ## The names in the variance-covariance matrix are in the same order as the gradient terms, so:
+## The names in the variance-covariance matrix are in the same order as the gradient terms, so:
 Sig.woc <- vcov(mod.woc)
 rownames(Sig.woc) <- colnames(Sig.woc) <- dpars
 
@@ -204,6 +207,8 @@ woc.result <- c(D.fun(theta.woc),
                 D.fun(theta.woc) + 1.96*delta.se.woc(theta.woc))
 woc.result
 
+cat(woc.result,file=here('exploratory/figures/notes.averted.afteronly.txt'))
+
 ## woc.cnr.result <- 1e5*c(Dcnr.fun(theta.woc),
 ##                     Dcnr.fun(theta.woc) -
 ##                     1.96*delta.cnr.se.woc(theta.woc),
@@ -211,4 +216,10 @@ woc.result
 ##                     1.96*delta.cnr.se.woc(theta.woc))
 ## woc.cnr.result
 
+## same as above but now including 'during'
+prd <- exp(predict(mod.woc,newdata = WT))
+WT
+dfdur <- prd[8]-WT[t==8,tb]
 
+
+## TODO include the up tick in notification and CI
