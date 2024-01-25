@@ -108,32 +108,6 @@ dD.fun <- function(theta){
      sum( (Pop*itz*(exp(a+k+(s+b)*itz)))[itz>intT] ))
 }
 
-
-## #' and version without population for CNR effects
-## Dcnr.fun <- function(theta){
-##   list2env(theta,envir = environment())
-##   sum((exp(a+k+(s+b)*itz)-exp(k+s*itz)))
-## }
-## dDcnr.fun <- function(theta){
-##   list2env(theta,envir = environment())
-##   c(sum((exp(a+k+(s+b)*itz)-exp(k+s*itz))),
-##     sum(itz*(exp(a+k+(s+b)*itz)-exp(k+s*itz))),
-##     sum((exp(a+k+(s+b)*itz))),
-##     sum(itz*(exp(a+k+(s+b)*itz))))
-## }
-
-## Delta method
-### Without control version
-## Parameters from the w/o control version
-## theta.woc <- list(
-##   itz=WT[,year],
-##   Pop=WT[,Pop],
-##   k=coef(mod.woc)['(Intercept)'],
-##   s=coef(mod.woc)['year'],
-##   a=coef(mod.woc)['Iafter'],
-##   b=coef(mod.woc)['year:Iafter']
-## )
-
 theta.woc <- list(
   intT = 8, #integer time before the post-intervention period (see graph above)
   itz=WT[!is.na(t),t],
@@ -169,17 +143,12 @@ points(WT[,t],
 dev.off()
 
 ## Checks: NOTE OK
-## sum(pop*((nap2-1)*nap)[tz%%1==0]) #discrete version
 blue <- nap[tz%%1==0]*pop
 red <- napc*pop
 sum(
   (blue-red)[TZ>8]
 )
 D.fun(theta.woc)              #our formula
-
-## ## CNR checks:
-## sum(((nap2-1)*nap)[tz%%1==0]) #discrete version
-## Dcnr.fun(theta.woc)              #our formula
 
 
 ## The names in the variance-covariance matrix are in the same order as the gradient terms, so:
@@ -194,13 +163,6 @@ delta.se.woc <- function(theta){
 }
 delta.se.woc(theta.woc) #test
 
-## delta.cnr.se.woc <- function(theta){
-##   g <- dDcnr.fun(theta)
-##   V <- t(g) %*% Sig.woc %*% (g)
-##   sqrt(V)
-## }
-## delta.cnr.se.woc(theta.woc) #test
-
 ## This would give the estimate as 95% CI
 woc.result <- c(D.fun(theta.woc),
                 D.fun(theta.woc) - 1.96*delta.se.woc(theta.woc),
@@ -208,13 +170,6 @@ woc.result <- c(D.fun(theta.woc),
 woc.result
 
 cat(woc.result,file=here('exploratory/figures/notes.averted.afteronly.txt'))
-
-## woc.cnr.result <- 1e5*c(Dcnr.fun(theta.woc),
-##                     Dcnr.fun(theta.woc) -
-##                     1.96*delta.cnr.se.woc(theta.woc),
-##                     Dcnr.fun(theta.woc) +
-##                     1.96*delta.cnr.se.woc(theta.woc))
-## woc.cnr.result
 
 ## same as above but now including 'during'
 prd <- exp(predict(mod.woc,newdata = WT))
