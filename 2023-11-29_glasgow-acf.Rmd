@@ -316,7 +316,29 @@ tidy_counterfactuals_overall <- function(data){
 
 Import datasets for analysis
 
-#### 2.1 Shapefiles
+#### 2.1 Jonathan Golub's data
+
+Import data from Jonathan Golub's paper (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4472641/), and summarise in a figure
+
+```{r}
+
+golub <- read_xlsx("2024_01_10_golub.xlsx")
+
+golub_cxr <- golub %>%
+  filter(!is.na(mass_cxr)) %>%
+  separate(year_country, into = c("year", "country")) %>%
+  mutate(year = as.numeric(year)) %>%
+  filter(year<1980) %>%
+  mutate(target_population = str_replace_all(sample, " ", ""),
+         target_population = str_extract(target_population, "\\d+"))
+
+
+```
+
+
+
+
+#### 2.2 Shapefiles
 
 Make a map of Glasgow wards
 
@@ -336,7 +358,7 @@ scotland <- st_read(here("mapping/Scotland_boundary/Scotland boundary.shp"))
 #make a bounding box for Glasgow
 bbox <- st_bbox(glasgow_wards_1951) |> st_as_sfc()
 
-#plot scotlan with a bounding box around the City of Glasgow
+#plot scotland with a bounding box around the City of Glasgow
 scotland_with_bbox <- ggplot() +
   geom_sf(data = scotland, fill="antiquewhite") +
   geom_sf(data = bbox, colour = "#C60C30", fill="antiquewhite") +
@@ -653,6 +675,34 @@ pred_pops %>%
   group_by(year) %>%
   mutate(sex_ratio = first(sum)/last(sum))
 ```
+
+
+What percentage of adults (15+ participated in the intervention in 1957)?
+
+```{r}
+
+pred_pops %>%
+  ungroup() %>%
+  filter(year==1957) %>%
+  filter(age != "00 to 04",
+         age != "05 to 14") %>%
+  summarise(total_pop = sum(pred)) %>%
+  mutate(cxr_screened = 714915) %>%
+  mutate(pct_pop_cxr_screened = percent(cxr_screened/total_pop))
+
+pred_pops %>%
+  ungroup() %>%
+  filter(year==1957) %>%
+  filter(age != "00 to 04",
+         age != "05 to 14") %>%
+  summarise(total_pop = sum(pred), .by=sex) %>%
+  mutate(cxr_screened = c(340474, 281875)) %>%
+  mutate(pct_pop_cxr_screened = percent(cxr_screened/total_pop))
+
+
+```
+
+
 
 Population pyramids
 
@@ -1696,108 +1746,215 @@ ward_change$slope_change %>%
 
 ```
 
-(Alternative figure - keep in for the minute)
+Suggestion from Pete D 2024-02-02: Try plotting these on choropleth maps
 
-Is there any correlation between immediate increase and a) post-intervention (1958) effect, and b) post intervention slope (1958-1963)
 
 ```{r}
 
-# ward_cors <- ward_impact_out %>%
-#   select(ward, immediate_effect = acf_inc100k_rr,
-#                immediate_effect_lower = acf_inc100k_rr.lower,
-#                immediate_effect_upper = acf_inc100k_rr.upper) %>%
-#   right_join(
-#     ward_pulm_impact2 %>% 
-#       select(ward, post_effect = acf_inc100k_rr,
-#                post_effect_lower = acf_inc100k_rr.lower,
-#                post_effect_upper = acf_inc100k_rr.upper)
-#   ) %>%
-#   right_join(
-#     ward_pulm_impact3 %>%
-#       filter(acf_period=="c. post-acf") %>%
-#       select(ward, slope_effect = pct_change_epred_annual,
-#              slope_effect_lower = pct_change_lower_annual,
-#              slope_effect_upper = pct_change_upper_annual)
-#   )
-# 
-# ward_cors %>%
-#   ggplot(aes(x=immediate_effect, xmin=immediate_effect_lower, xmax=immediate_effect_upper,
-#              y=post_effect, ymin=post_effect_lower, ymax=post_effect_upper,
-#              group = ward)) +
-#   geom_errorbar() +
-#   geom_errorbarh() +
-#   geom_point() +
-#   geom_smooth(method = "lm") +
-#   theme_ggdist() +
-#   labs(title="Correlation between immediate ACF impact and post-ACF case notification rate",
-#        y="Relative case notification rate (1958 vs. 1956)\nPost intervention impact",
-#        x="Relative case notification rate (1957 vs. 1956)\nImmediate impact",
-#        caption="Points are municipal wards") +
-#   theme(legend.position = "none",
-#         panel.border = element_rect(colour = "grey78", fill=NA))
-# 
-# ward_cors %>%
-#   ggplot(aes(x=immediate_effect, xmin=immediate_effect_lower, xmax=immediate_effect_upper,
-#              y=slope_effect, ymin=slope_effect_lower, ymax=slope_effect_upper,
-#              group = ward)) +
-#   geom_errorbar() +
-#   geom_errorbarh() +
-#   geom_smooth(method = "lm") +
-#   theme_ggdist() +
-#   labs(title="Correlation between immediate ACF impact and post-ACF mean rate of change",
-#        y="Post ACF mean annual rate of change in case notification rates",
-#        x="Relative case notification rate (1957 vs. 1956)\nImmediate impact",
-#        caption="Points are municipal wards") +
-#   theme(legend.position = "none",
-#         panel.border = element_rect(colour = "grey78", fill=NA))
+bind_rows(
+  (glasgow_wards_1951 %>%
+     left_join(ward_change$immediate_change) %>%
+     mutate(estimate = "Immediate effect")),
+  (glasgow_wards_1951 %>%
+     left_join(ward_change$post_change) %>%
+     mutate(estimate = "Post ACF effect")),
+  (glasgow_wards_1951 %>%
+     left_join(ward_change$post_change) %>%
+     mutate(estimate = "Slope effect"))
+  ) %>%
+  select(ward, acf_inc100k_rr, estimate) %>%
+  mutate(ward = case_when(ward=="Shettleston and Tollcross" ~ "Shettleston and\nTollcross",
+                          ward=="Partick (West)" ~ "Partick\n(West)",
+                          ward=="Partick (East)" ~ "Partick\n(East)",
+                          ward=="North Kelvin" ~ "North\nKelvin",
+                          ward=="Kinning Park" ~ "Kinning\nPark",
+                          TRUE ~ ward)) %>%
+  split(.$estimate) %>%
+  map(~ ggplot(.) +
+  geom_sf(aes(fill=acf_inc100k_rr)) +
+  geom_sf_label(aes(label = ward), size=1.5, fill=NA, label.size = NA, colour="black", family = "Segoe UI") +
+  scale_fill_viridis_c() +
+  theme_ggdist() +
+  theme(panel.border = element_rect(colour = "grey78", fill=NA)) +
+  labs(y="", x="",
+       fill="RR")) %>%
+    cowplot::plot_grid(plotlist = ., ncol = 3,
+                       labels = c('A: Immediate effect (1957 vs. 1956)', 
+                                  'B: Post-ACF effect (1958 vs. 1956)', 
+                                  'C: Slope change effect (1958-63 vs. 1950-56'))
 
-
+ggsave(here("figures/ward_effects.png"), width = 16)
+  
 
 ```
+
+
+
+
+(Alternative figure - keep in for the minute)
+
+Is there any correlation between immediate increase and a) post-intervention (1958) effect, and b) post intervention slope (1958-1963)
 
 Try a different way with the full distribution of posteriors
 
 
 ```{r}
 
-# ward_immediate_draws <- mdata2 %>%
-#   select(year, year2, y_num, acf_period, population_without_inst_ship, cases, ward) %>%
-#   filter(year %in% c(1956,1957)) %>%
-#   add_epred_draws(m_pulmonary_ward) %>%
-#   mutate(inc_100k = .epred/population_without_inst_ship*100000) %>%
-#   group_by(ward, .draw) %>%
-#   summarise(pct_change_immediate = (last(inc_100k) - first(inc_100k))/first(inc_100k)) %>%
-#   arrange(ward) %>%
-#   ungroup()
-# 
-# ward_post_draws <- mdata2 %>%
-#   select(year, year2, y_num, acf_period, population_without_inst_ship, cases, ward) %>%
-#   filter(year %in% c(1956,1958)) %>%
-#   add_epred_draws(m_pulmonary_ward) %>%
-#   mutate(inc_100k = .epred/population_without_inst_ship*100000) %>%
-#   group_by(ward, .draw) %>%
-#   summarise(pct_change_post = (last(inc_100k) - first(inc_100k))/first(inc_100k)) %>%
-#   arrange(ward) %>%
-#   ungroup()
-# 
-# 
-# ward_slope_draws <- mdata2 %>%
-#   select(year, year2, y_num, acf_period, population_without_inst_ship, cases, ward) %>%
-#   filter(year %in% c(1950, 1956, 1958, 1963)) %>%
-#   add_epred_draws(m_pulmonary_ward) %>%
-#   mutate(inc_100k = .epred/population_without_inst_ship*100000) %>%
-#   ungroup() %>%
-#   mutate(n_years = case_when(acf_period=="a. pre-acf" ~ 7,
-#                              acf_period=="c. post-acf" ~ 6)) %>%
-#   group_by(ward, acf_period, .draw) %>%
-#   summarise(pct_change_slope = ((last(inc_100k) - first(inc_100k))/first(inc_100k))/n_years) %>%
-#   distinct() %>%
-#   pivot_wider(names_from = c(acf_period),
-#               values_from = pct_change_slope) %>%
-#   mutate(ratio_annual_slope = `c. post-acf` / `a. pre-acf`)
-#   
+#relative rate (1957 vs. 1956)
+ward_immediate_draws <- mdata2 %>%
+  select(year, year2, y_num, acf_period, population_without_inst_ship, cases, ward) %>%
+  filter(year %in% c(1956,1957)) %>%
+  add_epred_draws(m_pulmonary_ward) %>%
+  mutate(inc_100k = .epred/population_without_inst_ship*100000) %>%
+  group_by(.draw, ward) %>%
+  summarise(rr_1957_vs_1956 = (last(inc_100k))/first(inc_100k)) %>%
+  arrange(ward) %>%
+  ungroup()
+
+ward_immediate_draws %>%
+  ggplot() +
+  geom_histogram(aes(x=rr_1957_vs_1956, fill=ward, colour=ward), alpha=0.75) +
+  facet_wrap(ward~.) +
+  theme_ggdist() +
+  theme(legend.position = "none")
+
+#relative rate (1957 vs. mean(1950-1965))
+ward_immediate_draws_expanded <- mdata2 %>%
+  select(year, year2, y_num, acf_period, population_without_inst_ship, cases, ward) %>%
+  filter(year %in% c(1950:1957)) %>%
+  add_epred_draws(m_pulmonary_ward) %>%
+  group_by(.draw, ward, acf_period) %>%
+  summarise(.epred = mean(.epred),
+            population_without_inst_ship = population_without_inst_ship) %>%
+  group_by(.draw, ward) %>%
+  mutate(inc_100k = .epred/population_without_inst_ship*100000) %>%
+  summarise(rr_1957_vs_mean_1950_1956 = (last(inc_100k))/first(inc_100k)) %>%
+  arrange(ward) %>%
+  ungroup()
+
+ward_immediate_draws_expanded %>%
+  ggplot() +
+  geom_histogram(aes(x=rr_1957_vs_mean_1950_1956, fill=ward, colour=ward), alpha=0.75) +
+  facet_wrap(ward~.) +
+  theme_ggdist() +
+  theme(legend.position = "none")
+
+#relative rate (1958 vs. 1956)
+ward_post_draws <- mdata2 %>%
+  select(year, year2, y_num, acf_period, population_without_inst_ship, cases, ward) %>%
+  filter(year %in% c(1956,1958)) %>%
+  add_epred_draws(m_pulmonary_ward) %>%
+  mutate(inc_100k = .epred/population_without_inst_ship*100000) %>%
+  group_by(.draw, ward) %>%
+  summarise(rr_1958_vs_1956 = (last(inc_100k))/first(inc_100k)) %>%
+  arrange(ward) %>%
+  ungroup()
+
+ward_post_draws %>%
+  ggplot() +
+  geom_histogram(aes(x=rr_1958_vs_1956, fill=ward, colour=ward), alpha=0.75) +
+  facet_wrap(ward~.) +
+  theme_ggdist() +
+  theme(legend.position = "none")
 
 
+#relative rate (1958 vs. mean(1950-1956))
+ward_post_draws_expanded <- mdata2 %>%
+  select(year, year2, y_num, acf_period, population_without_inst_ship, cases, ward) %>%
+  filter(year %in% c(1950:1956, 1958)) %>%
+  add_epred_draws(m_pulmonary_ward) %>%
+  group_by(.draw, ward, acf_period) %>%
+  summarise(.epred = mean(.epred),
+            population_without_inst_ship = population_without_inst_ship) %>%
+  group_by(.draw, ward) %>%
+  mutate(inc_100k = .epred/population_without_inst_ship*100000) %>%
+  summarise(rr_1958_vs_mean_1950_1956 = (last(inc_100k))/first(inc_100k)) %>%
+  arrange(ward) %>%
+  ungroup()
+
+ward_post_draws_expanded %>%
+  ggplot() +
+  geom_histogram(aes(x=rr_1958_vs_mean_1950_1956, fill=ward, colour=ward), alpha=0.75) +
+  facet_wrap(ward~.) +
+  theme_ggdist() +
+  theme(legend.position = "none")
+
+
+#Was a greater relative increase in CNR associated with greater reductions post ACF
+left_join(ward_immediate_draws, ward_post_draws) %>%
+  ggplot(aes(y=rr_1958_vs_1956, x=rr_1957_vs_1956)) +
+  geom_hdr_points(size=0.1) +
+  geom_smooth(method = "lm", se=FALSE, colour="black", linewidth=0.5) +
+  facet_wrap(ward~.)
+
+left_join(ward_immediate_draws_expanded, ward_post_draws) %>%
+  ggplot(aes(y=rr_1958_vs_1956, x=rr_1957_vs_mean_1950_1956)) +
+  geom_hdr_points(size=0.1) +
+  geom_smooth(method = "lm", se=FALSE, colour="black", linewidth=0.5) +
+  facet_wrap(ward~.)
+
+left_join(ward_immediate_draws, ward_post_draws_expanded) %>%
+  ggplot(aes(y=rr_1958_vs_mean_1950_1956, x=rr_1957_vs_1956)) +
+  geom_hdr_points(size=0.1) +
+  geom_smooth(method = "lm", se=FALSE, colour="black", linewidth=0.5) +
+  facet_wrap(ward~.)
+
+left_join(ward_immediate_draws_expanded, ward_post_draws_expanded) %>%
+  ggplot(aes(y=rr_1958_vs_mean_1950_1956, x=rr_1957_vs_mean_1950_1956)) +
+  geom_hdr_points(size=0.1) +
+  geom_smooth(method = "lm", se=FALSE, colour="black", linewidth=0.5) +
+  facet_wrap(ward~.)
+
+#regardless of comparison period, it looks like no, and in fact correlation is in opposite direction
+#does this make sense?
+#I guess that there is probably too short of a period to have an immediate effect on transmission
+#Therefore, were cases just "brought forward in time" with ACF
+#i.e. diagnosed in 1957 instead of 1958
+#but the wards with the greatest increase in CNRs in 1957 probably had the *worst* TB transmission
+#Therefore, what we are capturing here is probably:
+#high transmission wards -> lots of cases detected -> but still have a higher CNR post intervention compared to lower transmission wards?
+#TBD
+#And more interesting might be the effect on slopes. i.e. did we alter the trajectory?
+```
+
+
+```{r}
+
+
+ward_slope_draws <- mdata2 %>%
+  select(year, year2, y_num, acf_period, population_without_inst_ship, cases, ward) %>%
+  filter(year %in% c(1950, 1956, 1958, 1963)) %>%
+  add_epred_draws(m_pulmonary_ward) %>%
+  mutate(inc_100k = .epred/population_without_inst_ship*100000) %>%
+  ungroup() %>%
+  mutate(n_years = case_when(acf_period=="a. pre-acf" ~ 7,
+                             acf_period=="c. post-acf" ~ 6)) %>%
+  group_by(.draw, ward, acf_period) %>%
+  summarise(slope = (last(inc_100k)/first(inc_100k)))
+
+ward_slope_draws %>%
+  ggplot() +
+  geom_density(aes(x=slope, fill=acf_period),alpha=0.5) +
+  facet_wrap(ward~.)
+
+ward_slope_draws_rr <- ward_slope_draws %>%
+  group_by(ward, .draw) %>%
+  summarise(rr_slope = last(slope)/first(slope))
+
+#correlation between slope rate ratio (post vs pre) and magnitude of ACF effect
+#a) with magnitude compared to 1956 only
+left_join(ward_immediate_draws, ward_slope_draws_rr) %>%
+  ggplot(aes(y=rr_slope, x=rr_1957_vs_1956)) +
+  geom_hdr_points(size=0.1) +
+  geom_smooth(method = "lm", se=FALSE, colour="black", linewidth=0.5) +
+  facet_wrap(ward~.)
+
+#b) with magnitude compared to mean of 1950-1956 only
+left_join(ward_immediate_draws_expanded, ward_slope_draws_rr) %>%
+  ggplot(aes(y=rr_slope, x=rr_1957_vs_mean_1950_1956)) +
+  geom_hdr_points(size=0.1) +
+  geom_smooth(method = "lm", se=FALSE, colour="black", linewidth=0.5) +
+  facet_wrap(ward~.)
 
 
 ```
