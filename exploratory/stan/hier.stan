@@ -8,7 +8,7 @@ transformed data{
   row_vector[NT] times;
   matrix[K,NT] TZ; //matrix of 1:NT in each row
   for(i in 1:NT) times[i] = 1.0*i;
-  TZ = rep_matrix(times,NT);
+  TZ = rep_matrix(times,K);
 }
 parameters{
   // MVN stuff
@@ -19,7 +19,7 @@ parameters{
   vector<lower=0>[K] cvec;                 //intercept vector
   vector[K] svec;                 //slope vector
   real<lower=0> bigeps; //noise prior SD
-  vector[K] eps;       //noises
+  vector<lower=0>[K] eps;       //noises
 }
 transformed parameters{
   matrix[K,NT] M;                 //mean predicted response
@@ -64,4 +64,6 @@ model{
     Y[i] ~ normal(M[i],eps[i]);//time-series in unit i
   }
 }
-
+generated quantities{
+  row_vector[3] gm = m +  z[1] * diag_pre_multiply(tau, L_Omega)';
+}
