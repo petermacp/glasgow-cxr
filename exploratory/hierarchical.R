@@ -5,9 +5,7 @@ library(data.table)
 library(ggplot2)
 library(readxl)
 library(posterior)
-
-## --- plotting function
-source(here('exploratory/corplot.R')) #need lattice and hexbin installed
+library(corplot) #devtools::install_github('petedodd/corplot')
 
 ## --- compile stan model
 fn <- here('exploratory/stan/hier.stan')
