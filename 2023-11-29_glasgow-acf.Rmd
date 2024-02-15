@@ -24,6 +24,7 @@ library(ggrepel)
 library(scico)
 library(ggdensity)
 library(ggpubr)
+library(units)
 library(ggsn)
 
 ```
@@ -403,6 +404,37 @@ ggsave(here("figures/s1.png"), height=10, width = 12)
 
 ```
 
+Calculate areas per geographical unit
+
+```{r}
+sf_use_s2(FALSE) #https://github.com/r-spatial/sf/issues/1762
+
+glasgow_wards_1951 <- glasgow_wards_1951 %>%
+  mutate(area = st_area(glasgow_wards_1951))
+
+
+glasgow_wards_1951$area_km <- units::set_units(glasgow_wards_1951$area, km^2)
+
+
+```
+
+
+Make division shape files, and calculate area
+
+```{r}
+
+glasgow_divisions_1951 <- glasgow_wards_1951 %>%
+  group_by(division) %>% 
+  summarize(geometry = st_union(geometry)) %>%
+  nngeo::st_remove_holes() %>%
+  mutate(area = st_area(glasgow_divisions_1951))
+
+glasgow_divisions_1951$area_km <- units::set_units(glasgow_divisions_1951$area, km^2)
+
+
+```
+
+
 
 
 ### 3. Denominators
@@ -604,6 +636,58 @@ ward_pops %>%
 
 
 ```
+
+Output population density by ward and divison for regression modelling
+
+Wards first
+
+```{r}
+
+ward_covariates <-  glasgow_wards_1951 %>%
+  left_join(ward_pops) %>%
+  mutate(people_per_km_sq = as.double(population_without_inst_ship/area_km))
+
+#plot it out
+
+ward_covariates %>%
+  ggplot() +
+  geom_sf(aes(fill=people_per_km_sq)) + 
+  facet_wrap(year~., ncol=7) +
+  scale_fill_viridis_c(option="A") +
+  theme(legend.position = "bottom",
+        axis.text.x = element_text(angle = 45, hjust=1))
+
+ggsave(here("figures/ward_pop_density.png"), width=10)
+
+write_rds(ward_covariates, here("populations/ward_covariates.rds"))
+
+
+```
+
+Now divisions first
+
+```{r}
+
+division_covariates <-  glasgow_divisions_1951 %>%
+  left_join(division_pops) %>%
+  mutate(people_per_km_sq = as.double(total_population/area_km))
+
+#plot it out
+
+division_covariates %>%
+  ggplot() +
+  geom_sf(aes(fill=people_per_km_sq)) + 
+  facet_wrap(year~., ncol=7) +
+  scale_fill_viridis_c(option="G") +
+  theme(legend.position = "bottom",
+        axis.text.x = element_text(angle = 45, hjust=1))
+
+ggsave(here("figures/division_pop_density.png"), width=10)
+
+write_rds(division_covariates, here("populations/division_covariates.rds"))
+
+```
+
 
 
 #### 3.3 Population by age and sex
