@@ -143,3 +143,45 @@ gg3 <- ggplot(smy,aes(RR.peak,RR.slope,label=ward))+
 
 gg <- gg1+gg2+gg3
 ggsave(gg,file=here('exploratory/figures/post.ward.meanRRs.pdf'),h=5,w=15)
+
+## --- estimate of Sigma
+sgs <- grep('Sigma',names(smps),value=TRUE)
+S <- subset_draws(smps,sgs)
+S <- as.data.table(S)
+S <- S[,..sgs]
+S <- S[,lapply(.SD,mean),.SDcols=1:ncol(S)]
+S <- matrix(S,nrow=3,ncol=3)
+
+colnames(S) <- rownames(S) <- rcts
+S
+
+fn <- here('exploratory/figures/post.Sigma.mean.csv')
+write.csv(S,file=fn)
+
+## --- Notes ----
+## It does need checking. 
+## Also to note: a) I applied this to raw notifications rather than per capita rates; b) inference for the 3rd/slope RR is suboptimal.
+## The plots show (in log and real space respectively) the posteriors for the 'global' effects and their correlations.
+
+## There are different ways one could specify this model. I have done the following:
+## 1) counterfactual is a straight line through the pre-ACF data
+## 2) RR for peak captures during-ACF peak relative to counterfactual prediction
+## 3) immediately following ACF, notifications are a factor RR of the counterfactual prediction
+## 4) as time advances from the previous point (ie 1958) a new slope applies with gradient RR x (pre-ACF slope)
+## Note that this means the intercept term for post ACF is affected by both the slope and level RRs.
+
+## Anyway, you'll see in the attached that:
+## - slope effect is uncertain but corresponds to being less steep post-ACF
+## - peak vs level has positive correlation = bigger relative peak <-> smaller relative level impact
+## - peak vs slope has negative correlation = bigger relative peak <-> less steep slope
+## - level effect vs slope effect has positive correlation = bigger relative level impact <-> less steep slope
+
+## The anti-correlation between relative peak and relative level impact is what is seen empirically & begs an explanation.
+## I didn't look at slope changes empirically but will do.
+## In this model, I didn't represent any dependence of RR on (e.g.) the initial per capita TB notifications. Would want to shift over to modelling per capita rates for that.
+
+
+
+## TODO
+## empirical slopes
+## level vs peak by area grouping and including pop density

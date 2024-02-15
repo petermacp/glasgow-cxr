@@ -4,8 +4,16 @@ library(ggplot2)
 library(readxl)
 library(here)
 library(GGally)
+library(ggrepel)
 
 ## ===== exploratory data analysis: plots and empirical patterns
+
+## popdensity etc
+divcov <- readRDS(here('populations/division_covariates.rds'))
+warcov <- readRDS(here('populations/ward_covariates.rds'))
+warcov <- as.data.table(unique(warcov[,c('division','ward','area','total_population','year')]))
+warcov <- warcov[year==1950] #use baseline
+warcov <- warcov[,.(division,ward,pdens=1e3*total_population/area)]
 
 ## filename
 xfn <- here("2023-11-28_glasgow-acf.xlsx")
@@ -46,16 +54,113 @@ ggsave(file=here('exploratory/figures/data.png'),w=12,h=9)
 W[,period:=ifelse(year<1957,'before','after')]
 W[year==1957,period:='during']
 
+downslopes0 <- W[period=='before',{
+  md <- lm(tb/total_population ~ year)
+  list(slope0=-coef(md)['year'])
+},by=ward]
+
+downslopes1 <- W[period=='after',{
+  md <- lm(tb/total_population ~ year)
+  list(slope1=-coef(md)['year'])
+},by=ward]
+
+slopes <- merge(downslopes0,downslopes1)
+slopes[,RR.slope:=slope1/slope0] #downward slope after  / downward slope before
+
+WM <- merge(WM,slopes[,.(ward,RR.slope)],by='ward')
+
 ## mean rates
 WM <- W[,.(rate=mean(1e5*tb/total_population)),by=.(ward,period)]
 WM <- dcast(WM,ward ~ period,value.var='rate')
 WM[,reldiff:=(before-after)/before] # notification drop relative to 'before'
 WM[,relpeak:=during/before]         # peak notifications relative to 'before'
+WM[,RR.level:=(after)/before] # notification drop relative to 'before'
+
+## merge in covs
+WM <- merge(WM,warcov,by='ward')
 
 ## quite confusing
 ggpairs(WM[,.(before,reldiff,relpeak)])
 
 ggsave(file=here('exploratory/figures/effect.pairs.png'),w=5,h=5)
+
+
+## empirical slope vs peak
+gg <- ggplot(WM,aes(RR.slope,relpeak,label=ward))+
+  geom_point()+
+  geom_text_repel()+
+  ylab('RR.peak')+
+  ggtitle('Slope vs. Peak (dropping 7 outliers)')+xlim(-5,5)
+ggsave(gg,file=here('exploratory/figures/emp.ward.SvP.pdf'),h=5,w=5)
+
+
+## empirical level vs peak
+gg <- ggplot(WM,aes(RR.level,relpeak,label=ward))+
+  geom_point()+
+  geom_text_repel()+
+  ylab('RR.peak')+
+  ggtitle('Level vs. Peak')
+ggsave(gg,file=here('exploratory/figures/emp.ward.LvP.pdf'),h=5,w=5)
+
+## empirical level vs peak
+gg <- ggplot(WM,aes(RR.level,relpeak,label=ward))+
+  geom_point(aes(size=before),shape=1,col=2)+
+  geom_text_repel(show.legend=FALSE)+
+  ylab('RR.peak')+
+  ggtitle('Level vs. Peak')
+ggsave(gg,file=here('exploratory/figures/emp.ward.LvP.size.pdf'),h=5,w=5)
+
+## annotation layer
+TXT <- WM[,.(txt=cor(RR.level,relpeak)),by=division]
+TXT[,txt:=round(txt,2)]
+mivrs <- setdiff(names(WM),names(TXT))
+TXT[,mivrs:=NA_real_]
+TXT[,relpeak:=2.5]
+TXT[,RR.level:=0.4]
+
+gg <- ggplot(WM,aes(RR.level,relpeak,label=ward))+
+  geom_point()+
+  geom_text(data=TXT,aes(label=txt),col=2)+
+  geom_text_repel()+
+  ylab('RR.peak')+
+  facet_wrap(~division)+
+  ggtitle('Level vs. Peak')
+ggsave(gg,file=here('exploratory/figures/emp.ward.LvP.byDiv.pdf'),h=7,w=7)
+
+## what about population density?
+## empirical level vs peak
+gg <- ggplot(WM,aes(RR.level,relpeak,label=ward))+
+  geom_point(aes(size=pdens),shape=1,col=2)+
+  geom_text_repel(show.legend=FALSE)+
+  ylab('RR.peak')+
+  ggtitle('Level vs. Peak')
+ggsave(gg,file=here('exploratory/figures/emp.ward.LvP.density.pdf'),h=5,w=5)
+
+## pdens categories
+brks <- quantile(WM$pdens,c(0.25,0.5,0.75))
+WM[,pdensf:=fcase(pdens<=brks[1],'Q1',
+                  pdens>brks[1] & pdens<=brks[2],'Q2',
+                  pdens>brks[2] & pdens<=brks[3],'Q3',
+                  pdens>brks[3],'Q4'
+                  )]
+WM$pdensf <- factor(WM$pdensf,levels=paste0('Q',1:4),ordered = TRUE)
+
+## annotation layer
+TXT <- WM[,.(txt=cor(RR.level,relpeak)),by=pdensf]
+TXT[,txt:=round(txt,2)]
+mivrs <- setdiff(names(WM),names(TXT))
+TXT[,mivrs:=NA_real_]
+TXT[,relpeak:=2.5]
+TXT[,RR.level:=0.4]
+
+gg <- ggplot(WM,aes(RR.level,relpeak,label=ward))+
+  geom_point()+
+  geom_text_repel()+
+  geom_text(data=TXT,aes(label=txt),col=2)+
+  ylab('RR.peak')+
+  facet_wrap(~pdensf)+
+  ggtitle('Level vs. Peak')
+ggsave(gg,file=here('exploratory/figures/emp.ward.LvP.byDensCat.pdf'),h=7,w=7)
 
 
 ## controlling for each
