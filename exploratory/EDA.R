@@ -163,6 +163,36 @@ gg <- ggplot(WM,aes(RR.level,relpeak,label=ward))+
 ggsave(gg,file=here('exploratory/figures/emp.ward.LvP.byDensCat.pdf'),h=7,w=7)
 
 
+## before vs division?
+WM[,mean(before),by=division]
+
+## before categories
+brks <- quantile(WM$before,c(0.25,0.5,0.75))
+WM[,initial:=fcase(before<=brks[1],'Q1',
+                  before>brks[1] & before<=brks[2],'Q2',
+                  before>brks[2] & before<=brks[3],'Q3',
+                  before>brks[3],'Q4'
+                  )]
+WM$initial <- factor(WM$initial,levels=paste0('Q',1:4),ordered = TRUE)
+
+## annotation layer
+TXT <- WM[,.(txt=cor(RR.level,relpeak)),by=initial]
+TXT[,txt:=round(txt,2)]
+mivrs <- setdiff(names(WM),names(TXT))
+TXT[,mivrs:=NA_real_]
+TXT[,relpeak:=2.5]
+TXT[,RR.level:=0.4]
+
+gg <- ggplot(WM,aes(RR.level,relpeak,label=ward))+
+  geom_point()+
+  geom_text_repel()+
+  geom_text(data=TXT,aes(label=txt),col=2)+
+  ylab('RR.peak')+
+  facet_wrap(~initial)+
+  ggtitle('Level vs. Peak (by quartile before)')
+ggsave(gg,file=here('exploratory/figures/emp.ward.LvP.byInitCat.pdf'),h=7,w=7)
+
+
 ## controlling for each
 mdl <- lm(data=WM[,.(before,reldiff,relpeak)],reldiff ~ before + relpeak)
 summary(mdl) #bigger relative diff for smaller relative peak (controlling for before)
