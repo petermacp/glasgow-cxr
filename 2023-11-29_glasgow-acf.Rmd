@@ -677,6 +677,7 @@ division_covariates <-  glasgow_divisions_1951 %>%
 division_covariates %>%
   ggplot() +
   geom_sf(aes(fill=people_per_km_sq)) + 
+  geom_sf_label(aes(label = division), size=3, fill=NA, label.size = NA, colour="black", family = "Segoe UI") +
   facet_wrap(year~., ncol=7) +
   scale_fill_viridis_c(option="G") +
   theme(legend.position = "bottom",
@@ -2767,48 +2768,150 @@ bind_rows(
 #############
 
 
-What about a multilevel model with Wards nested within divisions?
-
 ```{r}
-
-mdata4 <- ward_inc %>%
-  filter(tb_type=="Pulmonary") %>%
-  mutate(acf_period = case_when(year %in% c(1950:1956) ~ "a. pre-acf",
-                                year %in% c(1957) ~ "b. acf",
-                                year %in% c(1958:1963) ~ "c. post-acf")) %>%
-  group_by(ward) %>%
-  mutate(y_num = row_number()) %>%
-  ungroup()
-
-
-
-```
-
-```{r}
-
-winform_prior4 <- c(prior(normal(0, 1), class = Intercept),
-                  #prior(gamma(1, 0.01), class = shape),
-                  prior(normal(0, 1), class = b),
-                  prior(cauchy(0,5), class="sd"),
-                  prior(lkj(2), class="cor"))
-```
-
-
-```{r}
-
-m_pulmonary_nested <- brm(
-  cases ~ y_num + acf_period + acf_period:y_num + (1 + y_num + acf_period + acf_period:y_num | division/ward),
-                  data = mdata4,
+#just simplify the model to make easier.
+e_ward <- brm(
+  cases ~ y_num:acf_period + (1 + y_num:acf_period | ward) + offset(log(population_without_inst_ship)),
+                  data = mdata2,
                   family = negbinomial(),
                   seed = 1234,
-                  chains = 4, cores = 4, 
-                  prior = winform_prior4,
-                  save_pars = save_pars(all = TRUE),
-                  backend = "cmdstanr",
-                  warmup = 1000)
+                  chains = 4, cores = 4,
+                  backend = "cmdstanr")
 
-summary(m_pulmonary_nested)
-conditional_effects(m_pulmonary_nested)
+
+summary(e_ward)
+
+plot_counterfactual(model_data = mdata2, model=e_ward, outcome = inc_100k, population_denominator = population_without_inst_ship, grouping_var = ward, ward)
+```
+
+Try calculating correlation between RR.peak and RR.level 
+
+```{r}
+#https://www.andrewheiss.com/blog/2021/11/10/ame-bayes-re-guide/#conditional-effects-for-existing-groups
+
+rr_peak <- add_epred_draws(object = e_ward,
+                newdata = mdata1 %>%
+                  filter(y_num %in% 7:8),
+                re_formula = NA) %>%
+  ungroup() %>%
+    mutate(epred_inc100k = (.epred/population_without_inst_ship)*100000) %>%
+    group_by(.draw) %>%
+    summarise(RR.peak = last(epred_inc100k)/first(epred_inc100k))
+
+a <- rr_peak %>%
+  ggplot() +
+  geom_histogram(aes(x=RR.peak), fill="darkblue", colour="darkblue", alpha=0.3)+
+  scale_fill_gradient(high="lightblue1",low="darkblue") +
+  theme_ggdist() +
+  theme(legend.position = "none",
+        panel.border = element_rect(colour = "grey78", fill=NA))
+
+rr_level <- add_epred_draws(object = e_ward,
+                newdata = mdata1 %>%
+                  filter(y_num %in% 7:9),
+                re_formula = NA) %>%
+  ungroup() %>%
+    mutate(epred_inc100k = (.epred/population_without_inst_ship)*100000) %>%
+    group_by(.draw) %>%
+    summarise(RR.level = last(epred_inc100k)/first(epred_inc100k))
+
+b <- rr_level %>%
+  ggplot() +
+  geom_histogram(aes(x=RR.level), fill="darkblue", colour="darkblue", alpha=0.3)+
+  scale_fill_gradient(high="lightblue1",low="darkblue") +
+  theme_ggdist() +
+  theme(legend.position = "none",
+        panel.border = element_rect(colour = "grey78", fill=NA))
+
+
+cor_rr_peak_rrlevel <- round(cor(rr_peak$RR.peak, rr_level$RR.level), digits = 2)
+
+
+c <- left_join(rr_peak, rr_level) %>%
+  ggplot(aes(y=RR.peak, x = RR.level)) +
+  geom_hex() +
+  geom_smooth(se=FALSE, colour="firebrick") +
+  geom_text(aes(y=2.2, x=0.55, label=cor_rr_peak_rrlevel), colour="firebrick")  +
+  scale_fill_gradient(high="lightblue1",low="darkblue") +
+  theme_ggdist() +
+  theme(legend.position = "none",
+        panel.border = element_rect(colour = "grey78", fill=NA))
+
+(plot_spacer() + b) / (a + c) +
+  plot_annotation(
+  title = 're_formula=NA')
+
+ggsave(here("figures/temp_cors.pdf"))
 
 
 ```
+
+Try with random effects included, sampling from uncertainity distribution
+
+```{r}
+rr_peak <- add_epred_draws(object = e_ward,
+                newdata = mdata1 %>%
+                  filter(y_num %in% 7:8) %>%
+                  mutate(region = "new_ward"),
+                re_formula = NULL, 
+          allow_new_levels = TRUE, sample_new_levels = "uncertainty") %>%
+  ungroup() %>%
+    mutate(epred_inc100k = (.epred/population_without_inst_ship)*100000) %>%
+    group_by(.draw) %>%
+    summarise(RR.peak = last(epred_inc100k)/first(epred_inc100k))
+
+a <- rr_peak %>%
+  ggplot() +
+  geom_histogram(aes(x=RR.peak), fill="firebrick4", colour="firebrick4", alpha=0.3)+
+  scale_fill_gradient(high="firebrick1",low="firebrick4") +
+  theme_ggdist() +
+  theme(legend.position = "none",
+        panel.border = element_rect(colour = "grey78", fill=NA))
+
+rr_level <- add_epred_draws(object = e_ward,
+                newdata = mdata1 %>%
+                  filter(y_num %in% 7:9) %>%
+                  mutate(region = "new_ward"),
+                re_formula = NULL, 
+          allow_new_levels = TRUE, sample_new_levels = "uncertainty") %>%
+  ungroup() %>%
+    mutate(epred_inc100k = (.epred/population_without_inst_ship)*100000) %>%
+    group_by(.draw) %>%
+    summarise(RR.level = last(epred_inc100k)/first(epred_inc100k))
+
+b <- rr_level %>%
+  ggplot() +
+  geom_histogram(aes(x=RR.level), fill="firebrick4", colour="firebrick4", alpha=0.3)+
+  scale_fill_gradient(high="firebrick1",low="firebrick4") +
+  theme_ggdist() +
+  theme(legend.position = "none",
+        panel.border = element_rect(colour = "grey78", fill=NA))
+
+
+cor_rr_peak_rrlevel <- round(cor(rr_peak$RR.peak, rr_level$RR.level), digits = 2)
+
+
+c <- left_join(rr_peak, rr_level) %>%
+  ggplot(aes(y=RR.peak, x = RR.level)) +
+  geom_hex() +
+  geom_smooth(se=FALSE, colour="firebrick") +
+  geom_text(aes(y=3, x=0.4, label=cor_rr_peak_rrlevel), colour="firebrick")  +
+  scale_fill_gradient(high="white",low="firebrick4") +
+  theme_ggdist() +
+  theme(legend.position = "none",
+        panel.border = element_rect(colour = "grey78", fill=NA))
+
+(plot_spacer() + b) / (a + c) +
+  plot_annotation(
+  title = 're_formula=sample_new_levels = "uncertainty"')
+
+ggsave(here("figures/temp_cors_2.pdf"))
+
+
+```
+
+
+
+```
+
+
