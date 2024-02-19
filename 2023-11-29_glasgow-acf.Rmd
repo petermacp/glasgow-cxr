@@ -2775,7 +2775,8 @@ e_ward <- brm(
                   data = mdata2,
                   family = negbinomial(),
                   seed = 1234,
-                  chains = 4, cores = 4)
+                  chains = 4, cores = 4,
+                  backend = "cmdstanr")
 
 
 summary(e_ward)
@@ -2783,25 +2784,20 @@ summary(e_ward)
 plot_counterfactual(model_data = mdata2, model=e_ward, outcome = inc_100k, population_denominator = population_without_inst_ship, grouping_var = ward, ward)
 ```
 
-Calculate correlations between RR.peak (1957 vs. mean[1950-1956]), RR.level (1958 vs. mean[1950-1956]), and RR.slope (1958-1963 vs. 1950-1956) 
-
-https://www.andrewheiss.com/blog/2021/11/10/ame-bayes-re-guide/#conditional-effects-for-existing-groups
+Try calculating correlation between RR.peak and RR.level 
 
 ```{r}
+#https://www.andrewheiss.com/blog/2021/11/10/ame-bayes-re-guide/#conditional-effects-for-existing-groups
 
-#RR.peak calculations
 rr_peak <- add_epred_draws(object = e_ward,
                 newdata = mdata1 %>%
-                  filter(year %in% c(1950:1957)),
+                  filter(y_num %in% 7:8),
                 re_formula = NA) %>%
   ungroup() %>%
-  mutate(epred_inc100k = (.epred/population_without_inst_ship)*100000) %>%
-  group_by(.draw, acf_period) %>%
-  reframe(epred_inc100k = mean(epred_inc100k))  %>%
-  group_by(.draw) %>%
-  summarise(RR.peak = last(epred_inc100k)/first(epred_inc100k))
+    mutate(epred_inc100k = (.epred/population_without_inst_ship)*100000) %>%
+    group_by(.draw) %>%
+    summarise(RR.peak = last(epred_inc100k)/first(epred_inc100k))
 
-#RR.peak histogram
 a <- rr_peak %>%
   ggplot() +
   geom_histogram(aes(x=RR.peak), fill="darkblue", colour="darkblue", alpha=0.3)+
@@ -2810,20 +2806,15 @@ a <- rr_peak %>%
   theme(legend.position = "none",
         panel.border = element_rect(colour = "grey78", fill=NA))
 
-#RR.level calculations
 rr_level <- add_epred_draws(object = e_ward,
                 newdata = mdata1 %>%
-                  filter(year %in% c(1950:1958)),
+                  filter(y_num %in% 7:9),
                 re_formula = NA) %>%
   ungroup() %>%
-  mutate(epred_inc100k = (.epred/population_without_inst_ship)*100000) %>%
-  group_by(.draw, acf_period) %>%
-  reframe(epred_inc100k = mean(epred_inc100k))  %>%
-  filter(acf_period !="b. acf") %>%
-  group_by(.draw) %>%
-  summarise(RR.level = last(epred_inc100k)/first(epred_inc100k))
+    mutate(epred_inc100k = (.epred/population_without_inst_ship)*100000) %>%
+    group_by(.draw) %>%
+    summarise(RR.level = last(epred_inc100k)/first(epred_inc100k))
 
-#RR. level histogram
 b <- rr_level %>%
   ggplot() +
   geom_histogram(aes(x=RR.level), fill="darkblue", colour="darkblue", alpha=0.3)+
@@ -2832,111 +2823,44 @@ b <- rr_level %>%
   theme(legend.position = "none",
         panel.border = element_rect(colour = "grey78", fill=NA))
 
-#RR.slope
-rr_slope <- add_epred_draws(object = e_ward,
-                newdata = mdata1 %>%
-                  filter(year %in% c(1950, 1956, 1958, 1963)),
-                re_formula = NA) %>%
-  ungroup() %>%
-  mutate(n_years = case_when(acf_period=="a. pre-acf" ~ 7,
-                             acf_period=="c. post-acf" ~ 6)) %>%
-    mutate(epred_inc100k = (.epred/population_without_inst_ship)*100000) %>%
-    group_by(.draw, acf_period) %>%
-    summarise(RR.slope = last(epred_inc100k)/first(epred_inc100k)) %>%
-    ungroup() %>%
-    group_by(.draw) %>%
-    summarise(RR.slope = last(RR.slope)/first(RR.slope))
 
-#RR.slope histogram
-c <- rr_slope %>%
-  ggplot() +
-  geom_histogram(aes(x=RR.slope), fill="darkblue", colour="darkblue", alpha=0.3)+
-  scale_fill_gradient(high="lightblue1",low="darkblue") +
-  theme_ggdist() +
-  theme(legend.position = "none",
-        panel.border = element_rect(colour = "grey78", fill=NA))
+cor_rr_peak_rrlevel <- round(cor(rr_peak$RR.peak, rr_level$RR.level), digits = 2)
 
 
-#Correlation between RR.peak and RR.level
-cor_rr_peak_rr_level <- round(cor(rr_peak$RR.peak, rr_level$RR.level), digits = 2)
-
-#Correlation between RR.peak and RR.slope
-cor_rr_peak_rr_slope <- round(cor(rr_peak$RR.peak, rr_slope$RR.slope), digits = 2)
-
-#Correlation between RR.level and RR.slope
-cor_rr_level_rr_slope <- round(cor(rr_level$RR.level, rr_slope$RR.slope), digits = 2)
-
-
-#plot of correlation between RR.peak and RR.level
-d <- left_join(rr_peak, rr_level) %>%
+c <- left_join(rr_peak, rr_level) %>%
   ggplot(aes(y=RR.peak, x = RR.level)) +
   geom_hex() +
   geom_smooth(se=FALSE, colour="firebrick") +
-  geom_text(aes(y=2.0, x=0.53, label=cor_rr_peak_rr_level), colour="firebrick")  +
+  geom_text(aes(y=2.2, x=0.55, label=cor_rr_peak_rrlevel), colour="firebrick")  +
   scale_fill_gradient(high="lightblue1",low="darkblue") +
   theme_ggdist() +
   theme(legend.position = "none",
         panel.border = element_rect(colour = "grey78", fill=NA))
 
-#plot of correlation between RR.peak and RR.slope
-e <- left_join(rr_peak, rr_slope) %>%
-  ggplot(aes(y=RR.peak, x = RR.slope)) +
-  geom_hex() +
-  geom_smooth(se=FALSE, colour="firebrick") +
-  geom_text(aes(y=2.0, x=0.74, label=cor_rr_peak_rr_slope), colour="firebrick")  +
-  scale_fill_gradient(high="lightblue1",low="darkblue") +
-  theme_ggdist() +
-  theme(legend.position = "none",
-        panel.border = element_rect(colour = "grey78", fill=NA))
-
-#plot of correlation between RR.level and RR.slope
-f <- left_join(rr_level, rr_slope) %>%
-  ggplot(aes(y=RR.level, x = RR.slope)) +
-  geom_hex() +
-  geom_smooth(se=FALSE, colour="firebrick") +
-  geom_text(aes(y=0.65, x=0.75, label=cor_rr_level_rr_slope), colour="firebrick")  +
-  scale_fill_gradient(high="lightblue1",low="darkblue") +
-  theme_ggdist() +
-  theme(legend.position = "none",
-        panel.border = element_rect(colour = "grey78", fill=NA))
-
-
-(plot_spacer() + plot_spacer() + c) /
-  (plot_spacer() + b + f) /
-  (a + d + e) +
+(plot_spacer() + b) / (a + c) +
   plot_annotation(
-  title = 'Model: cases ~ y_num:acf_period + (1 + y_num:acf_period | ward) +\noffset(log(population_without_inst_ship))\nPredictions:re_formula=NA')
+  title = 're_formula=NA')
 
-ggsave(here("figures/temp_cors.pdf"), width=7, height=7)
-
-
-
+ggsave(here("figures/temp_cors.pdf"))
 
 
 ```
 
-
-
 Try with random effects included, sampling from uncertainity distribution
 
 ```{r}
-
-#RR.peak calculations
-rr_peak2 <- add_epred_draws(object = e_ward,
+rr_peak <- add_epred_draws(object = e_ward,
                 newdata = mdata1 %>%
-                  filter(year %in% c(1950:1957)) %>%
-                  mutate(ward = "new_ward"),
+                  filter(y_num %in% 7:8) %>%
+                  mutate(region = "new_ward"),
                 re_formula = NULL, 
-          allow_new_levels = TRUE, sample_new_levels = "gaussian") %>%
+          allow_new_levels = TRUE, sample_new_levels = "uncertainty") %>%
   ungroup() %>%
-  mutate(epred_inc100k = (.epred/population_without_inst_ship)*100000) %>%
-  group_by(.draw, acf_period) %>%
-  reframe(epred_inc100k = mean(epred_inc100k))  %>%
-  group_by(.draw) %>%
-  summarise(RR.peak = last(epred_inc100k)/first(epred_inc100k))
+    mutate(epred_inc100k = (.epred/population_without_inst_ship)*100000) %>%
+    group_by(.draw) %>%
+    summarise(RR.peak = last(epred_inc100k)/first(epred_inc100k))
 
-#RR.peak histogram
-a2 <- rr_peak2 %>%
+a <- rr_peak %>%
   ggplot() +
   geom_histogram(aes(x=RR.peak), fill="firebrick4", colour="firebrick4", alpha=0.3)+
   scale_fill_gradient(high="firebrick1",low="firebrick4") +
@@ -2944,23 +2868,18 @@ a2 <- rr_peak2 %>%
   theme(legend.position = "none",
         panel.border = element_rect(colour = "grey78", fill=NA))
 
-#RR.level calculations
-rr_level2 <- add_epred_draws(object = e_ward,
+rr_level <- add_epred_draws(object = e_ward,
                 newdata = mdata1 %>%
-                  filter(year %in% c(1950:1958)) %>%
-                  mutate(ward = "new_ward"),
+                  filter(y_num %in% 7:9) %>%
+                  mutate(region = "new_ward"),
                 re_formula = NULL, 
-          allow_new_levels = TRUE, sample_new_levels = "gaussian") %>%
+          allow_new_levels = TRUE, sample_new_levels = "uncertainty") %>%
   ungroup() %>%
-  mutate(epred_inc100k = (.epred/population_without_inst_ship)*100000) %>%
-  group_by(.draw, acf_period) %>%
-  reframe(epred_inc100k = mean(epred_inc100k))  %>%
-  filter(acf_period !="b. acf") %>%
-  group_by(.draw) %>%
-  summarise(RR.level = last(epred_inc100k)/first(epred_inc100k))
+    mutate(epred_inc100k = (.epred/population_without_inst_ship)*100000) %>%
+    group_by(.draw) %>%
+    summarise(RR.level = last(epred_inc100k)/first(epred_inc100k))
 
-#RR. level histogram
-b2 <- rr_level2 %>%
+b <- rr_level %>%
   ggplot() +
   geom_histogram(aes(x=RR.level), fill="firebrick4", colour="firebrick4", alpha=0.3)+
   scale_fill_gradient(high="firebrick1",low="firebrick4") +
@@ -2968,254 +2887,31 @@ b2 <- rr_level2 %>%
   theme(legend.position = "none",
         panel.border = element_rect(colour = "grey78", fill=NA))
 
-#RR.slope
-rr_slope2 <- add_epred_draws(object = e_ward,
-                newdata = mdata1 %>%
-                  filter(year %in% c(1950, 1956, 1958, 1963)) %>%
-                  mutate(ward = "new_ward"),
-                re_formula = NULL, 
-          allow_new_levels = TRUE, sample_new_levels = "gaussian") %>%
-  ungroup() %>%
-  mutate(n_years = case_when(acf_period=="a. pre-acf" ~ 7,
-                             acf_period=="c. post-acf" ~ 6)) %>%
-    mutate(epred_inc100k = (.epred/population_without_inst_ship)*100000) %>%
-    group_by(.draw, acf_period) %>%
-    summarise(RR.slope = last(epred_inc100k)/first(epred_inc100k)) %>%
-    ungroup() %>%
-    group_by(.draw) %>%
-    summarise(RR.slope = last(RR.slope)/first(RR.slope))
 
-#RR.slope histogram
-c2 <- rr_slope2 %>%
-  ggplot() +
-  geom_histogram(aes(x=RR.slope), fill="firebrick4", colour="firebrick4", alpha=0.3)+
-  scale_fill_gradient(high="firebrick1",low="firebrick4") +
-  theme_ggdist() +
-  theme(legend.position = "none",
-        panel.border = element_rect(colour = "grey78", fill=NA))
+cor_rr_peak_rrlevel <- round(cor(rr_peak$RR.peak, rr_level$RR.level), digits = 2)
 
 
-#Correlation between RR.peak and RR.level
-cor_rr_peak_rr_level2 <- round(cor(rr_peak2$RR.peak, rr_level2$RR.level), digits = 2)
-
-#Correlation between RR.peak and RR.slope
-cor_rr_peak_rr_slope2 <- round(cor(rr_peak2$RR.peak, rr_slope2$RR.slope), digits = 2)
-
-#Correlation between RR.level and RR.slope
-cor_rr_level_rr_slope2 <- round(cor(rr_level2$RR.level, rr_slope2$RR.slope), digits = 2)
-
-
-#plot of correlation between RR.peak and RR.level
-d2 <- left_join(rr_peak2, rr_level2) %>%
+c <- left_join(rr_peak, rr_level) %>%
   ggplot(aes(y=RR.peak, x = RR.level)) +
   geom_hex() +
   geom_smooth(se=FALSE, colour="firebrick") +
-  geom_text(aes(y=3, x=0.4, label=cor_rr_peak_rr_level2), colour="firebrick")  +
+  geom_text(aes(y=3, x=0.4, label=cor_rr_peak_rrlevel), colour="firebrick")  +
   scale_fill_gradient(high="white",low="firebrick4") +
   theme_ggdist() +
   theme(legend.position = "none",
         panel.border = element_rect(colour = "grey78", fill=NA))
 
-#plot of correlation between RR.peak and RR.slope
-e2 <- left_join(rr_peak2, rr_slope2) %>%
-  ggplot(aes(y=RR.peak, x = RR.slope)) +
-  geom_hex() +
-  geom_smooth(se=FALSE, colour="firebrick") +
-  geom_text(aes(y=3, x=0.4, label=cor_rr_peak_rr_level2), colour="firebrick")  +
-  scale_fill_gradient(high="white",low="firebrick4") +
-  theme_ggdist() +
-  theme(legend.position = "none",
-        panel.border = element_rect(colour = "grey78", fill=NA))
-
-#plot of correlation between RR.level and RR.slope
-f2 <- left_join(rr_level2, rr_slope2) %>%
-  ggplot(aes(y=RR.level, x = RR.slope)) +
-  geom_hex() +
-  geom_smooth(se=FALSE, colour="firebrick") +
-  geom_text(aes(y=1, x=0.4, label=cor_rr_peak_rr_level2), colour="firebrick")  +
-  scale_fill_gradient(high="white",low="firebrick4") +
-  theme_ggdist() +
-  theme(legend.position = "none",
-        panel.border = element_rect(colour = "grey78", fill=NA))
-
-
-(plot_spacer() + plot_spacer() + c2) /
-  (plot_spacer() + b2 + f2) /
-  (a2 + d2 + e2) +
+(plot_spacer() + b) / (a + c) +
   plot_annotation(
-  title = 're_formula="uncertainty"')
+  title = 're_formula=sample_new_levels = "uncertainty"')
 
-ggsave(here("figures/temp_cors_2.pdf"), width=7, height=7)
-
-
-
+ggsave(here("figures/temp_cors_2.pdf"))
 
 
 ```
 
 
 
-A more complicated model with nested random effects
-
-```{r}
-#just simplify the model to make easier.
-e_ward2 <- brm(
-  cases ~ y_num:acf_period + (1 + y_num:acf_period | division/ward) + offset(log(population_without_inst_ship)),
-                  data = mdata2,
-                  family = negbinomial(),
-                  seed = 1234,
-                  chains = 4, cores = 4)
-
-
-summary(e_ward2)
-
 ```
 
-```{r}
 
-#RR.peak calculations
-rr_peak3 <- add_epred_draws(object = e_ward2,
-                newdata = mdata2 %>%
-                  filter(year %in% c(1950:1957)),
-                re_formula = ~(1 + y_num:acf_period | division/ward)) %>%
-  ungroup() %>%
-  mutate(epred_inc100k = (.epred/population_without_inst_ship)*100000) %>%
-  group_by(.draw, acf_period, division) %>%
-  reframe(epred_inc100k = mean(epred_inc100k))  %>%
-  group_by(.draw, division) %>%
-  summarise(RR.peak = last(epred_inc100k)/first(epred_inc100k))
-
-#RR.peak histogram
-a3 <- rr_peak3 %>%
-  ggplot() +
-  geom_histogram(aes(x=RR.peak), fill="darkblue", colour="darkblue", alpha=0.3)+
-  scale_fill_gradient(high="lightblue1",low="darkblue") +
-  theme_ggdist() +
-  theme(legend.position = "none",
-        panel.border = element_rect(colour = "grey78", fill=NA)) +
-  facet_wrap(division~.)
-
-#RR.level calculations
-rr_level3 <- add_epred_draws(object = e_ward2,
-                newdata = mdata2 %>%
-                  filter(year %in% c(1950:1958)),
-                re_formula = ~(1 + y_num:acf_period | division/ward)) %>%
-  ungroup() %>%
-  mutate(epred_inc100k = (.epred/population_without_inst_ship)*100000) %>%
-  group_by(.draw, acf_period, division) %>%
-  reframe(epred_inc100k = mean(epred_inc100k))  %>%
-  filter(acf_period !="b. acf") %>%
-  group_by(.draw, division) %>%
-  summarise(RR.level = last(epred_inc100k)/first(epred_inc100k))
-
-#RR. level histogram
-b3 <- rr_level3 %>%
-  ggplot() +
-  geom_histogram(aes(x=RR.level), fill="darkblue", colour="darkblue", alpha=0.3)+
-  scale_fill_gradient(high="lightblue1",low="darkblue") +
-  theme_ggdist() +
-  theme(legend.position = "none",
-        panel.border = element_rect(colour = "grey78", fill=NA)) +
-  facet_wrap(division~.)
-
-#RR.slope
-rr_slope3 <- add_epred_draws(object = e_ward2,
-                newdata = mdata2 %>%
-                  filter(year %in% c(1950, 1956, 1958, 1963)),
-                re_formula = ~(1 + y_num:acf_period | division/ward)) %>%
-  ungroup() %>%
-  mutate(n_years = case_when(acf_period=="a. pre-acf" ~ 7,
-                             acf_period=="c. post-acf" ~ 6)) %>%
-    mutate(epred_inc100k = (.epred/population_without_inst_ship)*100000) %>%
-    group_by(.draw, acf_period, division) %>%
-    summarise(RR.slope = last(epred_inc100k)/first(epred_inc100k)) %>%
-    ungroup() %>%
-    group_by(.draw, division) %>%
-    summarise(RR.slope = last(RR.slope)/first(RR.slope))
-
-#RR.slope histogram
-c3 <- rr_slope3 %>%
-  ggplot() +
-  geom_histogram(aes(x=RR.slope), fill="darkblue", colour="darkblue", alpha=0.3)+
-  scale_fill_gradient(high="lightblue1",low="darkblue") +
-  theme_ggdist() +
-  theme(legend.position = "none",
-        panel.border = element_rect(colour = "grey78", fill=NA)) +
-  facet_wrap(division~.)
-
-
-#Correlation between RR.peak and RR.level
-cor_rr_peak_rr_level3 <- left_join(rr_peak3, rr_level3) %>%
-  ungroup() %>%
-  group_by(division) %>% 
-  nest() %>% 
-  mutate(cor = map_dbl(data, ~cor(.x$RR.peak, .x$RR.level))) %>%
-  mutate(cor = round(cor, digits=2))
-
-#Correlation between RR.peak and RR.slope
-cor_rr_peak_rr_slope3 <- left_join(rr_peak3, rr_slope3) %>%
-  ungroup() %>%
-  group_by(division) %>% 
-  nest() %>% 
-  mutate(cor = map_dbl(data, ~cor(.x$RR.peak, .x$RR.slope))) %>%
-  mutate(cor = round(cor, digits=2))
-
-#Correlation between RR.level and RR.slope
-cor_rr_level_rr_slope3 <- left_join(rr_level3, rr_slope3) %>%
-  ungroup() %>%
-  group_by(division) %>% 
-  nest() %>% 
-  mutate(cor = map_dbl(data, ~cor(.x$RR.level, .x$RR.slope))) %>%
-  mutate(cor = round(cor, digits=2))
-
-
-#plot of correlation between RR.peak and RR.level
-d3 <- left_join(rr_peak3, rr_level3) %>%
-  ggplot(aes(y=RR.peak, x = RR.level)) +
-  geom_hex() +
-  geom_smooth(se=FALSE, colour="firebrick") +
-  geom_text(data=cor_rr_peak_rr_level3, aes(y=2, x=0.5, label=cor), colour="firebrick")  +
-  scale_fill_gradient(high="lightblue1",low="darkblue") +
-  theme_ggdist() +
-  theme(legend.position = "none",
-        panel.border = element_rect(colour = "grey78", fill=NA)) +
-  facet_wrap(division~.)
-
-#plot of correlation between RR.peak and RR.slope
-e3 <-  left_join(rr_peak3, rr_slope3) %>%
-  ggplot(aes(y=RR.peak, x = RR.slope)) +
-  geom_hex() +
-  geom_smooth(se=FALSE, colour="firebrick") +
-  geom_text(data=cor_rr_peak_rr_slope3, aes(y=2, x=0.5, label=cor), colour="firebrick")  +
-  scale_fill_gradient(high="lightblue1",low="darkblue") +
-  theme_ggdist() +
-  theme(legend.position = "none",
-        panel.border = element_rect(colour = "grey78", fill=NA)) +
-  facet_wrap(division~.)
-
-#plot of correlation between RR.level and RR.slope
-f3 <- left_join(rr_level3, rr_slope3) %>%
-  ggplot(aes(y=RR.level, x = RR.slope)) +
-  geom_hex() +
-  geom_smooth(se=FALSE, colour="firebrick") +
-  geom_text(data=cor_rr_peak_rr_slope3, aes(y=0.65, x=0.5, label=cor), colour="firebrick")  +
-  scale_fill_gradient(high="lightblue1",low="darkblue") +
-  theme_ggdist() +
-  theme(legend.position = "none",
-        panel.border = element_rect(colour = "grey78", fill=NA)) +
-  facet_wrap(division~.)
-
-
-(plot_spacer() + plot_spacer() + c3) /
-  (plot_spacer() + b3 + f3) /
-  (a3 + d3 + e3) +
-  plot_annotation(
-  title = 'Model: cases ~ y_num:acf_period + (1 + y_num:acf_period | division/ward) + offset(log(population_without_inst_ship)\nPredictions: re_formula=NA')
-
-ggsave(here("figures/temp_cors3.pdf"), width=16, height=10)
-
-
-
-
-
-```
