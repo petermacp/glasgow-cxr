@@ -67,14 +67,20 @@ downslopes1 <- W[period=='after',{
 slopes <- merge(downslopes0,downslopes1)
 slopes[,RR.slope:=slope1/slope0] #downward slope after  / downward slope before
 
-WM <- merge(WM,slopes[,.(ward,RR.slope)],by='ward')
-
 ## mean rates
 WM <- W[,.(rate=mean(1e5*tb/total_population)),by=.(ward,period)]
 WM <- dcast(WM,ward ~ period,value.var='rate')
 WM[,reldiff:=(before-after)/before] # notification drop relative to 'before'
 WM[,relpeak:=during/before]         # peak notifications relative to 'before'
 WM[,RR.level:=(after)/before] # notification drop relative to 'before'
+WM[,absdiff:=before-after]
+WM[,prev:=before * (relpeak-1)/0.9] #assume 90% coverage
+WM[,CDR:=before * 3 / prev] #P = IT
+WM[,CDR:=(CDR)/(1+CDR)] #CDR estimate (inverse odds)
+
+## merge in slopes
+WM <- merge(WM,slopes[,.(ward,RR.slope)],by='ward')
+
 
 ## merge in covs
 WM <- merge(WM,warcov,by='ward')
@@ -83,6 +89,10 @@ WM <- merge(WM,warcov,by='ward')
 ggpairs(WM[,.(before,reldiff,relpeak)])
 
 ggsave(file=here('exploratory/figures/effect.pairs.png'),w=5,h=5)
+
+## larger correlation
+GP <- ggpairs(WM[,.(before,prev,relpeak,reldiff,RR.level,absdiff,CDR)])
+ggsave(GP,file=here('exploratory/figures/effect.pairs.more.png'),w=8,h=8)
 
 
 ## empirical slope vs peak
