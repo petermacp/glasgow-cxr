@@ -77,6 +77,7 @@ WM[,absdiff:=before-after]
 WM[,prev:=before * (relpeak-1)/0.9] #assume 90% coverage
 WM[,CDR:=before * 3 / prev] #P = IT
 WM[,CDR:=(CDR)/(1+CDR)] #CDR estimate (inverse odds)
+WM[,Ibefore:=before/CDR]
 
 ## merge in slopes
 WM <- merge(WM,slopes[,.(ward,RR.slope)],by='ward')
@@ -91,7 +92,7 @@ ggpairs(WM[,.(before,reldiff,relpeak)])
 ggsave(file=here('exploratory/figures/effect.pairs.png'),w=5,h=5)
 
 ## larger correlation
-GP <- ggpairs(WM[,.(before,prev,relpeak,reldiff,RR.level,absdiff,CDR)])
+GP <- ggpairs(WM[,.(before,Ibefore,prev,relpeak,reldiff,RR.level,absdiff,CDR)])
 ggsave(GP,file=here('exploratory/figures/effect.pairs.more.png'),w=8,h=8)
 
 
