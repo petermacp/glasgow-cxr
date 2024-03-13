@@ -116,9 +116,9 @@ p <- summary %>%
     ) +
     theme(legend.position = "bottom",
           panel.border = element_rect(colour = "grey78", fill=NA),
-          title = element_text(size=14),
-          axis.text.x = element_text(size=10, angle = 90, hjust=1, vjust=0.5),
-          legend.text = element_text(size=12)) +
+          text = element_text(size=8),
+          axis.text.x = element_text(size=8, angle = 90, hjust=1, vjust=0.5),
+          legend.text = element_text(size=8)) +
     guides(shape="none")
 
     facet_vars <- vars(...)
@@ -1351,7 +1351,8 @@ mdata_extrapulmonary <- ward_inc %>%
                                 year %in% c(1958:1963) ~ "c. post-acf")) %>%
   group_by(ward) %>%
   mutate(y_num = row_number()) %>%
-  ungroup()
+  ungroup() %>% 
+  filter(year<=1961) #no data for 1962 and 1963
 
 
 #scaffold for overall predictions
@@ -1596,6 +1597,34 @@ plot_counterfactual(model_data = mdata, model=m_prior6, outcome = inc_100k,
 Issue here is the non-centred parameterisation of the intercept prior... Feel like this is a more interpretable way to set priors... but will revert to centred parameterisation for the meantime.
 
 
+```{r}
+m_centered_prior <- brm(
+  cases ~ 1 + y_num*acf_period + (1 + y_num*acf_period | ward) + offset(log(population_without_inst_ship)),
+                  data = mdata,
+                  family = negbinomial(),
+                  seed = 1234,
+                  chains = 4, cores = 4,
+                  prior = prior(normal(0,1000), class = Intercept) +
+                          prior(gamma(0.01, 0.01), class = shape) +
+                          prior(normal(0, 1), class = b) +
+                          prior(exponential(1), class=sd) +
+                          prior(lkj(2), class=cor),
+                  sample_prior = "only")
+
+plot(m_centered_prior)
+
+plot_counterfactual(model_data = overall_scaffold, model=m_centered_prior, outcome = inc_100k, 
+                    population_denominator = population_without_inst_ship, re_formula = NA)
+
+plot_counterfactual(model_data = mdata, model=m_centered_prior, outcome = inc_100k, 
+                    population_denominator = population_without_inst_ship, grouping_var = ward, ward,
+                    re_formula = ~( 1 + y_num*acf_period | ward))
+
+```
+
+
+
+
 Look at the mean and variance of counts (counts of pulmonary notifications are what we are predicting)
 
 ```{r}
@@ -1615,20 +1644,23 @@ Fit the model with the data
 ```{r}
 
 m_pulmonary <- brm(
-  cases ~ y_num + acf_period + y_num:acf_period + (y_num*acf_period | ward) + offset(log(population_without_inst_ship)),
+  cases ~ 1 + y_num*acf_period + (1 + y_num*acf_period | ward) + offset(log(population_without_inst_ship)),
                   data = mdata,
                   family = negbinomial(),
                   seed = 1234,
                   chains = 4, cores = 4,
-                  prior = prior(gamma(0.01, 0.01), class = shape) +
-                          prior(normal(0, 0.1), class = b) +
+                  prior = prior(normal(0,1000), class = Intercept) +
+                          prior(gamma(0.01, 0.01), class = shape) +
+                          prior(normal(0, 1), class = b) +
                           prior(exponential(1), class=sd) +
                           prior(lkj(2), class=cor))
   
 #check model diagnostics
 summary(m_pulmonary)
 plot(m_pulmonary)
+
 pp_check(m_pulmonary, type='ecdf_overlay')
+prior_summary(m_pulmonary)
 
 ```
 
@@ -1660,8 +1692,11 @@ f1a <- st_as_sf(left_join(ward_inc, glasgow_wards_1951)) %>%
   theme_ggdist() +
   theme(panel.border = element_rect(colour = "grey78", fill=NA),
         legend.position = "top",
-        #legend.key.width = unit(2, "cm"),
-        legend.title.align = 0.5) +
+        legend.key.width = unit(2, "cm"),
+        legend.title.align = 0.5,
+        text = element_text(size=8),
+        axis.text.x = element_text(angle=45, size=6, hjust=1),
+        axis.text.y = element_text(size=6)) +
   guides(fill=guide_colorbar(title.position = "top"))
 
 (f1a / f1b) + plot_annotation(tag_levels = "A")
@@ -1855,6 +1890,38 @@ ward_change %>%
   datatable()
 
 
+my_patchwork = function(data, plot_col="plot") {
+  
+  reduce(data[[plot_col]], `%+%`)
+  
+}
+
+#peak in a chart
+ward_change %>%
+  keep((names(.) %in% tokeep)) %>%
+  bind_rows() %>%
+  mutate(across(c(estimate:.upper), number, accuracy=0.01)) %>%
+  select(measure, everything()) %>%
+  mutate(estimate = as.double(estimate)) %>%
+  full_join(glasgow_wards_1951) %>%
+  st_as_sf() %>%
+  group_by(measure) %>% 
+  nest() %>%
+  mutate(label = case_when(measure=="RR.peak" ~ "A",
+                           measure=="RR.level" ~"B",
+                           measure=="RR.slope" ~"C")) %>%
+  mutate(plot = pmap(list(data, label, measure),
+                     ~ggplot() +
+                       geom_sf(data=..1, aes(fill=estimate)) +
+                       ggtitle(paste0({..2}, ") ", {..3})) +
+                       scale_fill_gradient(high="lightblue1",low="darkblue", name="") +
+                       theme_ggdist() +
+                       theme(panel.border = element_rect(colour = "grey78", fill=NA),
+                       axis.text.x=element_text(angle=45, hjust=1)))) %>% 
+  pluck("plot") %>% reduce(`%+%`)
+
+ggsave(here("figures/s4.png"), width = 10)
+
 ```
 
 Calculate the counterfactual per ward
@@ -1896,12 +1963,14 @@ Now we will model the extra-pulmonary TB notification rate. Struggling a bit wit
 ```{r}
 
 m_extrapulmonary <- brm(
-  cases ~ y_num + acf_period + y_num:acf_period + (y_num*acf_period | ward) + offset(log(population_without_inst_ship)),
+  cases ~ 1 + y_num*acf_period + (1 + y_num*acf_period | ward) + offset(log(population_without_inst_ship)),
                   data = mdata_extrapulmonary,
-                  family = poisson(),
+                  family = negbinomial(),
                   seed = 1234,
                   chains = 4, cores = 4,
-                  prior = prior(normal(0, 0.01), class = b) +
+                  prior = prior(normal(0,1000), class = Intercept) +
+                          prior(gamma(0.01, 0.01), class = shape) +
+                          prior(normal(0, 1), class = b) +
                           prior(exponential(1), class=sd) +
                           prior(lkj(2), class=cor))
 
@@ -1916,7 +1985,7 @@ pp_check(m_extrapulmonary, type='ecdf_overlay')
 Summarise in plot
 
 ```{r}
-plot_counterfactual(model_data = overall_scaffold, model=m_extrapulmonary, 
+plot_counterfactual(model_data = overall_scaffold %>% filter(year<=1961), model=m_extrapulmonary, 
                     population_denominator = population_without_inst_ship, outcome=inc_100k_extrapulmonary, re_formula = NA)
   
 ggsave(here("figures/s6.png"), width=10)
@@ -1935,7 +2004,7 @@ tokeep <- c("peak_summary", "level_summary", "slope_summary")
 
 #summary measures in a table
 overall_change_extrapulmonary %>%
-  keep((names(.) %in% tokeep)) %>%
+  keep(names(.) %in% tokeep) %>%
   bind_rows() %>%
   mutate(across(c(estimate:.upper), number, accuracy=0.01)) %>%
   select(measure, everything()) %>%
@@ -1949,7 +2018,7 @@ Numbers of extra-pulmonary TB cases averted overall.
 
 ```{r}
 
-overall_ep_counterf <- calculate_counterfactual(model_data = mdata, model=m_extrapulmonary, 
+overall_ep_counterf <- calculate_counterfactual(model_data = mdata_extrapulmonary, model=m_extrapulmonary, 
                                                population_denominator = population_without_inst_ship)
 
 overall_ep_counterf$counter_post %>%
@@ -1999,7 +2068,7 @@ tokeep <- c("peak_summary", "level_summary", "slope_summary")
 
 #summary measures in a table
 ward_change_extrapulmonary  %>%
-  keep((names(.) %in% tokeep)) %>%
+  keep(names(.) %in% tokeep) %>%
   bind_rows() %>%
   mutate(across(c(estimate:.upper), number, accuracy=0.01)) %>%
   select(measure, everything()) %>%
@@ -2030,17 +2099,15 @@ mdata_age_sex <- cases_by_age_sex %>%
   mutate(y_num = row_number()) %>%
   ungroup()
 
-basic_prior <- c(prior(gamma(1, 0.01), class = shape),
-                  prior(normal(0, 1), class = b))
-
-
 m_age_sex <- brm(
   cases ~ y_num + (acf_period)*(age*sex) + (acf_period:y_num)*(age*sex),
                   data = mdata_age_sex,
                   family = negbinomial(),
                   seed = 1234,
                   chains = 4, cores = 4, 
-                  prior = basic_prior)
+                  prior = prior(normal(0,1000), class = Intercept) +
+                          prior(gamma(0.01, 0.01), class = shape) +
+                          prior(normal(0, 1), class = b))
 
 summary(m_age_sex)
 plot(m_age_sex)
