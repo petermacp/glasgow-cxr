@@ -1866,7 +1866,7 @@ Plot the counterfactual at ward level
 plot_counterfactual(model_data = mdata, model=m_pulmonary, outcome = inc_100k, population_denominator = population_without_inst_ship, 
                     grouping_var = ward, ward, re_formula= ~(1 + y_num*acf_period | ward))
   
-ggsave(here("figures/s4.png"), width=12, height=12)
+ggsave(here("figures/s3.png"), width=12, height=12)
 
 ```
 
@@ -1890,37 +1890,76 @@ ward_change %>%
   datatable()
 
 
-my_patchwork = function(data, plot_col="plot") {
-  
-  reduce(data[[plot_col]], `%+%`)
-  
-}
-
-#peak in a chart
-ward_change %>%
+#plot these in a figure
+ward_effects <- ward_change %>%
   keep((names(.) %in% tokeep)) %>%
   bind_rows() %>%
-  mutate(across(c(estimate:.upper), number, accuracy=0.01)) %>%
+  bind_rows(overall_change$peak_summary) %>%
+  bind_rows(overall_change$level_summary) %>%
+  bind_rows(overall_change$slope_summary) %>%
+  mutate_at(.vars = vars(estimate:.upper), 
+            .funs = funs(as.numeric)) %>%
   select(measure, everything()) %>%
   mutate(estimate = as.double(estimate)) %>%
-  full_join(glasgow_wards_1951) %>%
-  st_as_sf() %>%
-  group_by(measure) %>% 
-  nest() %>%
-  mutate(label = case_when(measure=="RR.peak" ~ "A",
-                           measure=="RR.level" ~"B",
-                           measure=="RR.slope" ~"C")) %>%
-  mutate(plot = pmap(list(data, label, measure),
-                     ~ggplot() +
-                       geom_sf(data=..1, aes(fill=estimate)) +
-                       ggtitle(paste0({..2}, ") ", {..3})) +
-                       scale_fill_gradient(high="lightblue1",low="darkblue", name="") +
-                       theme_ggdist() +
-                       theme(panel.border = element_rect(colour = "grey78", fill=NA),
-                       axis.text.x=element_text(angle=45, hjust=1)))) %>% 
-  pluck("plot") %>% reduce(`%+%`)
+  full_join(glasgow_wards_1951) %>% 
+  mutate(ward2 = paste0(ward_number, ". ", ward)) %>%
+  mutate(ward2 = case_when(is.na(ward) ~ "Overall",
+                          TRUE ~ ward2)) %>%
+  st_as_sf() 
 
-ggsave(here("figures/s4.png"), width = 10)
+#function for plotting choropleth maps
+plot_ward_effect <- function(data, measure){
+  {{data}} %>%
+  filter(measure == {{measure}}) %>%
+  ggplot() +
+  geom_sf(aes(fill=estimate)) +
+  geom_sf_label(aes(label = ward_number), size=3, fill=NA, label.size = NA, colour="black") +
+  scale_fill_gradient(high="lightblue1",low="darkblue", name="") +
+  theme_ggdist() +
+  theme(panel.border = element_rect(colour = "grey78", fill=NA),
+        axis.text.x=element_text(angle=45, hjust=1)) +
+    labs(x="", y="")
+}
+
+#function for plotting catapiller plots
+plot_ward_cat <- function(data, measure){
+
+  pal <- colorRampPalette(c('darkblue','lightblue'))
+
+  {{data}} %>%
+    filter(measure=={{measure}}) %>%
+    mutate(my_palette = case_when(ward2=="Overall" ~ "#C60C30",
+                                TRUE ~ pal(36)[as.numeric(cut(.$estimate,breaks = 36))])) %>%
+    ggplot() +
+    geom_pointrange(aes(y=estimate, ymin=.lower, ymax=.upper, 
+                      x=fct_reorder(ward2, estimate), colour=my_palette)) +
+    coord_flip() +
+    scale_colour_identity(name="") +
+    theme_ggdist() +
+    theme(panel.border = element_rect(colour = "grey78", fill=NA)) +
+    labs(x = "",
+         y = "Relative rate (95% CrI)")
+}
+
+
+
+ward_peak_i <- plot_ward_effect(data = ward_effects, measure = "RR.peak")
+ward_level_i <- plot_ward_effect(data = ward_effects, measure = "RR.level")
+ward_slope_i <- plot_ward_effect(data = ward_effects, measure = "RR.slope")
+
+ward_peak_ii <- plot_ward_cat(data = ward_effects, measure = "RR.peak")
+ward_level_ii <- plot_ward_cat(data = ward_effects, measure = "RR.level")
+ward_slope_ii <- plot_ward_cat(data = ward_effects, measure = "RR.slope")
+
+s4 <- (ward_peak_i + ward_level_i + ward_slope_i) /
+  (ward_peak_ii + ward_level_ii + ward_slope_ii)
+
+s4[[1]] <- s4[[1]] + plot_layout(tag_level = 'new')
+s4[[2]] <- s4[[2]] + plot_layout(tag_level = 'new')
+s4 + plot_annotation(tag_levels = c('A', '1'))
+
+
+ggsave(here("figures/s4.png"), width = 16, height=10)
 
 ```
 
