@@ -256,6 +256,7 @@ summarise_change <- function(model_data, model, population_denominator, grouping
 ```
 
 
+
 Function for calculating difference from counterfactual
 
 ```{r}
@@ -1344,6 +1345,7 @@ mdata <- ward_inc %>%
   mutate(y_num = row_number()) %>%
   ungroup()
 
+
 mdata_extrapulmonary <- ward_inc %>%
   filter(tb_type=="Non-Pulmonary") %>%
   mutate(acf_period = case_when(year %in% c(1950:1956) ~ "a. pre-acf",
@@ -1383,40 +1385,40 @@ a) intercept only, to predict count of cases
 at the intercept, we expect somewhere around 2500. We will set the standard deviation to both 0.5 and 1 to check what it looks like
 
 ```{r}
-
-c(prior(lognormal(7.600902, 0.5)), #log(2500) = 7.600902
-  prior(lognormal(7.600902, 1))) %>% 
-  parse_dist() %>% 
-  
-  ggplot(aes(y = prior, dist = .dist, args = .args)) +
-  stat_halfeye(.width = c(.5, .95)) +
-  scale_y_discrete(NULL, labels = str_c("lognormal(log(2000), ", c(0.5, 1), ")"),
-                   expand = expansion(add = 0.1)) +
-  xlab(expression(exp(italic(p)(beta[0])))) +
-  coord_cartesian(xlim = c(0,15000))
-
-
-prior(gamma(1, 0.01)) %>%
-  parse_dist() %>%
-  ggplot(aes(y=prior, dist = .dist, args = .args)) +
-  stat_halfeye(.width = c(0.5, 0.95))
-
-#now fit to a model, and plot some prior realisations
-
-m_prior1 <- brm(
-  cases ~ 0 + Intercept,
-  family = negbinomial(),
-  data = overall_scaffold,
-  sample_prior = "only",
-  prior = prior(normal(log(2000), 0.5), class = b, coef = Intercept) +
-          prior(gamma(1, 0.01), class = shape)
-)
-
-add_epred_draws(object=m_prior1,
-                newdata = tibble(intercept=1)) %>%
-  ggplot(aes(x=intercept, y=.epred)) +
-  stat_halfeye() +
-  scale_y_log10(labels = comma)
+# 
+# c(prior(lognormal(7.600902, 0.5)), #log(2500) = 7.600902
+#   prior(lognormal(7.600902, 1))) %>% 
+#   parse_dist() %>% 
+#   
+#   ggplot(aes(y = prior, dist = .dist, args = .args)) +
+#   stat_halfeye(.width = c(.5, .95)) +
+#   scale_y_discrete(NULL, labels = str_c("lognormal(log(2000), ", c(0.5, 1), ")"),
+#                    expand = expansion(add = 0.1)) +
+#   xlab(expression(exp(italic(p)(beta[0])))) +
+#   coord_cartesian(xlim = c(0,15000))
+# 
+# 
+# prior(gamma(1, 0.01)) %>%
+#   parse_dist() %>%
+#   ggplot(aes(y=prior, dist = .dist, args = .args)) +
+#   stat_halfeye(.width = c(0.5, 0.95))
+# 
+# #now fit to a model, and plot some prior realisations
+# 
+# m_prior1 <- brm(
+#   cases ~ 0 + Intercept,
+#   family = negbinomial(),
+#   data = overall_scaffold,
+#   sample_prior = "only",
+#   prior = prior(normal(log(2000), 0.5), class = b, coef = Intercept) +
+#           prior(gamma(1, 0.01), class = shape)
+# )
+# 
+# add_epred_draws(object=m_prior1,
+#                 newdata = tibble(intercept=1)) %>%
+#   ggplot(aes(x=intercept, y=.epred)) +
+#   stat_halfeye() +
+#   scale_y_log10(labels = comma)
 
 
 ```
@@ -1424,48 +1426,48 @@ add_epred_draws(object=m_prior1,
 Now try to add in a term for the effect of y_num. We anticpate that the number of cases will decline by about 1-5% per year. However, as we are pretty uncertain about this, we will just encode a weakly regularising prior to restrict the year size to sensible ranges.
 
 ```{r}
-
-
-m_prior2 <- brm(
-  cases ~ 0 + Intercept + y_num,
-  family = negbinomial(),
-  data = overall_scaffold,
-  sample_prior = "only",
-  prior = prior(normal(log(2000), 0.5), class = b, coef = Intercept) +
-          prior(gamma(1, 0.01), class = shape) +
-          prior(normal(0, 0.01), class = b, coef = y_num)
-)
-
-add_epred_draws(object=m_prior2,
-                newdata = overall_scaffold) %>%
-  ggplot(aes(x=year, y=.epred)) +
-  stat_halfeye() +
-  scale_y_log10(label=comma)
+# 
+# 
+# m_prior2 <- brm(
+#   cases ~ 0 + Intercept + y_num,
+#   family = negbinomial(),
+#   data = overall_scaffold,
+#   sample_prior = "only",
+#   prior = prior(normal(log(2000), 0.5), class = b, coef = Intercept) +
+#           prior(gamma(1, 0.01), class = shape) +
+#           prior(normal(0, 0.01), class = b, coef = y_num)
+# )
+# 
+# add_epred_draws(object=m_prior2,
+#                 newdata = overall_scaffold) %>%
+#   ggplot(aes(x=year, y=.epred)) +
+#   stat_halfeye() +
+#   scale_y_log10(label=comma)
 
 ```
 
 Now we want to add in a prior for the effect of the acf_intervention. We anticipate the peak to be anywhere between no effect, and a tripling
 
 ```{r}
-
-m_prior3 <- brm(
-  cases ~ 0 + Intercept + y_num + acf_period,
-  family = negbinomial(),
-  data = overall_scaffold,
-  sample_prior = "only",
-  prior = prior(normal(log(2000), 0.5), class = b, coef = Intercept) +
-          prior(gamma(1, 0.01), class = shape) +
-          prior(normal(0, 0.01), class = b, coef = y_num) +
-          prior(normal(0, 0.001), class = b)
-)
-
-
-add_epred_draws(object=m_prior3,
-                newdata = overall_scaffold) %>%
-  ggplot(aes(x=year, y=.epred)) +
-  stat_halfeye() +
-  scale_y_log10(labels = comma)
-
+# 
+# m_prior3 <- brm(
+#   cases ~ 0 + Intercept + y_num + acf_period,
+#   family = negbinomial(),
+#   data = overall_scaffold,
+#   sample_prior = "only",
+#   prior = prior(normal(log(2000), 0.5), class = b, coef = Intercept) +
+#           prior(gamma(1, 0.01), class = shape) +
+#           prior(normal(0, 0.01), class = b, coef = y_num) +
+#           prior(normal(0, 0.001), class = b)
+# )
+# 
+# 
+# add_epred_draws(object=m_prior3,
+#                 newdata = overall_scaffold) %>%
+#   ggplot(aes(x=year, y=.epred)) +
+#   stat_halfeye() +
+#   scale_y_log10(labels = comma)
+# 
 
 
 ```
@@ -1473,24 +1475,24 @@ add_epred_draws(object=m_prior3,
 Now we look and see what it looks like with the interactions
 
 ```{r}
-
-m_prior4 <- brm(
-  cases ~ 0 + Intercept + y_num + acf_period + y_num:acf_period,
-  family = negbinomial(),
-  data = overall_scaffold,
-  sample_prior = "only",
-  prior = prior(normal(log(2500), 1), class = b, coef = Intercept) +
-          prior(gamma(1, 0.01), class = shape) +
-          prior(normal(0, 0.01), class = b)
-)
-
-add_epred_draws(object=m_prior4,
-                newdata = overall_scaffold) %>%
-  ggplot(aes(x=year, y=.epred)) +
-  stat_halfeye() +
-  scale_y_log10(label=comma)
-
-
+# 
+# m_prior4 <- brm(
+#   cases ~ 0 + Intercept + y_num + acf_period + y_num:acf_period,
+#   family = negbinomial(),
+#   data = overall_scaffold,
+#   sample_prior = "only",
+#   prior = prior(normal(log(2500), 1), class = b, coef = Intercept) +
+#           prior(gamma(1, 0.01), class = shape) +
+#           prior(normal(0, 0.01), class = b)
+# )
+# 
+# add_epred_draws(object=m_prior4,
+#                 newdata = overall_scaffold) %>%
+#   ggplot(aes(x=year, y=.epred)) +
+#   stat_halfeye() +
+#   scale_y_log10(label=comma)
+# 
+# 
 
 ```
 
@@ -1498,98 +1500,98 @@ Now try adding in the random intercepts
 
 ```{r}
 
-c(prior(lognormal(3.912023, 0.5)), #log(50) = 3.912023
-  prior(lognormal(3.912023, 1))) %>% 
-  parse_dist() %>% 
-  
-  ggplot(aes(y = prior, dist = .dist, args = .args)) +
-  stat_halfeye(.width = c(.5, .95)) +
-  scale_y_discrete(NULL, labels = str_c("lognormal(log(50), ", c(0.5, 1), ")"),
-                   expand = expansion(add = 0.1)) +
-  xlab(expression(exp(italic(p)(beta[0])))) +
-  coord_cartesian(xlim = c(0,400))
-
-
-m_prior5 <- brm(
-  cases ~ y_num + acf_period + y_num:acf_period + ( 1 | ward),
-  family = negbinomial(),
-  data = mdata,
-  sample_prior = "only",
-  prior = prior(normal(log(50), 1), class = Intercept) +
-          prior(gamma(1, 0.01), class = shape) +
-          prior(normal(0, 0.01), class = b) +
-          prior(exponential(1), class=sd)
-)
-
-
-add_epred_draws(object=m_prior5,
-                newdata = mdata,
-                re_formula = NA) %>%
-  ggplot(aes(x=year, y=.epred)) +
-  stat_halfeye() +
-  scale_y_log10(label=comma)
-
-add_epred_draws(object=m_prior5,
-                newdata = mdata,
-                re_formula = NA) %>%
-  ggplot(aes(x=year, y=.epred)) +
-  stat_halfeye() +
-  scale_y_log10(label=comma) +
-  facet_wrap(ward~.)
+# c(prior(lognormal(3.912023, 0.5)), #log(50) = 3.912023
+#   prior(lognormal(3.912023, 1))) %>% 
+#   parse_dist() %>% 
+#   
+#   ggplot(aes(y = prior, dist = .dist, args = .args)) +
+#   stat_halfeye(.width = c(.5, .95)) +
+#   scale_y_discrete(NULL, labels = str_c("lognormal(log(50), ", c(0.5, 1), ")"),
+#                    expand = expansion(add = 0.1)) +
+#   xlab(expression(exp(italic(p)(beta[0])))) +
+#   coord_cartesian(xlim = c(0,400))
+# 
+# 
+# m_prior5 <- brm(
+#   cases ~ y_num + acf_period + y_num:acf_period + ( 1 | ward),
+#   family = negbinomial(),
+#   data = mdata,
+#   sample_prior = "only",
+#   prior = prior(normal(log(50), 1), class = Intercept) +
+#           prior(gamma(1, 0.01), class = shape) +
+#           prior(normal(0, 0.01), class = b) +
+#           prior(exponential(1), class=sd)
+# )
+# 
+# 
+# add_epred_draws(object=m_prior5,
+#                 newdata = mdata,
+#                 re_formula = NA) %>%
+#   ggplot(aes(x=year, y=.epred)) +
+#   stat_halfeye() +
+#   scale_y_log10(label=comma)
+# 
+# add_epred_draws(object=m_prior5,
+#                 newdata = mdata,
+#                 re_formula = NA) %>%
+#   ggplot(aes(x=year, y=.epred)) +
+#   stat_halfeye() +
+#   scale_y_log10(label=comma) +
+#   facet_wrap(ward~.)
 
 ```
 
 And add in the random slopes
 
 ```{r}
+# 
+# m_prior6 <- brm(
+#   cases ~ 1 + y_num + acf_period + y_num:acf_period + (1 + y_num*acf_period | ward),
+#   family = negbinomial(),
+#   data = mdata,
+#   sample_prior = "only",
+#   prior = prior(gamma(1, 0.01), class = shape) +
+#           prior(normal(0, 0.1), class = b) +
+#           prior(exponential(1), class=sd) +
+#           prior(lkj(2), class=cor)
+# )
+# 
+# 
+# 
+# m_prior6 <- brm(
+#   cases ~ 0 + Intercept + y_num + acf_period + y_num:acf_period + ( y_num*acf_period | ward),
+#   family = negbinomial(),
+#   data = mdata,
+#   sample_prior = "only",
+#   prior = prior(normal(log(50), 1), class = b, coef = Intercept) +
+#           prior(gamma(1, 0.01), class = shape) +
+#           prior(normal(0, 0.01), class = b) +
+#           prior(exponential(100), class=sd) +
+#           prior(lkj(2), class=cor)
+# )
 
-m_prior6 <- brm(
-  cases ~ 1 + y_num + acf_period + y_num:acf_period + (1 + y_num*acf_period | ward),
-  family = negbinomial(),
-  data = mdata,
-  sample_prior = "only",
-  prior = prior(gamma(1, 0.01), class = shape) +
-          prior(normal(0, 0.1), class = b) +
-          prior(exponential(1), class=sd) +
-          prior(lkj(2), class=cor)
-)
 
-
-
-m_prior6 <- brm(
-  cases ~ 0 + Intercept + y_num + acf_period + y_num:acf_period + ( y_num*acf_period | ward),
-  family = negbinomial(),
-  data = mdata,
-  sample_prior = "only",
-  prior = prior(normal(log(50), 1), class = b, coef = Intercept) +
-          prior(gamma(1, 0.01), class = shape) +
-          prior(normal(0, 0.01), class = b) +
-          prior(exponential(100), class=sd) +
-          prior(lkj(2), class=cor)
-)
-
-
-add_epred_draws(object=m_prior6,
-                newdata = mdata,
-                re_formula = NA) %>%
-  ggplot(aes(x=year, y=.epred)) +
-  stat_halfeye() +
-  scale_y_log10(label=comma)
-
-add_epred_draws(object=m_prior6,
-                newdata = mdata,
-                re_formula = ~( 1 + y_num + acf_period | ward)) %>%
-  ggplot(aes(x=year, y=.epred)) +
-  stat_halfeye() +
-  scale_y_log10(label=comma) +
-  facet_wrap(ward~.)
-
-plot_counterfactual(model_data = overall_scaffold, model=m_prior6, outcome = inc_100k, 
-                    population_denominator = population_without_inst_ship, re_formula = NA)
-
-plot_counterfactual(model_data = mdata, model=m_prior6, outcome = inc_100k, 
-                    population_denominator = population_without_inst_ship, grouping_var = ward, ward,
-                    re_formula = ~( 1 + y_num + acf_period | ward))
+# add_epred_draws(object=m_prior6,
+#                 newdata = mdata,
+#                 re_formula = NA) %>%
+#   ggplot(aes(x=year, y=.epred)) +
+#   stat_halfeye() +
+#   scale_y_log10(label=comma)
+# 
+# add_epred_draws(object=m_prior6,
+#                 newdata = mdata,
+#                 re_formula = ~( 1 + y_num + acf_period | ward)) %>%
+#   ggplot(aes(x=year, y=.epred)) +
+#   stat_halfeye() +
+#   scale_y_log10(label=comma) +
+#   facet_wrap(ward~.)
+# 
+# plot_counterfactual(model_data = overall_scaffold, model=m_prior6, outcome = inc_100k, 
+#                     population_denominator = population_without_inst_ship, re_formula = NA)
+# 
+# plot_counterfactual(model_data = mdata, model=m_prior6, outcome = inc_100k, 
+#                     population_denominator = population_without_inst_ship, grouping_var = ward, ward,
+#                     re_formula = ~( 1 + y_num + acf_period | ward))
 
 ```
 
@@ -1598,27 +1600,27 @@ Issue here is the non-centred parameterisation of the intercept prior... Feel li
 
 
 ```{r}
-m_centered_prior <- brm(
-  cases ~ 1 + y_num*acf_period + (1 + y_num*acf_period | ward) + offset(log(population_without_inst_ship)),
-                  data = mdata,
-                  family = negbinomial(),
-                  seed = 1234,
-                  chains = 4, cores = 4,
-                  prior = prior(normal(0,1000), class = Intercept) +
-                          prior(gamma(0.01, 0.01), class = shape) +
-                          prior(normal(0, 1), class = b) +
-                          prior(exponential(1), class=sd) +
-                          prior(lkj(2), class=cor),
-                  sample_prior = "only")
-
-plot(m_centered_prior)
-
-plot_counterfactual(model_data = overall_scaffold, model=m_centered_prior, outcome = inc_100k, 
-                    population_denominator = population_without_inst_ship, re_formula = NA)
-
-plot_counterfactual(model_data = mdata, model=m_centered_prior, outcome = inc_100k, 
-                    population_denominator = population_without_inst_ship, grouping_var = ward, ward,
-                    re_formula = ~( 1 + y_num*acf_period | ward))
+# m_centered_prior <- brm(
+#   cases ~ 1 + y_num*acf_period + (1 + y_num*acf_period | ward) + offset(log(population_without_inst_ship)),
+#                   data = mdata,
+#                   family = negbinomial(),
+#                   seed = 1234,
+#                   chains = 4, cores = 4,
+#                   prior = prior(normal(0,1000), class = Intercept) +
+#                           prior(gamma(0.01, 0.01), class = shape) +
+#                           prior(normal(0, 1), class = b) +
+#                           prior(exponential(1), class=sd) +
+#                           prior(lkj(2), class=cor),
+#                   sample_prior = "only")
+# 
+# plot(m_centered_prior)
+# 
+# plot_counterfactual(model_data = overall_scaffold, model=m_centered_prior, outcome = inc_100k, 
+#                     population_denominator = population_without_inst_ship, re_formula = NA)
+# 
+# plot_counterfactual(model_data = mdata, model=m_centered_prior, outcome = inc_100k, 
+#                     population_denominator = population_without_inst_ship, grouping_var = ward, ward,
+#                     re_formula = ~( 1 + y_num*acf_period | ward))
 
 ```
 
@@ -1637,6 +1639,9 @@ var(mdata$cases)
 ```
 
 
+
+
+
 Quite a bit of over-dispersion here, so negative binomial distribution might be a better choice of distributional family than Poisson.
 
 Fit the model with the data
@@ -1649,11 +1654,12 @@ m_pulmonary <- brm(
                   family = negbinomial(),
                   seed = 1234,
                   chains = 4, cores = 4,
-                  prior = prior(normal(0,1000), class = Intercept) +
+                  prior = prior(normal(0,1), class = Intercept) +
                           prior(gamma(0.01, 0.01), class = shape) +
                           prior(normal(0, 1), class = b) +
                           prior(exponential(1), class=sd) +
-                          prior(lkj(2), class=cor))
+                          prior(lkj(4), class=cor),
+  control = list(adapt_delta = 0.9))
   
 #check model diagnostics
 summary(m_pulmonary)
@@ -1824,7 +1830,7 @@ e <- bind_cols(RR.peak=pluck(overall_change$peak_draws$estimate),
           RR.slope =pluck(overall_change$slope_draws$estimate)) %>%
   ggplot(aes(y=RR.peak, x = RR.slope)) +
   geom_hex() +
-  geom_smooth(se=FALSE, colour="firebrick") +
+  geom_smooth(se=FALSE, colour="firebrick", method = "lm") +
   geom_text(aes(y=2.1, x=0.5, label=cor_rr_peak_rr_slope), colour="firebrick")  +
   scale_x_continuous(limits = c(0, 6)) +
   scale_fill_gradient(high="lightblue1",low="darkblue") +
@@ -1837,7 +1843,7 @@ f <- bind_cols(RR.level=pluck(overall_change$level_draws$estimate),
           RR.slope =pluck(overall_change$slope_draws$estimate)) %>%
   ggplot(aes(y=RR.level, x = RR.slope)) +
   geom_hex() +
-  geom_smooth(se=FALSE, colour="firebrick") +
+  geom_smooth(se=FALSE, colour="firebrick", method = "lm") +
   geom_text(aes(y=0.75, x=0.5, label=cor_rr_level_rr_slope), colour="firebrick")  +  
   scale_x_continuous(limits = c(0, 6)) +
   scale_fill_gradient(high="lightblue1",low="darkblue") +
@@ -1922,7 +1928,7 @@ plot_ward_effect <- function(data, measure){
 }
 
 #function for plotting catapiller plots
-plot_ward_cat <- function(data, measure){
+plot_ward_cat <- function(data, measure, scale){
 
   pal <- colorRampPalette(c('darkblue','lightblue'))
 
@@ -1935,6 +1941,7 @@ plot_ward_cat <- function(data, measure){
                       x=fct_reorder(ward2, estimate), colour=my_palette)) +
     coord_flip() +
     scale_colour_identity(name="") +
+    scale_y_continuous() +
     theme_ggdist() +
     theme(panel.border = element_rect(colour = "grey78", fill=NA)) +
     labs(x = "",
