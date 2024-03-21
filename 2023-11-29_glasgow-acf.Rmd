@@ -1795,11 +1795,11 @@ c <- overall_change$slope_draws %>%
   ggplot() +
   geom_histogram(aes(x=estimate), fill="darkblue", colour="darkblue", alpha=0.3)+
   scale_fill_gradient(high="lightblue1",low="darkblue") +  
-  scale_x_continuous(limits = c(0, 6)) +
+  #scale_x_continuous(limits = c(0, 6)) +
   theme_ggdist() +
   theme(legend.position = "none",
         panel.border = element_rect(colour = "grey78", fill=NA)) +
-  labs(x="RR.slope",
+  labs(x="RR.slope (logit scale)",
        y="")
 
 
@@ -1832,7 +1832,7 @@ e <- bind_cols(RR.peak=pluck(overall_change$peak_draws$estimate),
   geom_hex() +
   geom_smooth(se=FALSE, colour="firebrick", method = "lm") +
   geom_text(aes(y=2.1, x=0.5, label=cor_rr_peak_rr_slope), colour="firebrick")  +
-  scale_x_continuous(limits = c(0, 6)) +
+  #scale_x_continuous(limits = c(0, 6)) +
   scale_fill_gradient(high="lightblue1",low="darkblue") +
   theme_ggdist() +
   theme(legend.position = "none",
@@ -1845,7 +1845,7 @@ f <- bind_cols(RR.level=pluck(overall_change$level_draws$estimate),
   geom_hex() +
   geom_smooth(se=FALSE, colour="firebrick", method = "lm") +
   geom_text(aes(y=0.75, x=0.5, label=cor_rr_level_rr_slope), colour="firebrick")  +  
-  scale_x_continuous(limits = c(0, 6)) +
+  #scale_x_continuous(limits = c(0, 6)) +
   scale_fill_gradient(high="lightblue1",low="darkblue") +
   theme_ggdist() +
   theme(legend.position = "none",
@@ -2151,18 +2151,19 @@ m_age_sex <- brm(
                   family = negbinomial(),
                   seed = 1234,
                   chains = 4, cores = 4, 
-                  prior = prior(normal(0,1000), class = Intercept) +
+                  prior = prior(normal(0,1), class = Intercept) +
                           prior(gamma(0.01, 0.01), class = shape) +
                           prior(normal(0, 1), class = b))
 
 summary(m_age_sex)
 plot(m_age_sex)
 pp_check(m_age_sex, type='ecdf_overlay')
-
+conditional_effects(m_age_sex)
 
 ```
 
 Summarise posterior
+
 
 ```{r}
 
@@ -2232,7 +2233,11 @@ age_sex_summary %>%
                          age=="56_65" ~ "56 to 65y",
                          age=="65+" ~ "65 & up y")) %>%
   mutate(sex = case_when(sex== "M" ~ "Male",
-                         sex== "F" ~ "Female")) , aes(y=cases, x=year2, shape=acf_period), size=2) +
+                         sex== "F" ~ "Female")) %>%
+  mutate(acf_period = case_when(acf_period=="a. pre-acf" ~ "Before Intervention",
+                                acf_period=="b. acf" ~ "Counterfactual",
+                                  acf_period=="c. post-acf" ~ "Post Intervention")), 
+  aes(y=cases, x=year2, shape=acf_period), size=2) +
   geom_vline(aes(xintercept=acf_end), linetype=3) +
   ggh4x::facet_grid2(age~sex, scales = "free_y", independent = "y") +
   theme_ggdist() +
@@ -2242,7 +2247,7 @@ age_sex_summary %>%
                      guide = guide_axis(angle = 90)) +
   scale_fill_manual(values = c("#DE0D92", "grey50", "#4D6CFA") , name="") +
   scale_colour_manual(values = c("#DE0D92", "grey50", "#4D6CFA") , name="") +
-  scale_shape_discrete(name="") +
+  scale_shape(name="") +
   labs(
     x = "Year",
     y = "Case notifications (n)",
@@ -2252,8 +2257,7 @@ age_sex_summary %>%
         panel.border = element_rect(colour = "grey78", fill=NA),
         title = element_text(size=14),
         axis.text = element_text(size=14),
-        legend.text = element_text(size=12)) +
-  guides(shape="none")
+        legend.text = element_text(size=12))
   
 ggsave(here("figures/s7.png"), height=10)
 
@@ -2261,150 +2265,94 @@ ggsave(here("figures/s7.png"), height=10)
 
 #### 9.2 Summary of impact of intervention
 
-(This all needs tidying up and checking - to do!)
-
-1. percentage increase in CNR, from 1956 to 1957 (i.e. immediate ACF effect)
+Calculate summary effects
 
 ```{r}
 
-nd <- mdata_age_sex %>%
-  filter(year %in% c(1956:1957)) %>%
-  select(acf_period, y_num, age, sex)
+#Peak
+out_age_sex_1 <- crossing(mdata_age_sex %>% 
+                      select(y_num, age, sex) %>%
+                      filter(y_num == 8),
+                      acf_period = c("a. pre-acf", "b. acf"))
+
+peak_draws_age_sex <- add_epred_draws(newdata = out_age_sex_1,
+                  object = m_age_sex) %>%
+    group_by(.draw, age, sex) %>%
+    summarise(estimate = last(.epred)/first(.epred)) %>%
+    ungroup() %>%
+    mutate(measure = "RR.peak")
+  
+peak_summary_age_sex <- peak_draws_age_sex %>%
+    group_by(age, sex) %>%
+    mean_qi(estimate) %>%
+    mutate(measure = "RR.peak")
 
 
-age_sex_impact_out <- 
-  add_epred_draws(m_age_sex,
-                newdata=nd) %>%
-  ungroup() %>%
-  select(acf_period, .epred, age, sex) %>%
-  pivot_wider(names_from = acf_period,
-              values_from = .epred,
-              values_fn = list) %>%
-  unnest() %>%
-  rename(pre_epred = 3,
-         post_epred = 4) %>%
-  mutate(acf_diff = post_epred-pre_epred,
-         acf_rr = post_epred/pre_epred) %>%
-  group_by(age, sex) %>%
-  mean_qi(acf_diff, acf_rr) 
+#Level
+ 
+out_age_sex_2 <- crossing(mdata_age_sex %>% 
+                      select(y_num, age, sex) %>%
+                      filter(y_num == 9),
+                      acf_period = c("a. pre-acf", "c. post-acf"))
+  
+level_draws_age_sex <- add_epred_draws(newdata = out_age_sex_2,
+                  object = m_age_sex) %>%
+    arrange(y_num, .draw) %>%
+    group_by(.draw, age, sex) %>%
+    summarise(estimate = last(.epred)/first(.epred)) %>%
+    ungroup() %>%
+    mutate(measure = "RR.level")
+  
+level_summary_age_sex <- level_draws_age_sex %>%
+    group_by(age, sex) %>%
+    mean_qi(estimate) %>%
+    mutate(measure = "RR.level")
 
-age_sex_impact_out %>%
-  mutate_if(is.double, ~ scales::number(x = ., accuracy = 0.01, big.mark = ",")) %>%
-  datatable()
+#Slope
+
+out_age_sex_3 <- crossing(mdata_age_sex %>% 
+                      select(y_num, age, sex) %>%
+                      filter(y_num %in% c(9,14)),
+                    acf_period = c("a. pre-acf", "c. post-acf"))
   
-f3a <- age_sex_impact_out %>%
-  mutate(sex = case_when(sex=="M" ~ "Male",
-                         sex=="F" ~ "Female")) %>%
-  mutate(age = case_when(age=="00_05" ~ "0 to 5y",
-                         age=="06_15" ~ "06 to 15y",
-                         age=="16_25" ~ "16 to 25y",
-                         age=="26_35" ~ "26 to 35y",
-                         age=="36_45" ~ "36 to 45y",
-                         age=="46_55" ~ "46 to 55y",
-                         age=="56_65" ~ "56 to 65y",
-                         age=="65+" ~ "65 & up y")) %>%
-  ggplot() +
-  geom_pointrange(aes(y=acf_rr, ymin=acf_rr.lower, ymax=acf_rr.upper, group=sex, 
-                      x=age,
-                      colour = sex),
-                  position = position_dodge(width = 0.25)) +
-  geom_hline(aes(yintercept=1), linetype=2) +
-  scale_colour_manual(values = c("purple", "darkorange"), name="") +
-  labs(x="",
-       y="Relative notifications (95% UI)\nACF (1957) vs. Before ACF (1956)") +
-  theme_ggdist() +
-  theme(legend.position = "bottom",
-        panel.border = element_rect(colour = "grey78", fill=NA))
+slope_draws_age_sex <- add_epred_draws(newdata = out_age_sex_3,
+                  object = m_age_sex) %>%
+        arrange(y_num) %>%
+        ungroup() %>%
+        group_by(.draw, acf_period, age, sex) %>%
+        summarise(slope = (last(.epred) - first(.epred)) / (last(y_num)-first(y_num))) %>%
+        ungroup() %>%
+        group_by(.draw, age, sex) %>%
+        summarise(estimate = last(slope)/first(slope)) %>%
+        mutate(measure = "RR.slope")
   
-  
+slope_summary_age_sex <- slope_draws_age_sex %>%
+     group_by(age, sex) %>%
+      median_qi(estimate) %>%
+      mutate(measure = "RR.slope")
 
 ```
 
-
-2. Change from pre-ACF period (1956), to first year post-ACF (1958)
-
+Numerica sumamry of these summary results
 
 ```{r}
 
-nd <- mdata_age_sex %>%
-  filter(year %in% c(1956,1958)) %>%
-  select(acf_period, y_num, age, sex)
-
-#Do it with calculating incidence, then sumamrising.
-age_sex_impact2 <-add_epred_draws(m_age_sex,
-                newdata=nd) %>%
-  ungroup() %>%
-  select(acf_period, .epred, age, sex) %>%
-  pivot_wider(names_from = acf_period,
-              values_from = .epred,
-              values_fn = list) %>%
-  unnest() %>%
-  rename(pre_epred = 3,
-        post_epred = 4) %>%
-  mutate(acf_diff = post_epred-pre_epred,
-         acf_rr = post_epred/pre_epred) %>%
-  group_by(age, sex) %>%
-  mean_qi(acf_diff, acf_rr) 
-
-age_sex_impact2 %>%
-  mutate_if(is.double, ~ scales::number(x = ., accuracy = 0.01, big.mark = ",")) %>%
+bind_rows(
+  peak_summary_age_sex, level_summary_age_sex, slope_summary_age_sex
+) %>%
+  mutate(across(c(estimate:.upper), number, accuracy=0.01)) %>%
+  select(measure, everything()) %>%
   datatable()
 
-f3b <- age_sex_impact2 %>%  
-  mutate(sex = case_when(sex=="M" ~ "Male",
-                         sex=="F" ~ "Female")) %>%
-  mutate(age = case_when(age=="00_05" ~ "0 to 5y",
-                         age=="06_15" ~ "06 to 15y",
-                         age=="16_25" ~ "16 to 25y",
-                         age=="26_35" ~ "26 to 35y",
-                         age=="36_45" ~ "36 to 45y",
-                         age=="46_55" ~ "46 to 55y",
-                         age=="56_65" ~ "56 to 65y",
-                         age=="65+" ~ "65 & up y")) %>%
-  ggplot() +
-  geom_pointrange(aes(y=acf_rr, ymin=acf_rr.lower, ymax=acf_rr.upper, group=sex, 
-                      x=age,
-                      colour = sex),
-                  position = position_dodge(width = 0.25)) +
-  geom_hline(aes(yintercept=1), linetype=2) +
-  scale_colour_manual(values = c("purple", "darkorange"), name="") +
-  labs(x="",
-       y="Relative notifications (95% UI)\nACF (1958) vs. Before ACF (1956)") +
-  theme_ggdist() +
-  theme(legend.position = "bottom",
-        panel.border = element_rect(colour = "grey78", fill=NA))
 
 
 ```
 
-3. Change in slope (i.e. difference in mean annual case notification rate pre-Intervention vs. post-intervention, by ward)
+As a figure
 
 ```{r}
 
-age_sex_impact3 <- mdata_age_sex %>%
-  select(year, year2, y_num, acf_period, cases, age, sex) %>%
-  filter(year!=1957) %>%
-  add_epred_draws(m_age_sex) %>%
-  group_by(year, age, sex, acf_period) %>%
-  mean_qi(.epred) %>%
-  ungroup() %>%
-  mutate(n_years = length(year), .by=acf_period) %>%
-  summarise(pct_change_epred_overall = (((last(.epred) - first(.epred))/first(.epred))),
-            pct_change_lower_overall = (((last(.lower) - first(.lower))/first(.lower))),
-            pct_change_upper_overall = (((last(.upper) - first(.upper))/first(.upper))),
-    
-            pct_change_epred_annual = (((last(.epred) - first(.epred))/first(.epred))/n_years),
-            pct_change_lower_annual = (((last(.lower) - first(.lower))/first(.lower))/n_years),
-            pct_change_upper_annual = (((last(.upper) - first(.upper))/first(.upper))/n_years),
-            .by = c(acf_period, age, sex)) %>%
-  distinct()
-
-
-age_sex_impact3 %>%
-  mutate_if(is.double, percent) %>%
-  datatable()
-
-f3c <- age_sex_impact3 %>%
+peak_g_age_sex <- peak_summary_age_sex %>%
   mutate(sex = case_when(sex=="M" ~ "Male",
                          sex=="F" ~ "Female")) %>%
   mutate(age = case_when(age=="00_05" ~ "0 to 5y",
@@ -2416,21 +2364,65 @@ f3c <- age_sex_impact3 %>%
                          age=="56_65" ~ "56 to 65y",
                          age=="65+" ~ "65 & up y")) %>%
   ggplot() +
-    geom_hline(aes(yintercept=0), linetype=2) +
-    geom_pointrange(aes(y=pct_change_epred_annual, ymin=pct_change_lower_annual, ymax=pct_change_upper_annual, group=acf_period, 
-                      x=age,
-                      colour = acf_period), size=0.1) +
-  scale_y_continuous(labels =percent) +
-  facet_grid(.~sex) +
-  coord_flip() +
-  scale_colour_manual(values = c("#DE0D92", "#4D6CFA")) +
+  geom_hline(aes(yintercept=1), linetype=2)+
+  geom_pointrange(aes(x=age, y=estimate, ymin=.lower, ymax=.upper, group=sex, colour=sex, shape=sex),
+                  position = position_dodge(width = 0.5)) +
+  scale_colour_manual(values = c("#CD7AC5", "cadetblue3"), name="") +
+  scale_shape(name="") +
   labs(x="",
-       y="Mean annual rate of change in case notification rate (95% UI)\n Before ACF (1950-1956) vs. after ACF (1958-1963)",
-       colour="") +
+       y="Relative rate (95% UI)") +
   theme_ggdist() +
-  theme(panel.border = element_rect(colour = "grey78", fill=NA))
+  theme(legend.position = "bottom",
+        panel.border = element_rect(colour = "grey78", fill=NA))
 
-f3c
+#level plot
+level_g_age_sex <- level_summary_age_sex %>%
+  mutate(sex = case_when(sex=="M" ~ "Male",
+                         sex=="F" ~ "Female")) %>%
+  mutate(age = case_when(age=="00_05" ~ "0 to 5y",
+                         age=="06_15" ~ "06 to 15y",
+                         age=="16_25" ~ "16 to 25y",
+                         age=="26_35" ~ "26 to 35y",
+                         age=="36_45" ~ "36 to 45y",
+                         age=="46_55" ~ "46 to 55y",
+                         age=="56_65" ~ "56 to 65y",
+                         age=="65+" ~ "65 & up y")) %>%
+  ggplot() +
+  geom_hline(aes(yintercept=1), linetype=2)+
+  geom_pointrange(aes(x=age, y=estimate, ymin=.lower, ymax=.upper, group=sex, colour=sex, shape=sex),
+                  position = position_dodge(width = 0.5)) +
+  scale_colour_manual(values = c("#CD7AC5", "cadetblue3"), name="") +
+  scale_shape(name="") +
+  labs(x="",
+       y="Relative rate (95% UI)") +
+  theme_ggdist() +
+  theme(legend.position = "bottom",
+        panel.border = element_rect(colour = "grey78", fill=NA))
+
+#slope plot
+slope_g_age_sex <- slope_summary_age_sex %>%
+  mutate(sex = case_when(sex=="M" ~ "Male",
+                         sex=="F" ~ "Female")) %>%
+  mutate(age = case_when(age=="00_05" ~ "0 to 5y",
+                         age=="06_15" ~ "06 to 15y",
+                         age=="16_25" ~ "16 to 25y",
+                         age=="26_35" ~ "26 to 35y",
+                         age=="36_45" ~ "36 to 45y",
+                         age=="46_55" ~ "46 to 55y",
+                         age=="56_65" ~ "56 to 65y",
+                         age=="65+" ~ "65 & up y")) %>%
+  ggplot() +
+  geom_hline(aes(yintercept=1), linetype=2)+
+  geom_pointrange(aes(x=age, y=estimate, ymin=.lower, ymax=.upper, group=sex, colour=sex, shape=sex),
+                  position = position_dodge(width = 0.5)) +
+  scale_colour_manual(values = c("#CD7AC5", "cadetblue3"), name="") +
+  scale_shape(name="") +
+  labs(x="",
+       y="Relative rate (95% UI)") +
+  theme_ggdist() +
+  theme(legend.position = "bottom",
+        panel.border = element_rect(colour = "grey78", fill=NA))
+
 
 ```
 
@@ -2447,8 +2439,8 @@ counterfact_age_sex <-
       filter(year>1957) %>%
       select(year, age, sex, .draw, .epred_counterf = .epred)
   
-#Calcuate incidence per draw, then summarise.
-  post_change_age_sex <-
+#Calcuate predicted number of cases per draw, then summarise.
+post_change_age_sex <-
       add_epred_draws(object = m_age_sex,
                       newdata = mdata_age_sex %>%
                                     select(year, year2, y_num, age, sex, acf_period)) %>%
@@ -2456,7 +2448,7 @@ counterfact_age_sex <-
       ungroup() %>%
       select(year, age, sex, .draw, .epred) 
   
-  #for the overall period
+#for the overall period
 counterfact_overall_age_sex <-
       add_epred_draws(object = m_age_sex,
                       newdata = mdata_age_sex %>%
@@ -2468,8 +2460,8 @@ counterfact_overall_age_sex <-
       summarise(.epred_counterf = sum(.epred)) %>%
       mutate(year = "Overall (1958-1963)")
   
-  #Calcuate incidence per draw, then summarise.
-  post_change_overall_age_sex <-
+#Calcuate incidence per draw, then summarise.
+post_change_overall_age_sex <-
       add_epred_draws(object = m_age_sex,
                       newdata = mdata_age_sex %>%
                                     select(year, year2, y_num, age, sex, acf_period)) %>%
@@ -2478,16 +2470,6 @@ counterfact_overall_age_sex <-
       group_by(.draw, age, sex) %>%
       summarise(.epred = sum(.epred)) 
   
-  
-
-left_join(counterfact_age_sex, post_change_age_sex) %>%
-    mutate(cases_averted = .epred_counterf-.epred,
-           pct_change = (.epred - .epred_counterf)/.epred_counterf) %>%
-    group_by(year, age, sex) %>%
-    mean_qi(cases_averted, pct_change) %>%
-    ungroup() %>%
-  datatable()
-
 counter_post_overall_age_sex <-
   left_join(counterfact_overall_age_sex, post_change_overall_age_sex) %>%
     mutate(cases_averted = .epred_counterf-.epred,
@@ -2497,11 +2479,6 @@ counter_post_overall_age_sex <-
     ungroup() %>%
     mutate(year = "Overall (1958-1963)") 
 
-
-```
-
-
-```{r}
 
 age_sex_txt <- counter_post_overall_age_sex %>%
   mutate(across(c(cases_averted:cases_averted.upper), number_format(accuracy = 0.1, big.mark = ","))) %>%
@@ -2520,7 +2497,7 @@ age_sex_txt %>% datatable()
 
 ```{r}
 
-f3d <- counter_post_overall_age_sex %>% 
+counterfactual_g_age_sex <- counter_post_overall_age_sex %>% 
   mutate(sex = case_when(sex=="M" ~ "Male",
                          sex=="F" ~ "Female")) %>%
   mutate(age = case_when(age=="00_05" ~ "0 to 5y",
@@ -2532,33 +2509,28 @@ f3d <- counter_post_overall_age_sex %>%
                          age=="56_65" ~ "56 to 65y",
                          age=="65+" ~ "65 & up y")) %>%
   ggplot() +
-  geom_pointrange(aes(x = age, y=cases_averted, ymin=cases_averted.lower, ymax=cases_averted.upper, colour=sex)) + 
-  facet_grid(.~sex) +
-  coord_flip() +
-  scale_colour_manual(values = c("purple", "darkorange"), name="") +
+  geom_pointrange(aes(x = age, y=cases_averted, ymin=cases_averted.lower, ymax=cases_averted.upper, colour=sex, shape=sex), position=position_dodge(width=0.5)) + 
+  scale_colour_manual(values = c("#CD7AC5", "cadetblue3"), name="") +
+  scale_shape(name="") +
   scale_y_continuous(labels = comma) +
   labs(x="",
-       y="Number (95% UI) of TB cases averted (1958-1963)",
+       y="Number (95% UI)",
        colour="") +
   theme_ggdist() +
   theme(panel.border = element_rect(colour = "grey78", fill=NA),
-        legend.position = "none")
+        legend.position = "bottom")
 
-f3d
+counterfactual_g_age_sex
 ```
 
-
-
-
-Join together for Figure 2.
+Join together for Figure 3.
 
 
 ```{r}
 
-(f3a + f3b) / (f3c + f3d) + plot_annotation(tag_levels = "A")
+(peak_g_age_sex + level_g_age_sex) / (slope_g_age_sex + counterfactual_g_age_sex) + plot_annotation(tag_levels = "A") + plot_layout(guides = "collect") & theme(legend.position = "bottom")
 
-ggsave(here("figures/f3.png"), width = 12)
+ggsave(here("figures/f3.png"), width = 12, height=8)
 
 
 ```
-mdata_age_sex
