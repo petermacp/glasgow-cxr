@@ -26,7 +26,6 @@ library(ggdensity)
 library(ggpubr)
 library(units)
 library(glue)
-#library(ggsn)
 
 ```
 
@@ -794,30 +793,7 @@ pred_pops %>%
 ```
 
 
-What percentage of adults (15+ participated in the intervention in 1957)?
 
-```{r}
-
-pred_pops %>%
-  ungroup() %>%
-  filter(year==1957) %>%
-  filter(age != "00 to 04",
-         age != "05 to 14") %>%
-  summarise(total_pop = sum(pred)) %>%
-  mutate(cxr_screened = 622349) %>%
-  mutate(pct_pop_cxr_screened = percent(cxr_screened/total_pop))
-
-pred_pops %>%
-  ungroup() %>%
-  filter(year==1957) %>%
-  filter(age != "00 to 04",
-         age != "05 to 14") %>%
-  summarise(total_pop = sum(pred), .by=sex) %>%
-  mutate(cxr_screened = c(340474, 281875)) %>%
-  mutate(pct_pop_cxr_screened = percent(cxr_screened/total_pop))
-
-
-```
 
 
 Population pyramids
@@ -1050,6 +1026,99 @@ cases_by_age_sex <- map_df(age_sex_sheets, ~read_xlsx(path = "2023-11-28_glasgow
 cases_by_age_sex %>%
   mutate(across(where(is.numeric) & !(year),  ~comma(.))) %>%
   datatable()
+
+
+```
+
+### 4.5 Uptake of screening
+
+What percentage of adults (15+ participated in the intervention in 1957)?
+
+```{r}
+# 
+# pred_pops %>%
+#   ungroup() %>%
+#   filter(year==1957) %>%
+#   filter(age != "00 to 04",
+#          age != "05 to 14") %>%
+#   summarise(total_pop = sum(pred)) %>%
+#   mutate(cxr_screened = 622349) %>%
+#   mutate(pct_pop_cxr_screened = percent(cxr_screened/total_pop))
+# 
+# pred_pops %>%
+#   ungroup() %>%
+#   filter(year==1957) %>%
+#   filter(age != "00 to 04",
+#          age != "05 to 14") %>%
+#   summarise(total_pop = sum(pred), .by=sex) %>%
+#   mutate(cxr_screened = c(340474, 281875)) %>%
+#   mutate(pct_pop_cxr_screened = percent(cxr_screened/total_pop))
+
+
+```
+
+Note that in the Report of Sir Kenneth Cowan, we have the following estimates of participation (we will use these for the manuscript, as they are not based on my estimates)
+
+```{r}
+male_adult_resident_participation <- 281875
+female_adult_resident_participation <- 340474
+male_adult_resident_population <- 381713
+female_adult_resident_population <- 437588
+
+#overall participation
+(male_adult_resident_participation+female_adult_resident_participation)/(male_adult_resident_population+female_adult_resident_population)
+
+#male participation
+male_adult_resident_participation/male_adult_resident_population
+
+#female participation
+female_adult_resident_participation/female_adult_resident_population
+
+
+```
+
+
+Look at uptake of screening by age and sex
+
+```{r}
+
+
+uptake_age_sex <- read_xlsx("2024-03-26_mass_xray_uptake.xlsx", sheet = "uptake_age_sex")
+
+uptake_age_sex %>%
+  mutate(uptake = examined/resident_population) %>%
+  mutate(examined_l = comma(examined),
+         resident_population_l = comma(resident_population),
+         uptake_l = percent(uptake, accuracy=0.1)) %>%
+  mutate(label = glue("{examined_l}/{resident_population_l} ({uptake_l})")) %>%
+  filter(age !="00-14") %>%
+  mutate(sex = case_when(sex=="m" ~ "Male",
+                         sex=="f" ~ "Female")) %>%
+  ggplot(aes(x=age, y=uptake, group=sex, fill=sex)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  geom_text(aes(label=uptake_l), position = position_dodge(width=0.85),vjust=2) +
+  scale_y_continuous(labels=percent) +
+  scale_fill_manual(values = c("#CD7AC5", "cadetblue3"), name="") +
+  theme_ggdist() +
+  theme(legend.position = "bottom",
+        panel.border = element_rect(colour = "grey78", fill=NA)) +
+  labs(x="", y="")
+
+ggsave(here("figures/s4.png"))
+
+```
+
+Uptake by division
+
+```{r}
+
+uptake_division <- read_xlsx("2024-03-26_mass_xray_uptake.xlsx", sheet = "uptake_division")
+
+division_pops %>%
+  filter(year==1957) %>%
+  select(division, population_without_inst_ship) %>%
+  left_join(uptake_division) %>%
+  mutate(pct_pop_examined = examined/population_without_inst_ship)
 
 
 ```
@@ -1698,7 +1767,7 @@ as_draws_df(m_pulmonary) %>%
   theme(panel.border = element_rect(colour = "grey78", fill=NA),
         legend.position = "top")
 
-ggsave(here("figures/s5.png"), width=16, height=16)
+ggsave(here("figures/s6.png"), width=16, height=16)
 ```
 
 Nicer version of table of parameters for supplement
@@ -1898,7 +1967,7 @@ f <- bind_cols(RR.level=pluck(overall_change$level_draws$estimate),
   (plot_spacer() + b + f) /
   (a + d + e)
 
-ggsave(here("figures/s6.png"), width=8, height=8)
+ggsave(here("figures/s7.png"), width=8, height=8)
 
 
 
@@ -1914,7 +1983,7 @@ Plot the counterfactual at ward level
 plot_counterfactual(model_data = mdata, model=m_pulmonary, outcome = inc_100k, population_denominator = population_without_inst_ship, 
                     grouping_var = ward, ward, re_formula= ~(1 + y_num*acf_period | ward))
   
-ggsave(here("figures/s4.png"), width=12, height=12)
+ggsave(here("figures/s5.png"), width=12, height=12)
 
 ```
 
@@ -2076,7 +2145,7 @@ Summarise in plot
 plot_counterfactual(model_data = overall_scaffold %>% filter(year<=1961), model=m_extrapulmonary, 
                     population_denominator = population_without_inst_ship, outcome=inc_100k_extrapulmonary, re_formula = NA)
   
-ggsave(here("figures/s7.png"), width=10)
+ggsave(here("figures/s8.png"), width=10)
 
 ```
 
@@ -2184,7 +2253,7 @@ plot_counterfactual(model_data = mdata_extrapulmonary, model=m_extrapulmonary, o
                     population_denominator = population_without_inst_ship, grouping_var = ward,re_formula =~(y_num*acf_period | ward), 
                     ward)
   
-ggsave(here("figures/s8.png"), width=10, height=12)
+ggsave(here("figures/s9.png"), width=10, height=12)
 
 ```
 
@@ -2342,7 +2411,7 @@ age_sex_summary %>%
   theme(legend.position = "bottom",
         panel.border = element_rect(colour = "grey78", fill=NA))
   
-ggsave(here("figures/s9.png"), height=10)
+ggsave(here("figures/s10.png"), height=10)
 
 ```
 
@@ -2618,3 +2687,27 @@ ggsave(here("figures/f3.png"), width = 12, height=8)
 
 
 ```
+
+
+
+### 10 Division model
+
+Was uptake of CXR at division level associated with greated impact?
+
+```{r}
+
+m_division <- brm(
+  cases ~ 1 + y_num*acf_period + (1 + y_num*acf_period | ward) + offset(log(population_without_inst_ship)),
+                  data = mdata,
+                  family = negbinomial(),
+                  seed = 1234,
+                  chains = 4, cores = 4,
+                  prior = prior(normal(0,1), class = Intercept) +
+                          prior(gamma(0.01, 0.01), class = shape) +
+                          prior(normal(0, 1), class = b) +
+                          prior(exponential(1), class=sd) +
+                          prior(lkj(4), class=cor),
+  control = list(adapt_delta = 0.9))
+
+```
+
