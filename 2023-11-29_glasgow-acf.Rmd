@@ -100,26 +100,33 @@ p <- summary %>%
     geom_line(data = counterfact %>% filter(year>=1956), 
               aes(y=.epred_inc, x=year2, colour="Counterfactual")) +
     geom_line(aes(y=.epred_inc, x=year2, group=acf_period,  colour=acf_period)) +
-    geom_point(data = {{model_data}}, aes(y={{outcome}}, x=year2, shape=acf_period), size=2) +
+    geom_point(data = {{model_data}} %>%
+                 mutate(acf_period = case_when(acf_period=="a. pre-acf" ~ "Pre-ACF",
+                                               acf_period=="b. acf" ~ "ACF",
+                                               acf_period=="c. post-acf" ~ "Post-ACF")), 
+               aes(y={{outcome}}, x=year2, shape=fct_relevel(acf_period,
+                                                             "Pre-ACF",
+                                                             "ACF",
+                                                             "Post-ACF")), size=2) +
     geom_vline(aes(xintercept=acf_end), linetype=3) +
     theme_ggdist() +
     scale_y_continuous(labels=comma, limits = c(0,NA)) +
     scale_x_continuous(labels = year_labels,
                        breaks = year_labels) +
-    scale_fill_manual(values = c("#DE0D92", "grey50", "#4D6CFA") , name="", na.translate = F) +
-    scale_colour_manual(values = c("#DE0D92", "grey50", "#4D6CFA") , name="", na.translate = F) +
-    scale_shape_discrete(name="", na.translate = F) +
+    scale_fill_manual(values = c("#DE0D92", "grey50", "#4D6CFA") , name="Model estimates:", na.translate = F) +
+    scale_colour_manual(values = c("#DE0D92", "grey50", "#4D6CFA") , name="Model estimates:", na.translate = F) +
+    scale_shape_discrete(name="Empirical data (period):", na.translate = F) +
     labs(
       x = "Year",
       y = "Case notification rate (per 100,000)",
       caption = "Mass miniature X-ray campaign period between dashed lines (11th March-12th April 1957)"
     ) +
     theme(legend.position = "bottom",
+          legend.box="vertical", 
           panel.border = element_rect(colour = "grey78", fill=NA),
           text = element_text(size=8),
           axis.text.x = element_text(size=8, angle = 90, hjust=1, vjust=0.5),
-          legend.text = element_text(size=8)) +
-    guides(shape="none")
+          legend.text = element_text(size=8))
 
     facet_vars <- vars(...)
 
@@ -1809,7 +1816,7 @@ f1a <- st_as_sf(left_join(ward_inc, glasgow_wards_1951)) %>%
   theme_ggdist() +
   theme(panel.border = element_rect(colour = "grey78", fill=NA),
         legend.position = "top",
-        legend.key.width = unit(1, "cm"),
+        #legend.key.width = unit(1, "cm"),
         legend.title.align = 0.5,
         text = element_text(size=8),
         axis.text.x = element_text(angle=45, size=6, hjust=1),
@@ -1818,7 +1825,7 @@ f1a <- st_as_sf(left_join(ward_inc, glasgow_wards_1951)) %>%
 
 (f1a / f1b) + plot_annotation(tag_levels = "A")
 
-ggsave(here("figures/f1.png"), width=7)
+ggsave(here("figures/f1.png"), width=6, height = 8)
 
 ```
 
@@ -2391,8 +2398,14 @@ age_sex_summary %>%
                          sex== "F" ~ "Female")) %>%
   mutate(acf_period = case_when(acf_period=="a. pre-acf" ~ "Before Intervention",
                                 acf_period=="b. acf" ~ "Counterfactual",
-                                  acf_period=="c. post-acf" ~ "Post Intervention")), 
-  aes(y=cases, x=year2, shape=acf_period), size=2) +
+                                  acf_period=="c. post-acf" ~ "Post Intervention"))%>%
+                 mutate(acf_period2 = case_when(acf_period=="Before Intervention" ~ "Pre-ACF",
+                                               acf_period=="Counterfactual" ~ "ACF",
+                                               acf_period=="Post Intervention" ~ "Post-ACF")), 
+  aes(y=cases, x=year2, shape=fct_relevel(acf_period2,
+                                                             "Pre-ACF",
+                                                             "ACF",
+                                                             "Post-ACF")), size=2) +
   geom_vline(aes(xintercept=acf_end), linetype=3) +
   ggh4x::facet_grid2(age~sex, scales = "free_y", independent = "y") +
   theme_ggdist() +
@@ -2400,15 +2413,16 @@ age_sex_summary %>%
   scale_x_continuous(labels = year_labels,
                      breaks = year_labels,
                      guide = guide_axis(angle = 90)) +
-  scale_fill_manual(values = c("#DE0D92", "grey50", "#4D6CFA") , name="") +
-  scale_colour_manual(values = c("#DE0D92", "grey50", "#4D6CFA") , name="") +
-  scale_shape(name="") +
+  scale_fill_manual(values = c("#DE0D92", "grey50", "#4D6CFA") , name="Model estimates:") +
+  scale_colour_manual(values = c("#DE0D92", "grey50", "#4D6CFA") , name="Model estimates:") +
+  scale_shape_discrete(name="Emprical data (period):", na.translate = F) +
   labs(
     x = "Year",
     y = "Case notifications (n)",
     caption = "Mass miniature X-ray campaign period between dashed lines (11th March-12th April 1957)"
   ) +
-  theme(legend.position = "bottom",
+  theme(legend.position = "bottom",          
+        legend.box="vertical", 
         panel.border = element_rect(colour = "grey78", fill=NA))
   
 ggsave(here("figures/s10.png"), height=10)
