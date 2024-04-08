@@ -118,15 +118,15 @@ p <- summary %>%
     scale_shape_discrete(name="Empirical data (period):", na.translate = F) +
     labs(
       x = "Year",
-      y = "Case notification rate (per 100,000)",
-      caption = "Mass miniature X-ray campaign period between dashed lines (11th March-12th April 1957)"
+      y = "CNR (per 100,000)"
     ) +
     theme(legend.position = "bottom",
           legend.box="vertical", 
           panel.border = element_rect(colour = "grey78", fill=NA),
           text = element_text(size=8),
           axis.text.x = element_text(size=8, angle = 90, hjust=1, vjust=0.5),
-          legend.text = element_text(size=8))
+          legend.text = element_text(size=8),
+          panel.grid.major = element_line(colour="grey98", size=0.5))
 
     facet_vars <- vars(...)
 
@@ -1809,10 +1809,10 @@ Make this into a figure combined with the map of empirical data
 f1a <- st_as_sf(left_join(ward_inc, glasgow_wards_1951)) %>%
   filter(tb_type=="Pulmonary") %>%
   ggplot() +
-  geom_sf(aes(fill=inc_100k)) +
+  geom_sf(aes(fill=inc_100k), colour="grey98", lwd=0.01) +
   facet_wrap(year~., ncol = 7) +
-  scale_fill_viridis_c(name="Case notification rate (per 100,000)",
-                       option = "A") +
+  scale_fill_scico(name="CNR (per 100,000)",
+                       palette = "acton", direction = -1) +
   theme_ggdist() +
   theme(panel.border = element_rect(colour = "grey78", fill=NA),
         legend.position = "top",
@@ -1820,12 +1820,11 @@ f1a <- st_as_sf(left_join(ward_inc, glasgow_wards_1951)) %>%
         legend.title.align = 0.5,
         text = element_text(size=8),
         axis.text.x = element_text(angle=45, size=6, hjust=1),
-        axis.text.y = element_text(size=6)) +
-  guides(fill=guide_colorbar(title.position = "top"))
+        axis.text.y = element_text(size=6))
 
 (f1a / f1b) + plot_annotation(tag_levels = "A")
 
-ggsave(here("figures/f1.png"), width=6, height = 8)
+ggsave(here("figures/f1.png"), width=7)
 
 ```
 
@@ -2038,7 +2037,9 @@ plot_ward_effect <- function(data, measure){
   ggplot() +
   geom_sf(aes(fill=estimate)) +
   geom_sf_label(aes(label = ward_number), size=3, fill=NA, label.size = NA, colour="black") +
-  scale_fill_gradient(high="lightblue1",low="darkblue", name="") +
+  scale_fill_scico(trans="log", palette = "roma", midpoint = 0, limits=c(0.5,2.25),
+                       breaks = c(0.5, 0.75, 1, 1.5, 2, 2.5), labels = c(0.5, 0.75, 1, 1.5, 2, 2.5),
+                   name="Relative rate") +
   theme_ggdist() +
   theme(panel.border = element_rect(colour = "grey78", fill=NA),
         axis.text.x=element_text(angle=45, hjust=1)) +
@@ -2048,17 +2049,22 @@ plot_ward_effect <- function(data, measure){
 #function for plotting catapiller plots
 plot_ward_cat <- function(data, measure, scale){
 
-  pal <- colorRampPalette(c('darkblue','lightblue'))
-
-  {{data}} %>%
-    filter(measure=={{measure}}) %>%
-    mutate(my_palette = case_when(ward2=="Overall" ~ "#C60C30",
-                                TRUE ~ pal(36)[as.numeric(cut(.$estimate,breaks = 36))])) %>%
     ggplot() +
-    geom_pointrange(aes(y=estimate, ymin=.lower, ymax=.upper, 
-                      x=fct_reorder(ward2, estimate), colour=my_palette)) +
+    geom_hline(aes(yintercept=1), linetype=2) +
+    geom_pointrange(data = {{data}} %>%     
+                      filter(measure=={{measure}}) %>%
+                      filter(!is.na(ward)),
+                    aes(y=estimate, ymin=.lower, ymax=.upper, 
+                      x=fct_reorder(ward2, estimate), colour=estimate)) +
+    geom_pointrange(data = {{data}} %>% 
+                      filter(measure=={{measure}}) %>%
+                      filter(is.na(ward)),
+                    aes(y=estimate, ymin=.lower, ymax=.upper, 
+                      x=ward2), colour="darkred") +
     coord_flip() +
-    scale_colour_identity(name="") +
+    scale_colour_scico(trans="log", palette = "roma", midpoint = 0, limits=c(0.5,2.25), 
+                       breaks = c(0.5, 0.75, 1, 1.5, 2, 2.5), labels = c(0.5, 0.75, 1, 1.5, 2, 2.5),
+                       name="Relative rate") +
     scale_y_continuous() +
     theme_ggdist() +
     theme(panel.border = element_rect(colour = "grey78", fill=NA)) +
@@ -2081,10 +2087,12 @@ s4 <- (ward_peak_i + ward_level_i + ward_slope_i) /
 
 s4[[1]] <- s4[[1]] + plot_layout(tag_level = 'new')
 s4[[2]] <- s4[[2]] + plot_layout(tag_level = 'new')
-s4 + plot_annotation(tag_levels = c('A', '1'))
+s4 + plot_annotation(tag_levels = c('A', '1')) + plot_layout(guides = 'collect') &
+  theme(legend.position='bottom',
+        legend.key.width = unit(3, "cm"))
 
 
-ggsave(here("figures/f2.png"), width = 16, height=10)
+ggsave(here("figures/f2.png"), width = 16, height=12)
 
 ```
 
