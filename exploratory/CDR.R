@@ -61,14 +61,14 @@ WM[,relpeak:=during/before]         # peak notifications relative to 'before'
 WM[,RR.level:=(after)/before] # notification drop relative to 'before'
 WM[,absdiff:=before-after]
 
-## 90% cov:
-WM[,prev:=before * (relpeak-1)/0.9] #assume 90% coverage
+## 76% cov:
+WM[,prev:=before * (relpeak-1)/0.76] #assume 76% coverage
 WM[,CDR:=before * 3 / prev] #P = IT
 WM[,CDR:=(CDR)/(1+CDR)] #CDR estimate (inverse odds)
 WM[,Ibefore:=before/CDR]
 
 ## sensitivity 70% cov:
-WM[,prev70:=before * (relpeak-1)/0.7] #assume 90% coverage
+WM[,prev70:=before * (relpeak-1)/0.7] #assume 70% coverage
 WM[,CDR70:=before * 3 / prev70] #P = IT
 WM[,CDR70:=(CDR70)/(1+CDR70)] #CDR estimate (inverse odds)
 WM[,Ibefore70:=before/CDR70]
@@ -80,7 +80,9 @@ WM <- merge(WM,warcov,by='ward')
 ## larger correlation
 ## removed: relpeak out as ~ CDR, RR.level ~ reldiff
 GP <- ggpairs(WM[,.(CDR,RR.level,Ipre=Ibefore,Npre=before,prev,pdens)]) 
-GP
+GP +
+  ggdist::theme_ggdist() +
+  theme(panel.background = element_rect(fill=NA, colour="grey78"))
 
 ggsave(GP,file=here('exploratory/figures/CDR.pairs.png'),w=8,h=8)
 
