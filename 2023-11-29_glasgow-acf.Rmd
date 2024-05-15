@@ -26,6 +26,7 @@ library(ggdensity)
 library(ggpubr)
 library(units)
 library(glue)
+library(ggh4x)
 
 ```
 
@@ -53,7 +54,7 @@ Function for counterfactual plots
 plot_counterfactual <- function(model_data, model, population_denominator, outcome, grouping_var=NULL, re_formula,...){
   
   #labeller for years
-  year_labels <- c(1950:1963)
+  year_labels <- c(1950:1964) #extra year for the extant of the x-axis
 
   #The Glasgow mass minuture chest X-ray campaign happened between 11th March and 12th April 1957
   #Segment for graphs to match ACF period
@@ -94,6 +95,8 @@ plot_counterfactual <- function(model_data, model, population_denominator, outco
 p <- summary %>%
     droplevels() %>%
     ggplot() +
+    geom_vline(aes(xintercept=acf_start, linetype="Mass CXR screening intervention")) +
+    geom_vline(aes(xintercept=acf_end, linetype="Mass CXR screening intervention")) +
     geom_ribbon(aes(ymin=.epred_inc.lower, ymax=.epred_inc.upper, x=year2, group = acf_period, fill=acf_period), alpha=0.5) +
     geom_ribbon(data = counterfact %>% filter(year>=1956), 
                 aes(ymin=.epred_inc.lower, ymax=.epred_inc.upper, x=year2, fill="Counterfactual"), alpha=0.5) +
@@ -108,25 +111,26 @@ p <- summary %>%
                                                              "Pre-ACF",
                                                              "ACF",
                                                              "Post-ACF")), size=2) +
-    geom_vline(aes(xintercept=acf_end), linetype=3) +
-    theme_ggdist() +
-    scale_y_continuous(labels=comma, limits = c(0,NA)) +
+    theme_grey() +
+    scale_y_continuous(labels=comma, limits =c(0,400)) +
     scale_x_continuous(labels = year_labels,
                        breaks = year_labels) +
     scale_fill_manual(values = c("#DE0D92", "grey50", "#4D6CFA") , name="Model estimates:", na.translate = F) +
     scale_colour_manual(values = c("#DE0D92", "grey50", "#4D6CFA") , name="Model estimates:", na.translate = F) +
     scale_shape_discrete(name="Empirical data (period):", na.translate = F) +
+    scale_linetype_manual(values = 2, name="") +
     labs(
-      x = "Year",
+      x = "",
       y = "CNR (per 100,000)"
     ) +
+    guides(x = "axis_truncated", y = "axis_truncated") +
     theme(legend.position = "bottom",
           legend.box="vertical", 
-          panel.border = element_rect(colour = "grey78", fill=NA),
-          text = element_text(size=8),
-          axis.text.x = element_text(size=8, angle = 90, hjust=1, vjust=0.5),
-          legend.text = element_text(size=8),
-          panel.grid.major = element_line(colour="grey98", size=0.5))
+          text = element_text(size=10),
+          axis.text.x = element_text(size=10, angle = 90, hjust=1, vjust=0.5),
+          legend.text = element_text(size=10),
+          legend.spacing.y = unit(0.1, 'cm'),
+          axis.line = element_line(colour = "black")) 
 
     facet_vars <- vars(...)
 
@@ -1741,12 +1745,12 @@ Fit the model with the data
 ```{r}
 
 m_pulmonary <- brm(
-  cases ~ 1 + y_num*acf_period + (1 + y_num*acf_period | ward) + offset(log(population_without_inst_ship)),
+  cases ~ 0 + Intercept + y_num*acf_period + (1 + y_num*acf_period | ward) + offset(log(population_without_inst_ship)),
                   data = mdata,
                   family = negbinomial(),
                   seed = 1234,
                   chains = 4, cores = 4,
-                  prior = prior(normal(0,1), class = Intercept) +
+                  prior = prior(normal(0,1), class=b, coef = "Intercept") +
                           prior(gamma(0.01, 0.01), class = shape) +
                           prior(normal(0, 1), class = b) +
                           prior(exponential(1), class=sd) +
@@ -1813,18 +1817,20 @@ f1a <- st_as_sf(left_join(ward_inc, glasgow_wards_1951)) %>%
   facet_wrap(year~., ncol = 7) +
   scale_fill_scico(name="CNR (per 100,000)",
                        palette = "acton", direction = -1) +
-  theme_ggdist() +
-  theme(panel.border = element_rect(colour = "grey78", fill=NA),
-        legend.position = "top",
+  theme_grey() +
+  theme(legend.position = "top",
         #legend.key.width = unit(1, "cm"),
         legend.title.align = 0.5,
-        text = element_text(size=8),
-        axis.text.x = element_text(angle=45, size=6, hjust=1),
-        axis.text.y = element_text(size=6))
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.line = element_blank(),
+        axis.ticks = element_blank(),
+        panel.background = element_blank(),
+        legend.title = element_text(size=10))
 
 (f1a / f1b) + plot_annotation(tag_levels = "A")
 
-ggsave(here("figures/f1.png"), width=7)
+ggsave(here("figures/f1.png"), width=7, height=8)
 
 ```
 
@@ -1989,7 +1995,7 @@ Plot the counterfactual at ward level
 plot_counterfactual(model_data = mdata, model=m_pulmonary, outcome = inc_100k, population_denominator = population_without_inst_ship, 
                     grouping_var = ward, ward, re_formula= ~(1 + y_num*acf_period | ward))
   
-ggsave(here("figures/s5.png"), width=12, height=12)
+ggsave(here("figures/s5.png"), width=16, height=12)
 
 ```
 
@@ -2066,10 +2072,11 @@ plot_ward_cat <- function(data, measure, scale){
                        breaks = c(0.5, 0.75, 1, 1.5, 2, 2.5), labels = c(0.5, 0.75, 1, 1.5, 2, 2.5),
                        name="Relative rate") +
     scale_y_continuous() +
-    theme_ggdist() +
+    theme_ggdist()  +
     theme(panel.border = element_rect(colour = "grey78", fill=NA)) +
     labs(x = "",
-         y = "Relative rate (95% UI)")
+         y = "Relative rate (95% UI)")+
+    guides(x = "axis_truncated", y = "axis_truncated")
 }
 
 
@@ -2716,20 +2723,20 @@ ggsave(here("figures/f3.png"), width = 12, height=8)
 
 Was uptake of CXR at division level associated with greated impact?
 
-```{r}
-
-m_division <- brm(
-  cases ~ 1 + y_num*acf_period + (1 + y_num*acf_period | ward) + offset(log(population_without_inst_ship)),
-                  data = mdata,
-                  family = negbinomial(),
-                  seed = 1234,
-                  chains = 4, cores = 4,
-                  prior = prior(normal(0,1), class = Intercept) +
-                          prior(gamma(0.01, 0.01), class = shape) +
-                          prior(normal(0, 1), class = b) +
-                          prior(exponential(1), class=sd) +
-                          prior(lkj(4), class=cor),
-  control = list(adapt_delta = 0.9))
-
-```
+# ```{r}
+# 
+# m_division <- brm(
+#   cases ~ 1 + y_num*acf_period + (1 + y_num*acf_period | ward) + offset(log(population_without_inst_ship)),
+#                   data = mdata,
+#                   family = negbinomial(),
+#                   seed = 1234,
+#                   chains = 4, cores = 4,
+#                   prior = prior(normal(0,1), class = Intercept) +
+#                           prior(gamma(0.01, 0.01), class = shape) +
+#                           prior(normal(0, 1), class = b) +
+#                           prior(exponential(1), class=sd) +
+#                           prior(lkj(4), class=cor),
+#   control = list(adapt_delta = 0.9))
+# 
+# ```
 
