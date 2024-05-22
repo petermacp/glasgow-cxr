@@ -1401,7 +1401,7 @@ overall_deaths %>%
   theme_ggdist() +
   theme(panel.border = element_rect(colour = "grey78", fill=NA))
 
-ggsave(here("figures/s7.png"), width=10)
+ggsave(here("figures/s8.png"), width=10)
 
 ```
 
@@ -1422,10 +1422,67 @@ overall_pops %>%
   left_join(overall_deaths %>%
               select(year,
                      pulmonary_deaths, pulmonary_death_rate_per_100k)) %>%
+  mutate(percent_pulmonary = percent(pulmonary_notifications/(total_notifications ), accuracy=0.1)) %>%
   mutate(across(where(is.numeric) & !(year),  ~round(., digits=1))) %>%
-  mutate(across(where(is.numeric) & !(year),  ~comma(.))) 
+  mutate(across(where(is.numeric) & !(year),  ~comma(.)))
 
 ```
+
+Comparison fo age-sex distribution of cases in 1950-1956 vs. 1957
+
+```{r}
+
+label_abs2 <- function(x) {
+  percent(abs(x))
+}
+
+
+
+cases_by_age_sex %>% 
+  ungroup() %>%
+  filter(tb_type=="Pulmonary") %>%
+  mutate(acf_period = case_when(year %in% c(1950:1956) ~ "a. pre-acf",
+                                year %in% c(1957) ~ "b. acf",
+                                year %in% c(1958:1963) ~ "c. post-acf")) %>%
+  group_by(acf_period, age, sex) %>%
+  summarise(cases = sum(cases)) %>%
+  ungroup() %>%
+  group_by(acf_period) %>%
+  mutate(period_total = sum(cases)) %>%
+  mutate(pct = cases/period_total) %>%
+  mutate(pct2 = case_when(sex=="F" ~ -pct,
+                          TRUE ~ pct)) %>%
+  mutate(sex = case_when(sex=="M" ~ "Male",
+                         sex=="F" ~ "Female")) %>%
+  mutate(age = case_when(age=="00_05" ~ "0 to 5y",
+                         age=="06_15" ~ "06 to 15y",
+                         age=="16_25" ~ "16 to 25y",
+                         age=="26_35" ~ "26 to 35y",
+                         age=="36_45" ~ "36 to 45y",
+                         age=="46_55" ~ "46 to 55y",
+                         age=="56_65" ~ "56 to 65y",
+                         age=="65+" ~ "65 & up y")) %>%
+                 mutate(acf_period = case_when(acf_period=="a. pre-acf" ~ "Pre-ACF",
+                                               acf_period=="b. acf" ~ "ACF",
+                                               acf_period=="c. post-acf" ~ "Post-ACF")) %>%
+  ggplot() +
+  geom_vline(aes(xintercept=0), linetype=2) +
+  geom_point(aes(x=pct2,y=age, colour=fct_relevel(acf_period,
+                                                             "Pre-ACF",
+                                                             "ACF",
+                                                             "Post-ACF")), stat="identity") +
+  scale_x_continuous(labels=label_abs2, limits = c(-0.2, 0.2)) +
+  scale_colour_manual(values = c("#DE0D92", "grey50", "#4D6CFA")) +
+  theme_grey(base_family = "Aptos") +
+  labs(x= "<- Female                Percent of cases              Male ->",
+       y="") +
+  theme(legend.title = element_blank(),
+        legend.position = "bottom")
+
+ggsave(here("figures/s5.png"))
+
+```
+
 
 
 Prepare the datasets for modelling
@@ -1778,7 +1835,7 @@ as_draws_df(m_pulmonary) %>%
   theme(panel.border = element_rect(colour = "grey78", fill=NA),
         legend.position = "top")
 
-ggsave(here("figures/s6.png"), width=16, height=16)
+ggsave(here("figures/s7.png"), width=16, height=16)
 ```
 
 Nicer version of table of parameters for supplement
@@ -1979,7 +2036,7 @@ f <- bind_cols(RR.level=pluck(overall_change$level_draws$estimate),
   (plot_spacer() + b + f) /
   (a + d + e)
 
-ggsave(here("figures/s7.png"), width=8, height=8)
+ggsave(here("figures/s8.png"), width=8, height=8)
 
 
 
@@ -1995,7 +2052,7 @@ Plot the counterfactual at ward level
 plot_counterfactual(model_data = mdata, model=m_pulmonary, outcome = inc_100k, population_denominator = population_without_inst_ship, 
                     grouping_var = ward, ward, re_formula= ~(1 + y_num*acf_period | ward))
   
-ggsave(here("figures/s5.png"), width=16, height=12)
+ggsave(here("figures/s6.png"), width=16, height=12)
 
 ```
 
@@ -2066,7 +2123,7 @@ plot_ward_cat <- function(data, measure, scale){
                       filter(measure=={{measure}}) %>%
                       filter(is.na(ward)),
                     aes(y=estimate, ymin=.lower, ymax=.upper, 
-                      x=ward2), colour="darkred") +
+                      x=ward2), colour="black") +
     coord_flip() +
     scale_colour_scico(trans="log", palette = "roma", midpoint = 0, limits=c(0.5,2.25), 
                        breaks = c(0.5, 0.75, 1, 1.5, 2, 2.5), labels = c(0.5, 0.75, 1, 1.5, 2, 2.5),
@@ -2081,13 +2138,13 @@ plot_ward_cat <- function(data, measure, scale){
 
 
 
-ward_peak_i <- plot_ward_effect(data = ward_effects, measure = "RR.peak")
-ward_level_i <- plot_ward_effect(data = ward_effects, measure = "RR.level")
-ward_slope_i <- plot_ward_effect(data = ward_effects, measure = "RR.slope")
+ward_peak_i <- plot_ward_effect(data = ward_effects, measure = "RR.peak") + ggtitle("Peak effect")
+ward_level_i <- plot_ward_effect(data = ward_effects, measure = "RR.level") + ggtitle("Level effect")
+ward_slope_i <- plot_ward_effect(data = ward_effects, measure = "RR.slope") + ggtitle("Slope effect")
 
-ward_peak_ii <- plot_ward_cat(data = ward_effects, measure = "RR.peak")
-ward_level_ii <- plot_ward_cat(data = ward_effects, measure = "RR.level")
-ward_slope_ii <- plot_ward_cat(data = ward_effects, measure = "RR.slope")
+ward_peak_ii <- plot_ward_cat(data = ward_effects, measure = "RR.peak") + ggtitle("Peak effect")
+ward_level_ii <- plot_ward_cat(data = ward_effects, measure = "RR.level") + ggtitle("Level effect")
+ward_slope_ii <- plot_ward_cat(data = ward_effects, measure = "RR.slope") + ggtitle("Slope effect")
 
 s4 <- (ward_peak_i + ward_level_i + ward_slope_i) /
   (ward_peak_ii + ward_level_ii + ward_slope_ii)
@@ -2165,9 +2222,10 @@ Summarise in plot
 
 ```{r}
 plot_counterfactual(model_data = overall_scaffold %>% filter(year<=1961), model=m_extrapulmonary, 
-                    population_denominator = population_without_inst_ship, outcome=inc_100k_extrapulmonary, re_formula = NA)
+                    population_denominator = population_without_inst_ship, outcome=inc_100k_extrapulmonary, re_formula = NA) +
+  scale_y_continuous(limits = c(0,50))
   
-ggsave(here("figures/s8.png"), width=10)
+ggsave(here("figures/s9.png"), width=10)
 
 ```
 
@@ -2273,9 +2331,9 @@ Ward-level extra-pulmonary estimates in graphical form.
 
 plot_counterfactual(model_data = mdata_extrapulmonary, model=m_extrapulmonary, outcome = inc_100k, 
                     population_denominator = population_without_inst_ship, grouping_var = ward,re_formula =~(y_num*acf_period | ward), 
-                    ward)
+                    ward) + scale_y_continuous(limits= c(0,75))
   
-ggsave(here("figures/s9.png"), width=10, height=12)
+ggsave(here("figures/s10.png"), width=10, height=12)
 
 ```
 
@@ -2440,7 +2498,7 @@ age_sex_summary %>%
         legend.box="vertical", 
         panel.border = element_rect(colour = "grey78", fill=NA))
   
-ggsave(here("figures/s10.png"), height=10)
+ggsave(here("figures/s12.png"), height=10)
 
 ```
 
