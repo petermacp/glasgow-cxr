@@ -440,42 +440,10 @@ glasgow_ward_map <- glasgow_wards_1951 %>%
 #add the map of scotland as an inset
 glasgow_ward_map + inset_element(scotland_with_bbox, 0.75, 0, 1, 0.4)
 
-ggsave(here("figures/s1.png"), height=10, width = 12)
+ggsave(here("figures/s1.tiff"), height=10, width = 12)
 
 
 ```
-
-Calculate areas per geographical unit
-
-```{r}
-sf_use_s2(FALSE) #https://github.com/r-spatial/sf/issues/1762
-
-glasgow_wards_1951 <- glasgow_wards_1951 %>%
-  mutate(area = st_area(glasgow_wards_1951))
-
-
-glasgow_wards_1951$area_km <- units::set_units(glasgow_wards_1951$area, km^2)
-
-
-```
-
-
-Make division shape files, and calculate area
-(stopped working, need to fix!)
-
-```{r}
-
-# glasgow_divisions_1951 <- glasgow_wards_1951 %>%
-#   group_by(division) %>% 
-#   summarize(geometry = st_union(geometry)) %>%
-#   nngeo::st_remove_holes() %>%
-#   mutate(area = st_area(glasgow_divisions_1951))
-# 
-# glasgow_divisions_1951$area_km <- units::set_units(glasgow_divisions_1951$area, km^2)
-
-
-```
-
 
 ### 3. Denominators
 
@@ -642,7 +610,7 @@ ward_pops %>%
   theme_ggdist() +
   theme(legend.position = "bottom")
 
-ggsave(here("figures/s2.png"), height=14, width=12)
+ggsave(here("figures/s2.tiff"), height=14, width=12)
 
 ```
 
@@ -672,63 +640,6 @@ ward_pops %>%
   datatable()
   
 
-
-```
-
-Output population density by ward and divison for regression modelling
-
-Wards first
-
-(stopped working, need to fix)
-
-```{r}
-
-# ward_covariates <-  glasgow_wards_1951 %>%
-#   left_join(ward_pops) %>%
-#   mutate(people_per_km_sq = as.double(population_without_inst_ship/area_km))
-# 
-# #plot it out
-# 
-# ward_covariates %>%
-#   ggplot() +
-#   geom_sf(aes(fill=people_per_km_sq)) + 
-#   facet_wrap(year~., ncol=7) +
-#   scale_fill_viridis_c(option="A") +
-#   theme(legend.position = "bottom",
-#         axis.text.x = element_text(angle = 45, hjust=1))
-# 
-# ggsave(here("figures/ward_pop_density.png"), width=10)
-# 
-# write_rds(ward_covariates, here("populations/ward_covariates.rds"))
-
-
-```
-
-Now divisions first
-
-
-(stopped working, need to fix)
-
-```{r}
-
-# division_covariates <-  glasgow_divisions_1951 %>%
-#   left_join(division_pops) %>%
-#   mutate(people_per_km_sq = as.double(total_population/area_km))
-# 
-# #plot it out
-# 
-# division_covariates %>%
-#   ggplot() +
-#   geom_sf(aes(fill=people_per_km_sq)) + 
-#   geom_sf_label(aes(label = division), size=3, fill=NA, label.size = NA, colour="black", family = "Segoe UI") +
-#   facet_wrap(year~., ncol=7) +
-#   scale_fill_viridis_c(option="G") +
-#   theme(legend.position = "bottom",
-#         axis.text.x = element_text(angle = 45, hjust=1))
-# 
-# ggsave(here("figures/division_pop_density.png"), width=10)
-# 
-# write_rds(division_covariates, here("populations/division_covariates.rds"))
 
 ```
 
@@ -840,7 +751,7 @@ pred_pops %>%
   labs(x="", y="") 
 
 
-ggsave(here("figures/s3.png"), width=10)
+ggsave(here("figures/s3.tiff"), width=10)
 
 
 ```
@@ -1045,29 +956,6 @@ cases_by_age_sex %>%
 
 What percentage of adults (15+ participated in the intervention in 1957)?
 
-```{r}
-# 
-# pred_pops %>%
-#   ungroup() %>%
-#   filter(year==1957) %>%
-#   filter(age != "00 to 04",
-#          age != "05 to 14") %>%
-#   summarise(total_pop = sum(pred)) %>%
-#   mutate(cxr_screened = 622349) %>%
-#   mutate(pct_pop_cxr_screened = percent(cxr_screened/total_pop))
-# 
-# pred_pops %>%
-#   ungroup() %>%
-#   filter(year==1957) %>%
-#   filter(age != "00 to 04",
-#          age != "05 to 14") %>%
-#   summarise(total_pop = sum(pred), .by=sex) %>%
-#   mutate(cxr_screened = c(340474, 281875)) %>%
-#   mutate(pct_pop_cxr_screened = percent(cxr_screened/total_pop))
-
-
-```
-
 Note that in the Report of Sir Kenneth Cowan, we have the following estimates of participation (we will use these for the manuscript, as they are not based on my estimates)
 
 ```{r}
@@ -1096,7 +984,7 @@ Look at uptake of screening by age and sex
 
 uptake_age_sex <- read_xlsx("2024-03-26_mass_xray_uptake.xlsx", sheet = "uptake_age_sex")
 
-uptake_age_sex %>%
+uptake_graph <- uptake_age_sex %>%
   mutate(uptake = examined/resident_population) %>%
   mutate(examined_l = comma(examined),
          resident_population_l = comma(resident_population),
@@ -1115,9 +1003,31 @@ uptake_age_sex %>%
         panel.border = element_rect(colour = "grey78", fill=NA)) +
   labs(x="", y="")
 
-ggsave(here("figures/s4.png"))
+
+
 
 ```
+Combine figure with table for single figure.
+
+```{r}
+
+uptake_table <- uptake_age_sex %>%
+  mutate(resident_population = comma(resident_population),
+         examined = comma(examined)) %>%
+  rename(Sex = sex,
+         Age = age,
+         `Resident population` = resident_population,
+         Examined = examined) %>%
+  mutate(Sex = case_when(Sex=="m" ~ "Male",
+                         Sex=="f" ~ "Female"))
+
+uptake_graph / gridExtra::tableGrob(uptake_table, rows = NULL)
+
+ggsave(here("figures/s4.tiff"), height=10)
+
+```
+
+
 
 Uptake by division
 
@@ -1401,7 +1311,7 @@ overall_deaths %>%
   theme_ggdist() +
   theme(panel.border = element_rect(colour = "grey78", fill=NA))
 
-ggsave(here("figures/s8.png"), width=10)
+ggsave(here("figures/deaths.tiff"), width=10)
 
 ```
 
@@ -1479,7 +1389,7 @@ cases_by_age_sex %>%
   theme(legend.title = element_blank(),
         legend.position = "bottom")
 
-ggsave(here("figures/s5.png"))
+ggsave(here("figures/s5.tiff"))
 
 ```
 
@@ -1527,257 +1437,7 @@ overall_scaffold <- mdata %>%
 
 ### 7. Pulmonary TB model
 
-#### 7.1 Fit the model and priors
-
-This models the case notification rate over time, with a step change for the intervention, and slope change after the intervention.
-
-Work on the priors a bit. We will build up from less complex to more complex.
-
-a) intercept only, to predict count of cases
-
-at the intercept, we expect somewhere around 2500. We will set the standard deviation to both 0.5 and 1 to check what it looks like
-
-```{r}
-# 
-# c(prior(lognormal(7.600902, 0.5)), #log(2500) = 7.600902
-#   prior(lognormal(7.600902, 1))) %>% 
-#   parse_dist() %>% 
-#   
-#   ggplot(aes(y = prior, dist = .dist, args = .args)) +
-#   stat_halfeye(.width = c(.5, .95)) +
-#   scale_y_discrete(NULL, labels = str_c("lognormal(log(2000), ", c(0.5, 1), ")"),
-#                    expand = expansion(add = 0.1)) +
-#   xlab(expression(exp(italic(p)(beta[0])))) +
-#   coord_cartesian(xlim = c(0,15000))
-# 
-# 
-# prior(gamma(1, 0.01)) %>%
-#   parse_dist() %>%
-#   ggplot(aes(y=prior, dist = .dist, args = .args)) +
-#   stat_halfeye(.width = c(0.5, 0.95))
-# 
-# #now fit to a model, and plot some prior realisations
-# 
-# m_prior1 <- brm(
-#   cases ~ 0 + Intercept,
-#   family = negbinomial(),
-#   data = overall_scaffold,
-#   sample_prior = "only",
-#   prior = prior(normal(log(2000), 0.5), class = b, coef = Intercept) +
-#           prior(gamma(1, 0.01), class = shape)
-# )
-# 
-# add_epred_draws(object=m_prior1,
-#                 newdata = tibble(intercept=1)) %>%
-#   ggplot(aes(x=intercept, y=.epred)) +
-#   stat_halfeye() +
-#   scale_y_log10(labels = comma)
-
-
-```
-
-Now try to add in a term for the effect of y_num. We anticpate that the number of cases will decline by about 1-5% per year. However, as we are pretty uncertain about this, we will just encode a weakly regularising prior to restrict the year size to sensible ranges.
-
-```{r}
-# 
-# 
-# m_prior2 <- brm(
-#   cases ~ 0 + Intercept + y_num,
-#   family = negbinomial(),
-#   data = overall_scaffold,
-#   sample_prior = "only",
-#   prior = prior(normal(log(2000), 0.5), class = b, coef = Intercept) +
-#           prior(gamma(1, 0.01), class = shape) +
-#           prior(normal(0, 0.01), class = b, coef = y_num)
-# )
-# 
-# add_epred_draws(object=m_prior2,
-#                 newdata = overall_scaffold) %>%
-#   ggplot(aes(x=year, y=.epred)) +
-#   stat_halfeye() +
-#   scale_y_log10(label=comma)
-
-```
-
-Now we want to add in a prior for the effect of the acf_intervention. We anticipate the peak to be anywhere between no effect, and a tripling
-
-```{r}
-# 
-# m_prior3 <- brm(
-#   cases ~ 0 + Intercept + y_num + acf_period,
-#   family = negbinomial(),
-#   data = overall_scaffold,
-#   sample_prior = "only",
-#   prior = prior(normal(log(2000), 0.5), class = b, coef = Intercept) +
-#           prior(gamma(1, 0.01), class = shape) +
-#           prior(normal(0, 0.01), class = b, coef = y_num) +
-#           prior(normal(0, 0.001), class = b)
-# )
-# 
-# 
-# add_epred_draws(object=m_prior3,
-#                 newdata = overall_scaffold) %>%
-#   ggplot(aes(x=year, y=.epred)) +
-#   stat_halfeye() +
-#   scale_y_log10(labels = comma)
-# 
-
-
-```
-
-Now we look and see what it looks like with the interactions
-
-```{r}
-# 
-# m_prior4 <- brm(
-#   cases ~ 0 + Intercept + y_num + acf_period + y_num:acf_period,
-#   family = negbinomial(),
-#   data = overall_scaffold,
-#   sample_prior = "only",
-#   prior = prior(normal(log(2500), 1), class = b, coef = Intercept) +
-#           prior(gamma(1, 0.01), class = shape) +
-#           prior(normal(0, 0.01), class = b)
-# )
-# 
-# add_epred_draws(object=m_prior4,
-#                 newdata = overall_scaffold) %>%
-#   ggplot(aes(x=year, y=.epred)) +
-#   stat_halfeye() +
-#   scale_y_log10(label=comma)
-# 
-# 
-
-```
-
-Now try adding in the random intercepts
-
-```{r}
-
-# c(prior(lognormal(3.912023, 0.5)), #log(50) = 3.912023
-#   prior(lognormal(3.912023, 1))) %>% 
-#   parse_dist() %>% 
-#   
-#   ggplot(aes(y = prior, dist = .dist, args = .args)) +
-#   stat_halfeye(.width = c(.5, .95)) +
-#   scale_y_discrete(NULL, labels = str_c("lognormal(log(50), ", c(0.5, 1), ")"),
-#                    expand = expansion(add = 0.1)) +
-#   xlab(expression(exp(italic(p)(beta[0])))) +
-#   coord_cartesian(xlim = c(0,400))
-# 
-# 
-# m_prior5 <- brm(
-#   cases ~ y_num + acf_period + y_num:acf_period + ( 1 | ward),
-#   family = negbinomial(),
-#   data = mdata,
-#   sample_prior = "only",
-#   prior = prior(normal(log(50), 1), class = Intercept) +
-#           prior(gamma(1, 0.01), class = shape) +
-#           prior(normal(0, 0.01), class = b) +
-#           prior(exponential(1), class=sd)
-# )
-# 
-# 
-# add_epred_draws(object=m_prior5,
-#                 newdata = mdata,
-#                 re_formula = NA) %>%
-#   ggplot(aes(x=year, y=.epred)) +
-#   stat_halfeye() +
-#   scale_y_log10(label=comma)
-# 
-# add_epred_draws(object=m_prior5,
-#                 newdata = mdata,
-#                 re_formula = NA) %>%
-#   ggplot(aes(x=year, y=.epred)) +
-#   stat_halfeye() +
-#   scale_y_log10(label=comma) +
-#   facet_wrap(ward~.)
-
-```
-
-And add in the random slopes
-
-```{r}
-# 
-# m_prior6 <- brm(
-#   cases ~ 1 + y_num + acf_period + y_num:acf_period + (1 + y_num*acf_period | ward),
-#   family = negbinomial(),
-#   data = mdata,
-#   sample_prior = "only",
-#   prior = prior(gamma(1, 0.01), class = shape) +
-#           prior(normal(0, 0.1), class = b) +
-#           prior(exponential(1), class=sd) +
-#           prior(lkj(2), class=cor)
-# )
-# 
-# 
-# 
-# m_prior6 <- brm(
-#   cases ~ 0 + Intercept + y_num + acf_period + y_num:acf_period + ( y_num*acf_period | ward),
-#   family = negbinomial(),
-#   data = mdata,
-#   sample_prior = "only",
-#   prior = prior(normal(log(50), 1), class = b, coef = Intercept) +
-#           prior(gamma(1, 0.01), class = shape) +
-#           prior(normal(0, 0.01), class = b) +
-#           prior(exponential(100), class=sd) +
-#           prior(lkj(2), class=cor)
-# )
-
-
-# add_epred_draws(object=m_prior6,
-#                 newdata = mdata,
-#                 re_formula = NA) %>%
-#   ggplot(aes(x=year, y=.epred)) +
-#   stat_halfeye() +
-#   scale_y_log10(label=comma)
-# 
-# add_epred_draws(object=m_prior6,
-#                 newdata = mdata,
-#                 re_formula = ~( 1 + y_num + acf_period | ward)) %>%
-#   ggplot(aes(x=year, y=.epred)) +
-#   stat_halfeye() +
-#   scale_y_log10(label=comma) +
-#   facet_wrap(ward~.)
-# 
-# plot_counterfactual(model_data = overall_scaffold, model=m_prior6, outcome = inc_100k, 
-#                     population_denominator = population_without_inst_ship, re_formula = NA)
-# 
-# plot_counterfactual(model_data = mdata, model=m_prior6, outcome = inc_100k, 
-#                     population_denominator = population_without_inst_ship, grouping_var = ward, ward,
-#                     re_formula = ~( 1 + y_num + acf_period | ward))
-
-```
-
-
-Issue here is the non-centred parameterisation of the intercept prior... Feel like this is a more interpretable way to set priors... but will revert to centred parameterisation for the meantime.
-
-
-```{r}
-# m_centered_prior <- brm(
-#   cases ~ 1 + y_num*acf_period + (1 + y_num*acf_period | ward) + offset(log(population_without_inst_ship)),
-#                   data = mdata,
-#                   family = negbinomial(),
-#                   seed = 1234,
-#                   chains = 4, cores = 4,
-#                   prior = prior(normal(0,1000), class = Intercept) +
-#                           prior(gamma(0.01, 0.01), class = shape) +
-#                           prior(normal(0, 1), class = b) +
-#                           prior(exponential(1), class=sd) +
-#                           prior(lkj(2), class=cor),
-#                   sample_prior = "only")
-# 
-# plot(m_centered_prior)
-# 
-# plot_counterfactual(model_data = overall_scaffold, model=m_centered_prior, outcome = inc_100k, 
-#                     population_denominator = population_without_inst_ship, re_formula = NA)
-# 
-# plot_counterfactual(model_data = mdata, model=m_centered_prior, outcome = inc_100k, 
-#                     population_denominator = population_without_inst_ship, grouping_var = ward, ward,
-#                     re_formula = ~( 1 + y_num*acf_period | ward))
-
-```
-
-
+#### 7.1 Fit the model
 
 
 Look at the mean and variance of counts (counts of pulmonary notifications are what we are predicting)
@@ -1790,9 +1450,6 @@ mean(mdata$cases)
 var(mdata$cases)
 
 ```
-
-
-
 
 
 Quite a bit of over-dispersion here, so negative binomial distribution might be a better choice of distributional family than Poisson.
@@ -1835,7 +1492,7 @@ as_draws_df(m_pulmonary) %>%
   theme(panel.border = element_rect(colour = "grey78", fill=NA),
         legend.position = "top")
 
-ggsave(here("figures/s7.png"), width=16, height=16)
+ggsave(here("figures/s7.tiff"), width=16, height=16)
 ```
 
 Nicer version of table of parameters for supplement
@@ -1887,7 +1544,7 @@ f1a <- st_as_sf(left_join(ward_inc, glasgow_wards_1951)) %>%
 
 (f1a / f1b) + plot_annotation(tag_levels = "A")
 
-ggsave(here("figures/f1.png"), width=7, height=8)
+ggsave(here("figures/f1.tiff"), width=7, height=8)
 
 ```
 
@@ -2036,7 +1693,7 @@ f <- bind_cols(RR.level=pluck(overall_change$level_draws$estimate),
   (plot_spacer() + b + f) /
   (a + d + e)
 
-ggsave(here("figures/s8.png"), width=8, height=8)
+ggsave(here("figures/s9.tiff"), width=8, height=8)
 
 
 
@@ -2050,9 +1707,10 @@ Plot the counterfactual at ward level
 ```{r}
 
 plot_counterfactual(model_data = mdata, model=m_pulmonary, outcome = inc_100k, population_denominator = population_without_inst_ship, 
-                    grouping_var = ward, ward, re_formula= ~(1 + y_num*acf_period | ward))
+                    grouping_var = ward, ward, re_formula= ~(1 + y_num*acf_period | ward)) +
+  scale_y_continuous(limits = c(0,500))
   
-ggsave(here("figures/s6.png"), width=16, height=12)
+ggsave(here("figures/s6.tiff"), width=16, height=12)
 
 ```
 
@@ -2156,7 +1814,7 @@ s4 + plot_annotation(tag_levels = c('A', '1')) + plot_layout(guides = 'collect')
         legend.key.width = unit(3, "cm"))
 
 
-ggsave(here("figures/f2.png"), width = 16, height=12)
+ggsave(here("figures/f2.tiff"), width = 16, height=12)
 
 ```
 
@@ -2225,7 +1883,7 @@ plot_counterfactual(model_data = overall_scaffold %>% filter(year<=1961), model=
                     population_denominator = population_without_inst_ship, outcome=inc_100k_extrapulmonary, re_formula = NA) +
   scale_y_continuous(limits = c(0,50))
   
-ggsave(here("figures/s9.png"), width=10)
+ggsave(here("figures/s10.tiff"), width=10)
 
 ```
 
@@ -2333,7 +1991,7 @@ plot_counterfactual(model_data = mdata_extrapulmonary, model=m_extrapulmonary, o
                     population_denominator = population_without_inst_ship, grouping_var = ward,re_formula =~(y_num*acf_period | ward), 
                     ward) + scale_y_continuous(limits= c(0,75))
   
-ggsave(here("figures/s10.png"), width=10, height=12)
+ggsave(here("figures/s11.tiff"), width=10, height=12)
 
 ```
 
@@ -2480,7 +2138,8 @@ age_sex_summary %>%
                                                              "ACF",
                                                              "Post-ACF")), size=2) +
   geom_vline(aes(xintercept=acf_end), linetype=3) +
-  ggh4x::facet_grid2(age~sex, scales = "free_y", independent = "y") +
+  facet_grid(fct_relevel(age, "65 & up y", "56 to 65y", "46 to 55y", "36 to 45y", "26 to 35y", "16 to 25y", "06 to 15y", "0 to 5y")~sex, 
+             scales = "free_y") +
   theme_ggdist() +
   scale_y_continuous(labels=comma) +
   scale_x_continuous(labels = year_labels,
@@ -2498,7 +2157,7 @@ age_sex_summary %>%
         legend.box="vertical", 
         panel.border = element_rect(colour = "grey78", fill=NA))
   
-ggsave(here("figures/s12.png"), height=10)
+ggsave(here("figures/s13.tiff"), height=10)
 
 ```
 
@@ -2770,31 +2429,9 @@ Join together for Figure 3.
 
 (peak_g_age_sex + level_g_age_sex) / (slope_g_age_sex + counterfactual_g_age_sex) + plot_annotation(tag_levels = "A") + plot_layout(guides = "collect") & theme(legend.position = "bottom")
 
-ggsave(here("figures/f3.png"), width = 12, height=8)
+ggsave(here("figures/f3.tiff"), width = 12, height=8)
 
 
 ```
 
-
-
-### 10 Division model
-
-Was uptake of CXR at division level associated with greated impact?
-
-# ```{r}
-# 
-# m_division <- brm(
-#   cases ~ 1 + y_num*acf_period + (1 + y_num*acf_period | ward) + offset(log(population_without_inst_ship)),
-#                   data = mdata,
-#                   family = negbinomial(),
-#                   seed = 1234,
-#                   chains = 4, cores = 4,
-#                   prior = prior(normal(0,1), class = Intercept) +
-#                           prior(gamma(0.01, 0.01), class = shape) +
-#                           prior(normal(0, 1), class = b) +
-#                           prior(exponential(1), class=sd) +
-#                           prior(lkj(4), class=cor),
-#   control = list(adapt_delta = 0.9))
-# 
-# ```
 
