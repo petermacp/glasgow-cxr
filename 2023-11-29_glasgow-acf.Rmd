@@ -610,7 +610,7 @@ ward_pops %>%
   theme_ggdist() +
   theme(legend.position = "bottom")
 
-ggsave(here("figures/s2.tiff"), height=14, width=12)
+ggsave(here("figures/s3.tiff"), height=14, width=12)
 
 ```
 
@@ -751,7 +751,7 @@ pred_pops %>%
   labs(x="", y="") 
 
 
-ggsave(here("figures/s3.tiff"), width=10)
+ggsave(here("figures/s4.tiff"), width=10)
 
 
 ```
@@ -1023,7 +1023,7 @@ uptake_table <- uptake_age_sex %>%
 
 uptake_graph / gridExtra::tableGrob(uptake_table, rows = NULL)
 
-ggsave(here("figures/s4.tiff"), height=10)
+ggsave(here("figures/s5.tiff"), height=10)
 
 ```
 
@@ -1389,7 +1389,7 @@ cases_by_age_sex %>%
   theme(legend.title = element_blank(),
         legend.position = "bottom")
 
-ggsave(here("figures/s5.tiff"))
+ggsave(here("figures/s6.tiff"))
 
 ```
 
@@ -1463,6 +1463,8 @@ m_pulmonary <- brm(
                   data = mdata,
                   family = negbinomial(),
                   seed = 1234,
+                  threads = threading(2, grainsize = 100, static = TRUE), #for exact reproducibility
+                  backend = "cmdstanr",
                   chains = 4, cores = 4,
                   prior = prior(normal(0,1), class=b, coef = "Intercept") +
                           prior(gamma(0.01, 0.01), class = shape) +
@@ -1492,7 +1494,7 @@ as_draws_df(m_pulmonary) %>%
   theme(panel.border = element_rect(colour = "grey78", fill=NA),
         legend.position = "top")
 
-ggsave(here("figures/s7.tiff"), width=16, height=16)
+ggsave(here("figures/s8.tiff"), width=16, height=16)
 ```
 
 Nicer version of table of parameters for supplement
@@ -1501,7 +1503,7 @@ Nicer version of table of parameters for supplement
 
 summarise_draws(m_pulmonary) %>%
   mutate(across(c(mean:ess_tail), comma, accuracy=0.01)) %>%
-  write_csv(here("figures/s1_table.csv"))
+  write_csv(here("figures/s9_table.csv"))
 
 ```
 
@@ -1693,7 +1695,7 @@ f <- bind_cols(RR.level=pluck(overall_change$level_draws$estimate),
   (plot_spacer() + b + f) /
   (a + d + e)
 
-ggsave(here("figures/s9.tiff"), width=8, height=8)
+ggsave(here("figures/s10.tiff"), width=8, height=8)
 
 
 
@@ -1710,7 +1712,7 @@ plot_counterfactual(model_data = mdata, model=m_pulmonary, outcome = inc_100k, p
                     grouping_var = ward, ward, re_formula= ~(1 + y_num*acf_period | ward)) +
   scale_y_continuous(limits = c(0,500))
   
-ggsave(here("figures/s6.tiff"), width=16, height=12)
+ggsave(here("figures/s7.tiff"), width=16, height=12)
 
 ```
 
@@ -1861,6 +1863,8 @@ m_extrapulmonary <- brm(
                   data = mdata_extrapulmonary,
                   family = negbinomial(),
                   seed = 1234,
+                  threads = threading(2, grainsize = 100, static = TRUE), #for exact reproducibility
+                  backend = "cmdstanr",
                   chains = 4, cores = 4,
                   prior = prior(normal(0,1000), class = Intercept) +
                           prior(gamma(0.01, 0.01), class = shape) +
@@ -1883,7 +1887,7 @@ plot_counterfactual(model_data = overall_scaffold %>% filter(year<=1961), model=
                     population_denominator = population_without_inst_ship, outcome=inc_100k_extrapulmonary, re_formula = NA) +
   scale_y_continuous(limits = c(0,50))
   
-ggsave(here("figures/s10.tiff"), width=10)
+ggsave(here("figures/s11.tiff"), width=10)
 
 ```
 
@@ -1968,10 +1972,10 @@ overall_ep_counterf$counter_post_overall %>%
          cases_averted:cases_averted.upper,
          pct_change:pct_change.upper) %>%
   transmute(model=model, year=year,
-            diff_cnr = glue("{diff_inc100k} ({diff_inc100k.lower} to {diff_inc100k.upper})"),
-            rr = glue("{rr_inc100k} ({rr_inc100k.lower} to {rr_inc100k.upper})"),
-            cases_averted = glue("{cases_averted} ({cases_averted.lower} to {cases_averted.upper})"),
-            pct_change = glue("{pct_change} ({pct_change.lower} to {pct_change.upper})")) %>%
+            diff_cnr = glue("{diff_inc100k} [{diff_inc100k.lower}, {diff_inc100k.upper}]"),
+            rr = glue("{rr_inc100k} [{rr_inc100k.lower}, {rr_inc100k.upper}]"),
+            cases_averted = glue("{cases_averted} [{cases_averted.lower}, {cases_averted.upper}]"),
+            pct_change = glue("{pct_change} [{pct_change.lower}, {pct_change.upper}]")) %>%
   write_csv(here("figures/table2.csv"))
 
 
@@ -1991,7 +1995,7 @@ plot_counterfactual(model_data = mdata_extrapulmonary, model=m_extrapulmonary, o
                     population_denominator = population_without_inst_ship, grouping_var = ward,re_formula =~(y_num*acf_period | ward), 
                     ward) + scale_y_continuous(limits= c(0,75))
   
-ggsave(here("figures/s11.tiff"), width=10, height=12)
+ggsave(here("figures/s12.tiff"), width=10, height=12)
 
 ```
 
@@ -2044,6 +2048,8 @@ m_age_sex <- brm(
                   data = mdata_age_sex,
                   family = negbinomial(),
                   seed = 1234,
+                  threads = threading(2, grainsize = 100, static = TRUE), #for exact reproducibility
+                  backend = "cmdstanr",
                   chains = 4, cores = 4, 
                   prior = prior(normal(0,1), class = Intercept) +
                           prior(gamma(0.01, 0.01), class = shape) +
@@ -2157,7 +2163,7 @@ age_sex_summary %>%
         legend.box="vertical", 
         panel.border = element_rect(colour = "grey78", fill=NA))
   
-ggsave(here("figures/s13.tiff"), height=10)
+ggsave(here("figures/s14.tiff"), height=10)
 
 ```
 
