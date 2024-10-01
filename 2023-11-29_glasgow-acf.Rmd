@@ -1852,25 +1852,23 @@ ward_pulmonary_counterf$counter_post_overall %>%
 
 ### 8. Extra-pulmonary TB notifications
 
-Now we will model the extra-pulmonary TB notification rate. Struggling a bit with negative binomial model, so revert to Poisson.
-
 #### 8.1 Fit the model
 
 ```{r}
 
 m_extrapulmonary <- brm(
-  cases ~ 1 + y_num*acf_period + (1 + y_num*acf_period | ward) + offset(log(population_without_inst_ship)),
+  cases ~ 0 + Intercept + y_num*acf_period + (1 + y_num*acf_period | ward) + offset(log(population_without_inst_ship)),
                   data = mdata_extrapulmonary,
                   family = negbinomial(),
                   seed = 1234,
                   threads = threading(2, grainsize = 100, static = TRUE), #for exact reproducibility
                   backend = "cmdstanr",
                   chains = 4, cores = 4,
-                  prior = prior(normal(0,1000), class = Intercept) +
+                  prior = prior(normal(0,1), class=b, coef = "Intercept") +
                           prior(gamma(0.01, 0.01), class = shape) +
                           prior(normal(0, 1), class = b) +
                           prior(exponential(1), class=sd) +
-                          prior(lkj(2), class=cor))
+                          prior(lkj(4), class=cor))
 
 summary(m_extrapulmonary)
 plot(m_extrapulmonary)
@@ -1895,7 +1893,7 @@ Summarise numerically.
 
 ```{r}
 
-overall_change_extrapulmonary <- summarise_change(model_data=overall_scaffold, model=m_extrapulmonary, 
+overall_change_extrapulmonary <- summarise_change(model_data=overall_scaffold %>% filter(year<=1961), model=m_extrapulmonary, 
                                    population_denominator=population_without_inst_ship, grouping_var=NULL, re_formula = NA)
 
 #want to keep the summary estimates here
@@ -1917,7 +1915,7 @@ Numbers of extra-pulmonary TB cases averted overall.
 
 ```{r}
 
-overall_ep_counterf <- calculate_counterfactual(model_data = mdata_extrapulmonary, model=m_extrapulmonary, 
+overall_ep_counterf <- calculate_counterfactual(model_data=overall_scaffold %>% filter(year<=1961), model=m_extrapulmonary, 
                                                population_denominator = population_without_inst_ship)
 
 overall_ep_counterf$counter_post %>%
